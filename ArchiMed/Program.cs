@@ -92,4 +92,14 @@ public class PatientDb: DbContext {
 
     }
     public DbSet<Patient> Patients => Set<Patient>();
+    public DbSet<Consultation> Consultation { get; set; }
+    public DbSet<Medecin> Medecin { get; set; }
+    public DbSet<Scanner> Scanner { get; set; }
+    public DbSet<DossierMedical> DossierMedical { get; set; }
+    public DbSet<Medicaments> Medicaments { get; set; }
+    public DbSet<Ordenance> Ordenance { get; set; }
+    public DbSet<Radio> Radio { get; set; }
+    public DbSet<Responsable> Responsable { get; set; }
+    public DbSet<Service> Service { get; set; }
+    
 }
