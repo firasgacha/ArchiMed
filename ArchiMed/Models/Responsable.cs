@@ -1,10 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿namespace ArchiMed.Models;
 
-namespace ArchiMed.Models;
-
-public class Patient
+public class Responsable
 {
-    public int PatientId { get; set; }
+    public int ResponsableId { get; set; }
     public string nom { get; set; }
     public string prenom { get; set; }
     public string naissance { get; set; }
@@ -18,12 +16,11 @@ public class Patient
     public string telephone { get; set; }
     public string ProfileUrl { get; set; }
     public string ProfileImage { get; set; }
+    public TypeResponsable type { get; set; }
     
-    //Les relations entre les tables
-    public virtual IList<Consultation> ConsultationList { get; set; }
-    
-    public virtual DossierMedical DossierMedical { get; set; }
-    
-    [ForeignKey("DossierMedical")]
-    public int DossierMedicalFk { get; set; }
+    public virtual IList<Consultation> ConsultationsList { get; set; }
+
+    public virtual IList<Scanner> ScannersList { get; set; }
+
+    public virtual IList<Radio> RadiosList { get; set; }
 }
