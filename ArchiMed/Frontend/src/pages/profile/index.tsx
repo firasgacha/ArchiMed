@@ -5,6 +5,7 @@ export default function Profile() {
 
   return (
     <>
+      <h1 className="px-5">Hiiiiiiii</h1>
       Hello Fedi
       <button
         onClick={() => {

@@ -14,7 +14,27 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    //***************
+
+    // TS Detection
+    "noImplicitAny": true,
+    "alwaysStrict": true,
+    "noUnusedParameters": true,
+    "noImplicitThis": true,
+
+    // Compiler:
+    "removeComments": true,
+
+    // Path Params
+    "baseUrl": "src",
+    "paths": {
+      "@AppLayout": ["layout/index.ts"],
+      "@AppService": ["service/index.ts"],
+      "@AppComponents": ["components/index.ts"],
+      "@AppHooks": ["hooks/index.ts"]
+    }
+    // **************
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

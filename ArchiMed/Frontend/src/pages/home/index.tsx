@@ -1,23 +1,27 @@
-import { useState } from "react";
+import { PageWithSide } from "@AppLayout";
+import NavBar from "./NavBar";
+
+const listOfLinks = [
+  {
+    name: "home",
+    icon: "home",
+    link: "/",
+  },
+];
 
 export default function Home() {
-  const [count, setCount] = useState(0);
-  const [valueArray, setValueArry] = useState<string[]>([]);
   return (
     <>
-      <button
-        onClick={() => {
-          setCount((v) => v + 1);
-        }}
-        className="px-5"
-      >
-        {count}
-      </button>
-      <ul>
-        {valueArray.map((el) => (
-          <li>{el} </li>
-        ))}
-      </ul>
+      <NavBar />
+      <PageWithSide linkList={listOfLinks}>
+        <h1>HI</h1>
+        <p> LoooooL </p>
+        <div className="mockup-code bg-primary text-primary-content">
+          <pre>
+            <code>can be any color!</code>
+          </pre>
+        </div>
+      </PageWithSide>
     </>
   );
 }
