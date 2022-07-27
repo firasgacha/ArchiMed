@@ -27,13 +27,7 @@
     "removeComments": true,
 
     // Path Params
-    "baseUrl": "src",
-    "paths": {
-      "@AppLayout": ["layout/index.ts"],
-      "@AppService": ["service/index.ts"],
-      "@AppComponents": ["components/index.ts"],
-      "@AppHooks": ["hooks/index.ts"]
-    }
+    "baseUrl": "src"
     // **************
   },
   "include": ["src"],
