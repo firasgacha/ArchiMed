@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import {BrowserRouter, Navigate, Outlet, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Link, Navigate, Outlet, Route, Routes} from "react-router-dom";
 
 import NotFound from "../NotFound";
+import ListOfDoctors from "./ListOfDoctors";
 export default function Navbar() {
   const [show, setShow] = useState(false);
   const [profile, setProfile] = useState(false);
@@ -36,7 +37,9 @@ export default function Navbar() {
                         <rect x={14} y={14} width={6} height={6} rx={1} />
                       </svg>
                     </div>
-                    <span className="ml-2">Dashboard</span>
+                    <Link to={'/medical-folder'}>
+                      <span className="ml-2">Medical Folder</span>
+                    </Link>
                   </div>
                 </li>
                 <li className="pl-6 cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-4 mb-4 py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none">
@@ -45,7 +48,7 @@ export default function Navbar() {
                       <path stroke="none" d="M0 0h24v24H0z" />
                       <path d="M4 7h3a1 1 0 0 0 1 -1v-1a2 2 0 0 1 4 0v1a1 1 0 0 0 1 1h3a1 1 0 0 1 1 1v3a1 1 0 0 0 1 1h1a2 2 0 0 1 0 4h-1a1 1 0 0 0 -1 1v3a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1v-1a2 2 0 0 0 -4 0v1a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h1a2 2 0 0 0 0 -4h-1a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1" />
                     </svg>
-                    <span className="ml-2">Products</span>
+                    <Link to={'doctors'}><span className="ml-2">List of doctors</span></Link>
                   </div>
                 </li>
                 <li className="pl-6 cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mb-4 py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none">
@@ -55,7 +58,7 @@ export default function Navbar() {
                       <polyline points="8 16 10 10 16 8 14 14 8 16" />
                       <circle cx={12} cy={12} r={9} />
                     </svg>
-                    <span className="ml-2">Performance</span>
+                    <Link to={'patients'}><span className="ml-2">List of patients</span></Link>
                   </div>
                 </li>
                 <li className="pl-6 cursor-pointer text-gray-600 text-sm leading-3 tracking-normal py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none">
@@ -106,8 +109,9 @@ export default function Navbar() {
                               <rect x={14} y={14} width={6} height={6} rx={1} />
                             </svg>
                           </div>
-                          <span className="ml-2 xl:text-base md:text-2xl text-base">Dashboard</span>
-                        </div>
+                          <Link to={'/medical-folder'}>
+                            <span className="ml-2">Medical Folder</span>
+                          </Link>                        </div>
                       </li>
                       <li className="pl-6 cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-4 mb-4 py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none">
                         <div className="flex items-center">
@@ -117,8 +121,7 @@ export default function Navbar() {
                               <path d="M4 7h3a1 1 0 0 0 1 -1v-1a2 2 0 0 1 4 0v1a1 1 0 0 0 1 1h3a1 1 0 0 1 1 1v3a1 1 0 0 0 1 1h1a2 2 0 0 1 0 4h-1a1 1 0 0 0 -1 1v3a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1v-1a2 2 0 0 0 -4 0v1a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h1a2 2 0 0 0 0 -4h-1a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1" />
                             </svg>
                           </div>
-                          <span className="ml-2 xl:text-base md:text-2xl text-base">Products</span>
-                        </div>
+                          <Link to={'doctors'}><span className="ml-2">List of doctors</span></Link></div>
                       </li>
                       <li className="pl-6 cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mb-4 py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none">
                         <div className="flex items-center">
@@ -129,7 +132,7 @@ export default function Navbar() {
                               <circle cx={12} cy={12} r={9} />
                             </svg>
                           </div>
-                          <span className="ml-2 xl:text-base md:text-2xl text-base">Performance</span>
+                          <Link to={'patients'}><span className="ml-2">List of patients</span></Link>
                         </div>
                       </li>
                       <li className="pl-6 cursor-pointer text-gray-600 text-sm leading-3 tracking-normal py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none">
@@ -236,7 +239,9 @@ export default function Navbar() {
                                       <circle cx={12} cy={7} r={4} />
                                       <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
                                     </svg>
+                                    <Link to={'/profile'}>
                                     <span className="text-sm ml-2">My Profile</span>
+                                    </Link>
                                   </div>
                                 </li>
                                 <li className="flex w-full justify-between text-gray-600 hover:text-indigo-700 cursor-pointer items-center mt-2">
