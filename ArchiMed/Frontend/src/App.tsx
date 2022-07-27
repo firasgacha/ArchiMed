@@ -1,6 +1,6 @@
 import "./App.css";
 import Home from "./pages/home";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Profile from "./pages/profile";
 
 function App() {

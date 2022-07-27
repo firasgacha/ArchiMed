@@ -1,5 +1,5 @@
-import { PageWithSide } from "@AppLayout";
 import NavBar from "./NavBar";
+import PageWithSide from "components/PageWithSide";
 
 const listOfLinks = [
   {
