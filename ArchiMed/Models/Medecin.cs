@@ -1,4 +1,8 @@
-﻿namespace ArchiMed.Models;
+﻿using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
+
+namespace ArchiMed.Models;
 
 public class Medecin
 {
@@ -19,12 +23,9 @@ public class Medecin
     public string ProfileUrl { get; set; }
     public string ProfileImage { get; set; }
     
-    
     //Les relations entre les tables
     public virtual IList<Consultation> ConsultationList { get; set; }
-
-    public virtual IList<Service> ServicesList { get; set; }
-    
+    public virtual IList<Service> ServicesList { get; set; }    
     public virtual IList<Ordenance> OrdenanceList { get; set; }
 
 }
