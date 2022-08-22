@@ -1,4 +1,6 @@
 using ArchiMed.Models;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore; // place this line at the beginning of file.
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,7 +39,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapGet("/", () => "Hello World!");
 
 // app.MapPost("/patient/", async(Patient n, PatientDb db)=> {
 //     db.Patients.Add(n);
@@ -87,6 +88,7 @@ app.MapGet("/", () => "Hello World!");
 
 app.Run();
 
+[EnableCors("AllowAll")]
 public class PatientDb: DbContext {
     public PatientDb(DbContextOptions<PatientDb> options): base(options) {
 
