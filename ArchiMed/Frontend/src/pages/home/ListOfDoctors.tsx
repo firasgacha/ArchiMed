@@ -31,7 +31,7 @@ export default function ListOfDoctors() {
             Footer: 'Birthday',
             accessor: 'naissance',
             Filter: ColumnFilter,
-            // Cell: (value: Date) => { return format(new Date(value), 'dd/MM/yyyy')}
+            Cell: ({ cell: { value } }) => format(new Date(value), 'dd/MM/yyyy')
         },
         {
             Header: 'Email',
@@ -321,23 +321,6 @@ export default function ListOfDoctors() {
                                                     })
                                                 }
                                             </tbody>
-                                            <tfoot>
-                                                {
-                                                    footerGroups.map(footerGroups => (
-                                                        <tr {...footerGroups.getFooterGroupProps()} className="w-full h-16 border-gray-300 border-b py-8">
-                                                            {
-                                                                footerGroups.headers.map(column => (
-                                                                    <td {...column.getFooterGroupProps} className="text-base font-bold text-center bg-indigo-700 text-white pr-6 tracking-normal leading-4">
-                                                                        {column.render('Footer')}
-                                                                        <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
-                                                                        {/* <div className="flex justify-center pt-1">{column.canFilter ? column.render('Filter') : null}</div> */}
-                                                                    </td>
-                                                                ))
-                                                            }
-                                                        </tr>
-                                                    ))
-                                                }
-                                            </tfoot>
                                         </table>
                                     </div>
                                 </div>
