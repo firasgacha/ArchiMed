@@ -10,13 +10,13 @@
   "dependencies": {
     "@heroicons/react": "^1.0.6",
     "@tanstack/react-table": "^8.5.0",
+    "axios": "^0.27.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-query": "^3.39.1",
     "react-router-dom": "^6.3.0",
     "react-table": "^7.8.0"
   },
-  "proxy": "https://localhost:7058",
   "devDependencies": {
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
