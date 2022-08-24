@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, Outlet, useLocation, useParams } from "react-router-dom";
 
 // SVG
 import SVGA from "assets/a.svg";
@@ -19,10 +19,13 @@ import ChevronSvg from "assets/chevron.svg";
 export default function Navbar() {
   const [show, setShow] = useState(false);
   const [profile, setProfile] = useState(false);
-  const [menu, setMenu] = useState(false);
-  const [menu1, setMenu1] = useState(false);
-  const [menu2, setMenu2] = useState(false);
-  const [menu3, setMenu3] = useState(false);
+  const location = useLocation();
+  const [pageName, setPageName] = useState("");
+
+  useEffect(() => {
+    const temp = location.pathname.slice(1).replace(/([A-Z])/g, " $1");
+    setPageName(location.pathname.charAt(1).toUpperCase() + temp.slice(1));
+  }, [location]);
 
   return (
     <div
@@ -265,7 +268,38 @@ export default function Navbar() {
             {/* Remove class [ border-dashed border-2 border-gray-300 ] to remove dotted border */}
             {/* Place your content here */}
             <div className="pt-5 lg:pl-10 mb-24">
-              <Outlet />
+              <div className="bg-white p-10 2xl:p-5">
+                <div className="container mx-auto bg-white rounded">
+                  <div className="xl:w-full border-b border-gray-300 py-5 bg-white">
+                    <div className="flex w-11/12 mx-auto xl:w-full xl:mx-0 items-center">
+                      <p className="text-lg text-gray-800 font-bold">
+                        {pageName}
+                      </p>
+                      <div className="ml-2 cursor-pointer text-gray-600 ">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          width={16}
+                          height={16}
+                        >
+                          <path
+                            className="heroicon-ui"
+                            d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm0-9a1 1 0 0 1 1 1v4a1 1 0 0 1-2 0v-4a1 1 0 0 1 1-1zm0-4a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
+                            fill="currentColor"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mx-auto">
+                    <div className="xl:w-9/12 w-11/12 mx-auto xl:mx-0">
+                      {/*Content*/}
+                      <Outlet />
+                      {/*Content*/}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             {/*Footer*/}
             <footer className="sticky top-full footer p-4 justify-center text-base-content">
