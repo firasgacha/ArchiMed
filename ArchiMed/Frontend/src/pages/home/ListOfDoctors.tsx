@@ -3,33 +3,35 @@ import { useTable, useSortBy, useGlobalFilter, useFilters, usePagination, useCol
 import MOCK_DATA from "./MOCK_DATA.json";
 import GlobalFilter from "../../components/GlobalFilter";
 import ColumnFilter from "components/ColumnFilter";
-import { Checkbox } from "../../components/Checkbox";
+import axios from "axios";
+import { format } from 'date-fns';
 
 export default function ListOfDoctors() {
     const COLUMNS = [
         {
             Header: 'First Name',
             Footer: 'First Name',
-            accessor: 'first_name',
+            accessor: 'nom',
             Filter: ColumnFilter
         },
         {
             Header: 'Last Name',
             Footer: 'Last Name',
-            accessor: 'last_name',
+            accessor: 'prenom',
             Filter: ColumnFilter
         },
         {
             Header: 'CIN',
             Footer: 'CIN',
-            accessor: 'CIN',
+            accessor: 'cin',
             Filter: ColumnFilter
         },
         {
             Header: 'Birthday',
             Footer: 'Birthday',
-            accessor: 'Birthday',
-            Filter: ColumnFilter
+            accessor: 'naissance',
+            Filter: ColumnFilter,
+            // Cell: (value: Date) => { return format(new Date(value), 'dd/MM/yyyy')}
         },
         {
             Header: 'Email',
@@ -40,7 +42,7 @@ export default function ListOfDoctors() {
         {
             Header: 'Phone',
             Footer: 'Phone',
-            accessor: 'Phone',
+            accessor: 'telephone',
             Filter: ColumnFilter
         },
         {
@@ -52,40 +54,38 @@ export default function ListOfDoctors() {
         {
             Header: 'Postal_Code',
             Footer: 'Postal_Code',
-            accessor: 'Postal_Code',
+            accessor: 'zipcode',
             Filter: ColumnFilter
         },
 
         {
             Header: 'City',
             Footer: 'City',
-            accessor: 'City',
+            accessor: 'ville',
             Filter: ColumnFilter
         },
         {
             Header: 'Country',
             Footer: 'Country',
-            accessor: 'Country',
+            accessor: 'pays',
             Filter: ColumnFilter
         },
-        // {
-        //     Header: 'ProfileImage',
-        //     Footer: 'ProfileImage',
-        //     accessor: 'ProfileImage',
-        //     Filter: ColumnFilter
-        // },
-        // {
-        //     Header: 'ProfileUrl',
-        //     Footer: 'ProfileUrl',
-        //     accessor: 'ProfileUrl',  
-        //     Filter: ColumnFilter
-        // }
+        {
+            Header: 'ProfileImage',
+            Footer: 'ProfileImage',
+            accessor: 'profileImage',
+            Filter: ColumnFilter
+        },
+        {
+            Header: 'ProfileUrl',
+            Footer: 'ProfileUrl',
+            accessor: 'profileUrl',  
+            Filter: ColumnFilter
+        }
     ]
-
-
-
+    const [doctorsListData, setDoctorsListData] = useState([]);
     const columns = useMemo(() => COLUMNS, []);
-    const data = useMemo(() => MOCK_DATA, []);
+    const data = useMemo(() => doctorsListData, []);
 
 
     const { allColumns, getToggleHideAllColumnsProps, getTableProps, getTableBodyProps, headerGroups, footerGroups, page, nextPage, previousPage, setPageSize, setColumnOrder, canNextPage, canPreviousPage, pageOptions, gotoPage, pageCount, prepareRow, state, setGlobalFilter } =
@@ -102,18 +102,14 @@ export default function ListOfDoctors() {
 
     const { pageIndex, pageSize } = state;
 
-    // const GetDoctorsData = () => {
-    //     fetch('https://localhost:7058/api/Medecin',{
-    //         method: 'GET',
-    //         headers: {
-    //             'accept': 'text/plain'
-    //         }
-    //     })
-    //         .then(response => {
-    //             const result = response;
-    //             console.log('result', result);
-    //         }).catch(err => { console.log(err) })
-    // }
+    const GetDoctorsData = () => {
+        axios.get('Medecin')
+            .then(response => {
+                const result = response.data;
+                setDoctorsListData(result);
+                console.log('result', result);
+            }).catch(err => { console.log(err) })
+    }
 
     const { globalFilter } = state;
 
@@ -138,6 +134,10 @@ export default function ListOfDoctors() {
     }
     const [isList, setIsList] = useState(false);
     const [isSubList, setIsSubList] = useState(3);
+
+    useEffect(()=>{
+        GetDoctorsData();
+    },[])
     return (
 
         <div id="listOfDoctors">
