@@ -13,6 +13,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("dev",
+        policy  =>
+        {
+            policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
+        });
+});
+
 // Connect to PostgreSQL Database
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<PatientDb>(options =>
@@ -28,6 +37,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseCors("dev");
     app.UseSwagger();
     app.UseSwaggerUI();
 }
@@ -87,8 +97,6 @@ app.MapControllers();
 // });
 
 app.Run();
-
-[EnableCors("AllowAll")]
 public class PatientDb: DbContext {
     public PatientDb(DbContextOptions<PatientDb> options): base(options) {
 
