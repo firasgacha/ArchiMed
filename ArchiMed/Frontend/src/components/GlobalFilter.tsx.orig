@@ -1,0 +1,51 @@
+import React from "react";
+
+export default function GlobalFilter({ filter, setFilter }) {
+  return (
+    <>
+      <div>
+        <div className="relative">
+<<<<<<< HEAD
+          <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+            <svg
+              aria-hidden="true"
+              className="w-5 h-5 text-gray-500 dark:text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              ></path>
+||||||| 32bf7d4
+          <div className="absolute text-white flex items-center px-4 border-r dark:border-gray-700 h-full bg-indigo-700 dark:bg-indigo-600 rounded-l cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 15.75l-2.489-2.489m0 0a3.375 3.375 0 10-4.773-4.773 3.375 3.375 0 004.774 4.774zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+=======
+          <div className="absolute text-white flex items-center px-4 border-r h-full bg-indigo-700 rounded-l cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 15.75l-2.489-2.489m0 0a3.375 3.375 0 10-4.773-4.773 3.375 3.375 0 004.774 4.774zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+>>>>>>> 8b9edd9353016659a500bb205d2245bb0cf671e5
+            </svg>
+          </div>
+<<<<<<< HEAD
+          <input
+            value={filter || ""}
+            onChange={(e) => setFilter(e.target.value)}
+            className="py-1 text-center text-gray-600 dark:text-gray-400 focus:outline-none focus:border focus:border-indigo-700 dark:focus:border-indigo-700 dark:border-gray-700 dark:bg-gray-800 bg-white font-normal min-w-64 flex items-center pl-9 min-h-10 border-gray-300 rounded border shadow"
+            placeholder="Search"
+          />
+||||||| 32bf7d4
+          <input value={filter || ''} onChange={e => setFilter(e.target.value)} className="text-center text-gray-600 dark:text-gray-400 focus:outline-none focus:border focus:border-indigo-700 dark:focus:border-indigo-700 dark:border-gray-700 dark:bg-gray-800 bg-white font-normal w-64 h-10 flex items-center pl-16 text-sm border-gray-300 rounded border shadow" placeholder="Search" />
+=======
+          <input value={filter || ''} onChange={e => setFilter(e.target.value)} className="text-center text-gray-600 focus:outline-none focus:border focus:border-indigo-700 bg-white font-normal w-64 h-10 flex items-center pl-16 text-sm border-gray-300 rounded border shadow" placeholder="Search" />
+>>>>>>> 8b9edd9353016659a500bb205d2245bb0cf671e5
+        </div>
+      </div>
+    </>
+  );
+}
