@@ -2,3 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+	select {
+		@apply p-2 shadow rounded bg-white font-medium leading-none text-gray-800 flex items-center justify-between cursor-pointer
+	}
+}
+

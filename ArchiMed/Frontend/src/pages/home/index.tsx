@@ -292,11 +292,9 @@ export default function Navbar() {
                     </div>
                   </div>
                   <div className="mx-auto">
-                    <div className="xl:w-9/12 w-11/12 mx-auto xl:mx-0">
-                      {/*Content*/}
-                      <Outlet />
-                      {/*Content*/}
-                    </div>
+                    {/*Content*/}
+                    <Outlet />
+                    {/*Content*/}
                   </div>
                 </div>
               </div>
