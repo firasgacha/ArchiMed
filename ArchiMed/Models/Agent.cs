@@ -1,6 +1,6 @@
 ﻿namespace ArchiMed.Models;
 
-public class Responsable
+public class Agent
 {
     public int ResponsableId { get; set; }
     public string nom { get; set; }
