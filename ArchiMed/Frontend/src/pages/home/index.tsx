@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, Outlet, useLocation, useParams } from "react-router-dom";
 
 // SVG
 import SVGA from "assets/a.svg";
@@ -19,10 +19,13 @@ import ChevronSvg from "assets/chevron.svg";
 export default function Navbar() {
   const [show, setShow] = useState(false);
   const [profile, setProfile] = useState(false);
-  const [menu, setMenu] = useState(false);
-  const [menu1, setMenu1] = useState(false);
-  const [menu2, setMenu2] = useState(false);
-  const [menu3, setMenu3] = useState(false);
+  const location = useLocation();
+  const [pageName, setPageName] = useState("");
+
+  useEffect(() => {
+    const temp = location.pathname.slice(1).replace(/([A-Z])/g, " $1");
+    setPageName(location.pathname.charAt(1).toUpperCase() + temp.slice(1));
+  }, [location]);
 
   return (
     <div
@@ -62,10 +65,54 @@ export default function Navbar() {
                 </Link>
               </div>
             </li>
-            <li className="pl-6 cursor-pointer text-gray-600 text-sm leading-3 tracking-normal py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none">
+            <li className="pl-6 cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-4 mb-4 py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none">
               <div className="flex items-center">
-                <CodeSVG />
-                <span className="ml-2">Deliverables</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z" />
+                </svg>
+                <Link to={"appointment"}>
+                <span className="ml-2">List of Appointments</span>
+                </Link>
+              </div>
+            </li>
+            <li className="pl-6 cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-4 mb-4 py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none">
+              <div className="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+                </svg>
+                <Link to={"employee"}>
+                  <span className="ml-2">List of Employees</span>
+                </Link>
+              </div>
+            </li>
+            <li className="pl-6 cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-4 mb-4 py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none">
+              <div className="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
+                </svg>
+                <Link to={"hopital"}>
+                  <span className="ml-2">List of Hopitals</span>
+                </Link>
+              </div>
+            </li>
+            <li className="pl-6 cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-4 mb-4 py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none">
+              <div className="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
+                </svg>
+                <Link to={"medications"}>
+                  <span className="ml-2">List of Medicaments</span>
+                </Link>
+              </div>
+            </li>
+            <li className="pl-6 cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-4 mb-4 py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none">
+              <div className="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" />
+                </svg>
+                <Link to={"departements"}>
+                  <span className="ml-2">List of Departements</span>
+                </Link>
               </div>
             </li>
           </ul>
@@ -265,7 +312,36 @@ export default function Navbar() {
             {/* Remove class [ border-dashed border-2 border-gray-300 ] to remove dotted border */}
             {/* Place your content here */}
             <div className="pt-5 lg:pl-10 mb-24">
-              <Outlet />
+              <div className="bg-white p-10 2xl:p-5">
+                <div className="container mx-auto bg-white rounded">
+                  <div className="xl:w-full border-b border-gray-300 py-5 bg-white">
+                    <div className="flex w-11/12 mx-auto xl:w-full xl:mx-0 items-center">
+                      <p className="text-lg text-gray-800 font-bold">
+                        {pageName}
+                      </p>
+                      <div className="ml-2 cursor-pointer text-gray-600 ">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          width={16}
+                          height={16}
+                        >
+                          <path
+                            className="heroicon-ui"
+                            d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm0-9a1 1 0 0 1 1 1v4a1 1 0 0 1-2 0v-4a1 1 0 0 1 1-1zm0-4a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
+                            fill="currentColor"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mx-auto">
+                    {/*Content*/}
+                    <Outlet />
+                    {/*Content*/}
+                  </div>
+                </div>
+              </div>
             </div>
             {/*Footer*/}
             <footer className="sticky top-full footer p-4 justify-center text-base-content">

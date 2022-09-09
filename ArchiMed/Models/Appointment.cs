@@ -5,9 +5,9 @@ namespace ArchiMed.Models;
 
 public class Appointment
 {
-    public int ConsultationId { get; set; }
+    public int AppointmentId { get; set; }
     
-    public DateTime DateRendezVous { get; set; }
+    public DateTime AppointmentDate { get; set; }
     
     //Les relations entre les tables
     [JsonIgnore]    

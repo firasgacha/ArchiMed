@@ -11,6 +11,12 @@ import ListOfDoctors from "pages/home/ListOfDoctors";
 import ListOfPatients from "pages/home/ListOfPatients";
 import LandingPage from "pages/LandingPage";
 import Contact from "pages/Contact";
+import ListOfServices from "pages/home/ListOfDepartements";
+import ListOfHopital from "pages/home/ListOfHopital";
+import ListOfMedicaments from "pages/home/ListOfMedicaments";
+import ListOfAppointment from "pages/home/ListOfAppointment";
+import ListOfEmployee from "pages/home/ListOfEmployee";
+import ListOfDepartements from "pages/home/ListOfDepartements";
 
 function App() {
   return (
@@ -21,6 +27,12 @@ function App() {
           <Route path="medical-folder" element={<MedicalFolder />} />
           <Route path="doctors" element={<ListOfDoctors />} />
           <Route path="patients" element={<ListOfPatients />} />
+          <Route path="departements" element={<ListOfDepartements />} />
+          <Route path="hospitals" element={<ListOfHopital />} />
+          <Route path="medications" element={<ListOfMedicaments />} />
+          <Route path="hopital" element={<ListOfHopital />} />
+          <Route path="appointment" element={<ListOfAppointment />} />
+          <Route path="employee" element={<ListOfEmployee />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<LandingPage />} />

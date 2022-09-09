@@ -2,7 +2,7 @@
 
 public class Medications
 {
-    public int MedicationId { get; set; }
+    public int MedicationsId { get; set; }
     public string medicationName { get; set; }
     public string medicationDescription { get; set; }
     public string medicationComposition { get; set; }

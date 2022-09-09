@@ -24,7 +24,7 @@ builder.Services.AddCors(options =>
 
 // Connect to PostgreSQL Database
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<PatientDb>(options =>
+builder.Services.AddDbContext<ArchiMedDB>(options =>
     options.UseNpgsql(connectionString));
 
 //... rest of the code omitted for brevity
@@ -97,19 +97,19 @@ app.MapControllers();
 // });
 
 app.Run();
-public class PatientDb: DbContext {
-    public PatientDb(DbContextOptions<PatientDb> options): base(options) {
+public class ArchiMedDB: DbContext {
+    public ArchiMedDB(DbContextOptions<ArchiMedDB> options): base(options) {
 
     }
     public DbSet<Patient> Patients => Set<Patient>();
-    public DbSet<Consultation> Consultation { get; set; }
-    public DbSet<Medecin> Medecin { get; set; }
-    public DbSet<Scanner> Scanner { get; set; }
-    public DbSet<DossierMedical> DossierMedical { get; set; }
-    public DbSet<Medicaments> Medicaments { get; set; }
-    public DbSet<Ordenance> Ordenance { get; set; }
-    public DbSet<Radio> Radio { get; set; }
-    public DbSet<Responsable> Responsable { get; set; }
-    public DbSet<Service> Service { get; set; }
+    public DbSet<Appointment> Appointments { get; set; }
+    public DbSet<Doctor> Doctors { get; set; }
+    public DbSet<Scanner> Scanners{ get; set; }
+    public DbSet<MedicalFolder> MedicalFolders { get; set; }
+    public DbSet<Medications> Medications { get; set; }
+    public DbSet<MedicalOrder> MedicalOrders { get; set; }
+    public DbSet<Radio> Radios { get; set; }
+    public DbSet<Agent> Agents { get; set; }
+    public DbSet<Department> Departments { get; set; }
     
 }

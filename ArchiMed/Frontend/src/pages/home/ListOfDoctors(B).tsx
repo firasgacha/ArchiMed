@@ -1,13 +1,14 @@
-﻿import React, { useEffect, useMemo, useState, useRef } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import { useTable, useSortBy, useGlobalFilter, useFilters, usePagination, useColumnOrder, useRowSelect } from "react-table";
 import GlobalFilter from "../../components/GlobalFilter";
 import ColumnFilter from "components/ColumnFilter";
 import axios from "axios";
 import { format, isDate } from 'date-fns';
+import { useQuery } from "react-query";
 
-export default function ListOfPatients() {
+export default function ListOfDoctors() {
     const fetchData = async () => {
-        await axios.get('Patient')
+        await axios.get('Doctor')
             .then((res) => {
                 setDoctorsListData(res.data);
                 console.log(res.data);
@@ -19,12 +20,23 @@ export default function ListOfPatients() {
     const COLUMNS = [
         {
             Header: 'First Name',
-            accessor: 'nom',
+            accessor: 'fisrtName',
             Filter: ColumnFilter
         },
         {
             Header: 'Last Name',
-            accessor: 'prenom',
+            accessor: 'lastName',
+            Filter: ColumnFilter
+        },
+        {
+            Header: 'Specialty',
+            accessor: 'specialty',
+            Filter: ColumnFilter
+        },
+        {
+            Header: 'Head of department',
+            accessor: 'headofDepartment',
+            Cell: ({ cell: { value } }) => (value ? 'Yes' : 'No'),
             Filter: ColumnFilter
         },
         {
@@ -34,9 +46,9 @@ export default function ListOfPatients() {
         },
         {
             Header: 'Birthday',
-            accessor: 'naissance',
+            accessor: 'birthday',
             Filter: ColumnFilter,
-            // Cell: ({ cell: { value } }) => format(new Date(value), 'dd/MM/yyyy')
+            Cell: ({ cell: { value } }) => format(new Date(value), 'dd/MM/yyyy')
         },
         {
             Header: 'Email',
@@ -45,34 +57,35 @@ export default function ListOfPatients() {
         },
         {
             Header: 'Phone',
-            accessor: 'telephone',
+            accessor: 'phone',
             Filter: ColumnFilter
         },
         {
             Header: 'Adress',
-            accessor: 'adresse',
+            accessor: 'adress',
             Filter: ColumnFilter
         },
         {
             Header: 'Postal_Code',
-            accessor: 'zipcode',
+            accessor: 'postalCode',
             Filter: ColumnFilter
         },
 
         {
             Header: 'City',
-            accessor: 'ville',
+            accessor: 'city',
             Filter: ColumnFilter
         },
         {
             Header: 'Country',
-            accessor: 'pays',
+            accessor: 'country',
             Filter: ColumnFilter
         }
     ]
     const [doctorsListData, setDoctorsListData] = useState([]);
     const [showAddDosctor, setshowAddDosctor] = useState(false);
     const [showEditDosctor, setshowEditDosctor] = useState(false);
+    const [selectedDoctor, setselectedDoctor] = useState(null);
 
 
 
@@ -116,15 +129,15 @@ export default function ListOfPatients() {
     const changeOrdre = (v: String) => {
         switch (v) {
             case "email": {
-                setColumnOrder(['email', 'CIN', 'first_name', 'last_name']);
+                setColumnOrder(['email', 'CIN', 'first_name', 'last_name', 'id']);
                 break;
             }
             case "cin": {
-                setColumnOrder(['CIN', 'email', 'first_name', 'last_name']);
+                setColumnOrder(['CIN', 'email', 'first_name', 'last_name', 'id']);
                 break;
             }
             case "default": {
-                setColumnOrder(['first_name', 'last_name', 'CIN', 'email']);
+                setColumnOrder(['id', 'first_name', 'last_name', 'CIN', 'email']);
                 break;
             }
             default: {
@@ -134,56 +147,59 @@ export default function ListOfPatients() {
     }
     const [isList, setIsList] = useState(false);
 
+    const getSelectedRows = () => {
+        return selectedFlatRows.map((row) => row.original);
+    }
 
     const [DoctorId, setDoctorId] = useState();
     const [fisrtName, setFisrtName] = useState(String);
     const [lastName, setLastName] = useState(String);
-    const [birthday, setBirthday] = useState(String);
+    const [birthday, setBirthday] = useState(Date);
     const [cin, setCIN] = useState(0);
     const [adress, setAdress] = useState(String);
     const [city, setCity] = useState(String);
     const [country, setCountry] = useState(String);
     const [postalCode, setPostalCode] = useState(0);
     const [email, setEmail] = useState(String);
-    const [phone, setPhone] = useState(String);
+    const [specialty, setSpecialty] = useState(String);
+    const [phone, setPhone] = useState(0);
+    const [headofDepartment, setHeadofDepartment] = useState(false);
+    const [consultationList, setConsultationList] = useState([]);
 
-
-    const patient = {
-        "patientId": DoctorId,
-        "nom": fisrtName,
-        "prenom": lastName,
+    const doctor = {
+        "doctorId": DoctorId,
+        "fisrtName": fisrtName,
+        "lastName": lastName,
         // "birthday": birthday + "T14:44:10.01Z",
-        "naissance": birthday,
+        "birthday": "2022-08-31T18:14:59.228Z",
         "cin": cin,
-        "adresse": adress,
-        "ville": city,
-        "pays": country,
-        "zipcode": postalCode,
+        "adress": adress,
+        "city": city,
+        "country": country,
+        "postalCode": postalCode,
         "email": email,
-        "telephone": phone,
-        "mdp": "string",
-        "profileUrl": "string",
-        "profileImage": "string",
-        "consultationList": [],
-        "dossierMedicalFk": 0
+        "specialty": specialty,
+        "phone": phone,
+        "headofDepartment": headofDepartment,
+        "consultationList": consultationList
     }
 
     const deleteDoctor = async () => {
         selectedFlatRows.map(async (row) => {
-            await axios.delete(`Patient/${row.original.patientId}`)
+            await axios.delete(`Doctor/${row.original.doctorId}`)
                 .then((res) => {
                     fetchData();
                 }).catch((err) => {
                     console.log(err);
                 })
         })
-        alert("Patient deleted");
+        alert("Doctor deleted");
     }
-    const addDoctor = async () => {
-        await axios.post('Patient', patient)
+    const addDoctor = async() => {
+        await axios.post('Doctor', doctor)
             .then((res) => {
                 console.log(res.data);
-                alert("Patient added");
+                alert("Doctor added");
                 fetchData();
             }).catch((err) => {
                 console.log(err);
@@ -192,30 +208,32 @@ export default function ListOfPatients() {
     }
 
     const editDoctor = async () => {
-        await axios.put(`Doctor/${DoctorId}`, patient)
+        await axios.put(`Doctor/${DoctorId}`, doctor)
             .then((res) => {
-                alert("Patient updated");
+                alert("Doctor updated");
                 fetchData();
             }).catch((err) => {
                 console.log(err.message);
             }
             )
     }
-
+    
     const EditFunction = () => {
         if (selectedFlatRows.length === 1) {
             selectedFlatRows.map(async (row) => {
-                setDoctorId(row.original.patientId);
-                setFisrtName(row.original.nom);
-                setLastName(row.original.prenom);
-                setBirthday(new Date(row.original.naissance));
+                setDoctorId(row.original.doctorId);
+                setFisrtName(row.original.fisrtName);
+                setLastName(row.original.lastName);
+                setBirthday(new Date(row.original.birthday));
                 setCIN(row.original.cin);
-                setAdress(row.original.adresse);
-                setCity(row.original.ville);
-                setCountry(row.original.pays);
-                setPostalCode(row.original.zipcode);
+                setAdress(row.original.adress);
+                setCity(row.original.city);
+                setCountry(row.original.country);
+                setPostalCode(row.original.postalCode);
                 setEmail(row.original.email);
-                setPhone(row.original.telephone);
+                setSpecialty(row.original.specialty);
+                setPhone(row.original.phone);
+                setHeadofDepartment(row.original.headofDepartment);
                 // setConsultationList(row.original.consultationList);
             })
             setshowEditDosctor(!showEditDosctor);
@@ -242,7 +260,7 @@ export default function ListOfPatients() {
                         <div className="flex items-center justify-center h-full w-full">
                             <div className="bg-white rounded-md shadow fixed overflow-y-auto sm:h-auto w-10/12 md:w-8/12 lg:w-1/2 2xl:w-2/5">
                                 <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
-                                    <p className="text-base font-semibold">Register new patient</p>
+                                    <p className="text-base font-semibold">Create New Doctor</p>
                                     <button className="focus:outline-none">
                                         <svg onClick={() => setshowAddDosctor(!showAddDosctor)} width={30} height={30} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
@@ -270,22 +288,36 @@ export default function ListOfPatients() {
                                         <div className="flex items-center space-x-9 mt-8">
                                             <input onChange={(e) => setCIN(Number(e.target.value))} placeholder="CIN" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                             <input onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input onChange={(e) => setPhone(e.target.value)} placeholder="Phone" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input onChange={(e) => setPhone(Number(e.target.value))} placeholder="Phone" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
-                                            <input onChange={(e) => setAdress(e.target.value)} placeholder="Adress" type="text" className="w-3/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input onChange={(e) => setAdress(e.target.value)} placeholder="Adress" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                             <input onChange={(e) => setPostalCode(Number(e.target.value))} placeholder="Postal Code" type="number" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input onChange={(e) => setCity(e.target.value)} placeholder="City" type="text" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input onChange={(e) => setCountry(e.target.value)} placeholder="Country" type="text" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
-                                            <input onChange={(e) => setCity(e.target.value)} placeholder="City" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input onChange={(e) => setCountry(e.target.value)} placeholder="Country" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <select onChange={(e) => setSpecialty(e.target.value)} name="specialite" id="specialite" className="w-3/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                                                <option value="Cardiologue" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose your specialite</option>
+                                                <option value="Dentiste" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Heart care</option>
+                                                <option value="Gynecologue" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Psycology</option>
+                                            </select>
+                                            {/* <select name="departements" id="departements" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                                                <option value="" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose your departement</option>
+                                                <option value="" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Heart care</option>
+                                                <option value="" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Psycology</option>
+                                            </select> */}
+                                            <div className="w-1/4">
+                                                <p>Head of department</p>
+                                                <input onChange={() => setHeadofDepartment(!headofDepartment)} type="checkbox" className="focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                           </div>
                                         </div>
                                     </form>
                                     <div className="flex items-center justify-between mt-9">
                                         <button onClick={() => setshowAddDosctor(!showAddDosctor)} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
                                             Cancel
                                         </button>
-                                        <button onClick={() => addDoctor()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Add Patient</button>
+                                        <button onClick={() => addDoctor()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Add Doctor</button>
                                     </div>
                                 </div>
                             </div>
@@ -300,7 +332,7 @@ export default function ListOfPatients() {
                         <div className="flex items-center justify-center h-full w-full">
                             <div className="bg-white rounded-md shadow fixed overflow-y-auto sm:h-auto w-10/12 md:w-8/12 lg:w-1/2 2xl:w-2/5">
                                 <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
-                                    <p className="text-base font-semibold">Edit Patient</p>
+                                    <p className="text-base font-semibold">Edit Doctor</p>
                                     <button className="focus:outline-none">
                                         <svg onClick={() => setshowEditDosctor(!showEditDosctor)} width={30} height={30} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
@@ -328,15 +360,29 @@ export default function ListOfPatients() {
                                         <div className="flex items-center space-x-9 mt-8">
                                             <input defaultValue={cin} onChange={(e) => setCIN(Number(e.target.value))} placeholder="CIN" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                             <input defaultValue={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input defaultValue={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input defaultValue={phone} onChange={(e) => setPhone(Number(e.target.value))} placeholder="Phone" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
-                                            <input defaultValue={adress} onChange={(e) => setAdress(e.target.value)} placeholder="Adress" type="text" className="w-3/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input defaultValue={adress} onChange={(e) => setAdress(e.target.value)} placeholder="Adress" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                             <input defaultValue={postalCode} onChange={(e) => setPostalCode(Number(e.target.value))} placeholder="Postal Code" type="number" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input defaultValue={city} onChange={(e) => setCity(e.target.value)} placeholder="City" type="text" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input defaultValue={country} onChange={(e) => setCountry(e.target.value)} placeholder="Country" type="text" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
-                                            <input defaultValue={city} onChange={(e) => setCity(e.target.value)} placeholder="City" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input defaultValue={country} onChange={(e) => setCountry(e.target.value)} placeholder="Country" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <select defaultValue={specialty} onChange={(e) => setSpecialty(e.target.value)} name="specialite" id="specialite" className="w-3/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                                                <option value="Cardiologue" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose your specialite</option>
+                                                <option value="Dentiste" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Heart care</option>
+                                                <option value="Gynecologue" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Psycology</option>
+                                            </select>
+                                            {/* <select name="departements" id="departements" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                                                <option value="" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose your departement</option>
+                                                <option value="" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Heart care</option>
+                                                <option value="" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Psycology</option>
+                                            </select> */}
+                                            <div className="w-1/4">
+                                                <p>Head of department</p>
+                                                <input defaultChecked={headofDepartment} onChange={() => setHeadofDepartment(!headofDepartment)} type="checkbox" className="focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                           </div>
                                         </div>
                                     </form>
                                     <div className="flex items-center justify-between mt-9">
@@ -360,15 +406,14 @@ export default function ListOfPatients() {
                     null,
                     2
                 )}
-                {JSON.stringify(patient)}
+                {JSON.stringify(doctor)}
             </code>
-
             <div id="listOfDoctors">
                 <div className="bg-white p-10 2xl:p-5">
                     <div className="container mx-auto bg-white rounded">
                         <div className="flex justify-between border-b border-gray-300 py-5 bg-white">
                             <div className="flex mx-auto xl:w-full xl:mx-0 items-center">
-                                <p className="text-lg text-gray-800 font-bold mr-3">List of patients</p>
+                                <p className="text-lg text-gray-800 font-bold mr-3">List of doctors</p>
                                 <svg onClick={() => setshowAddDosctor(!showAddDosctor)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM3 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 019.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
                                 </svg>
@@ -410,7 +455,7 @@ export default function ListOfPatients() {
                                         </div>
                                         {isList && (
                                             <div className="w-40 mt-2 p-4 bg-white shadow rounded">
-
+                                                {/* element */}
                                                 {
                                                     allColumns.map(column => (
                                                         <div key={column.id}>
