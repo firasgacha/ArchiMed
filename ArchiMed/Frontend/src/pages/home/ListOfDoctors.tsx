@@ -7,7 +7,6 @@ import {
   usePagination,
   useColumnOrder,
 } from "react-table";
-import GlobalFilter from "../../components/GlobalFilter";
 import ColumnFilter from "components/ColumnFilter";
 import axios from "axios";
 import { format } from "date-fns";

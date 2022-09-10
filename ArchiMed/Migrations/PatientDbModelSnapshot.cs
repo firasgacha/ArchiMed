@@ -16,7 +16,7 @@ namespace ArchiMed.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.0")
+                .HasAnnotation("ProductVersion", "6.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -38,11 +38,16 @@ namespace ArchiMed.Migrations
                     b.Property<int>("PatientFk")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("ResponsableId")
+                        .HasColumnType("integer");
+
                     b.HasKey("ConsultationId");
 
                     b.HasIndex("MedecinFk");
 
                     b.HasIndex("PatientFk");
+
+                    b.HasIndex("ResponsableId");
 
                     b.ToTable("Consultation");
                 });
@@ -336,11 +341,82 @@ namespace ArchiMed.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int?>("ResponsableId")
+                        .HasColumnType("integer");
+
                     b.HasKey("RadioId");
 
                     b.HasIndex("DossierMedicalFk");
 
+                    b.HasIndex("ResponsableId");
+
                     b.ToTable("Radio");
+                });
+
+            modelBuilder.Entity("ArchiMed.Models.Responsable", b =>
+                {
+                    b.Property<int>("ResponsableId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ResponsableId"));
+
+                    b.Property<string>("ProfileImage")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProfileUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("adresse")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("cin")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("mdp")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("naissance")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("nom")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("pays")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("prenom")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("telephone")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("type")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ville")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("zipcode")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ResponsableId");
+
+                    b.ToTable("Responsable");
                 });
 
             modelBuilder.Entity("ArchiMed.Models.Scanner", b =>
@@ -365,6 +441,9 @@ namespace ArchiMed.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int?>("ResponsableId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("ScannerImage")
                         .IsRequired()
                         .HasColumnType("text");
@@ -380,6 +459,8 @@ namespace ArchiMed.Migrations
                     b.HasKey("ScannerId");
 
                     b.HasIndex("DossierMedicalFk");
+
+                    b.HasIndex("ResponsableId");
 
                     b.ToTable("Scanner");
                 });
@@ -447,6 +528,10 @@ namespace ArchiMed.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ArchiMed.Models.Responsable", null)
+                        .WithMany("ConsultationsList")
+                        .HasForeignKey("ResponsableId");
+
                     b.Navigation("Medecin");
 
                     b.Navigation("Patient");
@@ -508,6 +593,10 @@ namespace ArchiMed.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ArchiMed.Models.Responsable", null)
+                        .WithMany("RadiosList")
+                        .HasForeignKey("ResponsableId");
+
                     b.Navigation("DossierMedical");
                 });
 
@@ -518,6 +607,10 @@ namespace ArchiMed.Migrations
                         .HasForeignKey("DossierMedicalFk")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("ArchiMed.Models.Responsable", null)
+                        .WithMany("ScannersList")
+                        .HasForeignKey("ResponsableId");
 
                     b.Navigation("DossierMedical");
                 });
@@ -583,6 +676,15 @@ namespace ArchiMed.Migrations
             modelBuilder.Entity("ArchiMed.Models.Patient", b =>
                 {
                     b.Navigation("ConsultationList");
+                });
+
+            modelBuilder.Entity("ArchiMed.Models.Responsable", b =>
+                {
+                    b.Navigation("ConsultationsList");
+
+                    b.Navigation("RadiosList");
+
+                    b.Navigation("ScannersList");
                 });
 #pragma warning restore 612, 618
         }
