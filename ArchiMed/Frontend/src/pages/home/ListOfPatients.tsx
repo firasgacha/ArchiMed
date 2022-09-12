@@ -8,6 +8,7 @@ import MaleSvg from "assets/male.svg";
 import FemaleSvg from "assets/female.svg";
 
 export default function ListOfPatients() {
+    
     const fetchData = async () => {
         await axios.get('Patient')
             .then((res) => {

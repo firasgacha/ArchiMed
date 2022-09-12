@@ -113,6 +113,8 @@ public class ArchiMedDB: DbContext {
     public DbSet<Doctor> Doctors { get; set; }
     public DbSet<ArchiMed.Models.Patient>? Patient { get; set; }
     public DbSet<ArchiMed.Models.MedicalFolder>? MedicalFolder { get; set; }
+    public DbSet<ArchiMed.Models.Appointment>? Appointment { get; set; }
+    public DbSet<ArchiMed.Models.Agent>? Agent { get; set; }
 
     
 }
