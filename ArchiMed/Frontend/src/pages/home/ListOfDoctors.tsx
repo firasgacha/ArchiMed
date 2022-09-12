@@ -391,7 +391,7 @@ export default function ListOfDoctors() {
                                         <button onClick={() => setshowAddDosctor(!showAddDosctor)} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
                                             Cancel
                                         </button>
-                                        <button onClick={() => addDoctor()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Add Doctor</button>
+                                        <button onClick={() => addDoctor()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Confirm</button>
                                     </div>
                                 </div>
                             </div>

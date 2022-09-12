@@ -181,7 +181,6 @@ export default function ListOfPatients() {
     const addPatient = async () => {
         await axios.post('Patient',
             {
-                "patientId": patientId,
                 "fisrtName": fisrtName,
                 "lastName": lastName,
                 "gender": gender,
@@ -197,7 +196,7 @@ export default function ListOfPatients() {
                     "medicalFolderId": 0,
                     "scanners": [],
                     "radios": [],
-                    "medications": []
+                    "medicalOrders":[]
                 }
             })
             .then((res) => {
@@ -277,7 +276,7 @@ export default function ListOfPatients() {
                         <div className="flex items-center justify-center h-full w-full">
                             <div className="bg-white rounded-md shadow fixed overflow-y-auto sm:h-auto w-10/12 md:w-8/12 lg:w-1/2 2xl:w-2/5">
                                 <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
-                                    <p className="text-base font-semibold">Create New Doctor</p>
+                                    <p className="text-base font-semibold">Add New Patient</p>
                                     <button className="focus:outline-none">
                                         <svg onClick={() => setshowAddpatient(!showAddPatient)} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
@@ -302,22 +301,22 @@ export default function ListOfPatients() {
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
                                             <input onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input onChange={(e) => setPhone(Number(e.target.value))} placeholder="Phone" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input onChange={(e) => setPhone(e.target.value)} placeholder="Phone" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
                                             <input onChange={(e) => setAdress(e.target.value)} placeholder="Adress" type="text" className="w-2/3 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                             <input onChange={(e) => setPostalCode(Number(e.target.value))} placeholder="Postal Code" type="number" className="w-1/3 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
-                                            <input onChange={(e) => setCity(e.target.value)} placeholder="City" type="text" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input onChange={(e) => setCountry(e.target.value)} placeholder="Country" type="text" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input onChange={(e) => setCity(e.target.value)} placeholder="City" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input onChange={(e) => setCountry(e.target.value)} placeholder="Country" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
                                     </form>
                                     <div className="flex items-center justify-between mt-9">
                                         <button onClick={() => setshowAddpatient(!showAddPatient)} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
                                             Cancel
                                         </button>
-                                        <button onClick={() => addPatient()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Add Patient</button>
+                                        <button onClick={() => addPatient()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Confirm</button>
                                     </div>
                                 </div>
                             </div>
@@ -392,7 +391,7 @@ export default function ListOfPatients() {
                 {JSON.stringify(patient)}
             </code> */}
 
-            <div id="listOfDoctors">
+            <div id="listOfPatient">
                 <div className="bg-white p-10 2xl:p-5">
                     <div className="container mx-auto bg-white rounded">
                         <div className="flex justify-between border-b border-gray-300 py-5 bg-white">

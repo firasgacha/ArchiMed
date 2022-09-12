@@ -7,10 +7,9 @@ public class Medications
     public string medicationDescription { get; set; }
     public string medicationComposition { get; set; }
     public string medicationEffets { get; set; }
-    public string medicationcontraindication { get; set; }
-    public string medicationPrice { get; set; }
-    public string medicationPicture { get; set; }
+    public string medicationContraindication { get; set; }
+    public int medicationPrice { get; set; }
     public string medicationCode { get; set; }
-    public DateTime DateFabrication { get; set; }
-    public DateTime DateExpiration { get; set; }
+    public string DateFabrication { get; set; }
+    public string DateExpiration { get; set; }
 }

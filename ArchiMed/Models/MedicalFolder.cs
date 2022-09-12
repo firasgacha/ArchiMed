@@ -10,5 +10,5 @@ public class MedicalFolder
     
     public ICollection<Scanner> Scanners { get; set; }
     public ICollection<Radio> Radios { get; set; }
-    public ICollection<Medications>Medications  { get; set; }
+    public ICollection<MedicalOrder>MedicalOrders  { get; set; }
 }

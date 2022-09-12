@@ -125,28 +125,6 @@ export default function ListOfDepartements() {
   }
   const [isList, setIsList] = useState(false);
 
-
-
-
-  const doctor = {
-    "doctorId": DoctorId,
-    "fisrtName": fisrtName,
-    "lastName": lastName,
-    "birthday": birthday,
-    "gender": gender,
-    // "birthday": "2022-08-31T18:14:59.228Z",
-    "cin": cin,
-    "adress": adress,
-    "city": city,
-    "country": country,
-    "postalCode": postalCode,
-    "email": email,
-    "specialty": specialty,
-    "phone": phone,
-    "headofDepartment": headofDepartment,
-    "departmentFk": departmentId
-  }
-
   const departement = {
     "departmentId": departmentId,
     "departmentName": departmentName,
@@ -242,7 +220,7 @@ export default function ListOfDepartements() {
                     <button onClick={() => setshowAddDepartment(!showAddDepartment)} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
                       Cancel
                     </button>
-                    <button onClick={() => addDepartement()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Add Departement</button>
+                    <button onClick={() => addDepartement()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Confirm</button>
                   </div>
                 </div>
               </div>

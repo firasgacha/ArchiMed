@@ -227,21 +227,7 @@ export default function ListOfAgents() {
       }
       )
   }
-  // {
-  //   "agentId": 1,
-  //     "fisrtName": "string",
-  //       "lastName": "string",
-  //         "birthday": "string",
-  //           "gender": "string",
-  //             "cin": 0,
-  //               "adress": "string",
-  //                 "city": "string",
-  //                   "country": "string",
-  //                     "postalCode": 0,
-  //                       "email": "string",
-  //                         "phone": "string",
-  //                           "role": "string"
-  // }
+  
   const editAgent = async () => {
     await axios.put(`Agent/${agentId}`,
       {

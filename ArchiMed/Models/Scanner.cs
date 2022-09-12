@@ -6,21 +6,21 @@ namespace ArchiMed.Models;
 public class Scanner
 {
     public int ScannerId { get; set; }
-    public string ScannerName { get; set; }
+    
     public string Description { get; set; }
-    public DateTime Created { get; set; }
-    public string ScannerType { get; set; }
     
-    //Les relations entre les tables
-    [JsonIgnore]
-    public virtual Agent agent { get; set; }
+    public string Created { get; set; }
     
-    [ForeignKey("agent")]
-    public int AgentFk { get; set; }
+    public Doctor? Doctor { get; set; }
     
-    [JsonIgnore]
-    public virtual MedicalFolder medicalFolder { get; set; }
+    public int DoctorId { get; set; }
     
-    [ForeignKey("medicalFolder")]
-    public int medicalFolderFk { get; set; }
+    public Patient? Patient { get; set; }
+    
+    public int PatientId { get; set; }
+    
+    public Agent? Agent { get; set; }
+    
+    public int AgentId { get; set; }
+   
 }
