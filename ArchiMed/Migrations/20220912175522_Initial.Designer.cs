@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ArchiMed.Migrations
 {
     [DbContext(typeof(ArchiMedDB))]
-    [Migration("20220912134805_Initial")]
+    [Migration("20220912175522_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -80,6 +80,38 @@ namespace ArchiMed.Migrations
                     b.HasKey("AgentId");
 
                     b.ToTable("Agent");
+                });
+
+            modelBuilder.Entity("ArchiMed.Models.Appointment", b =>
+                {
+                    b.Property<int>("AppointmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("AppointmentId"));
+
+                    b.Property<int>("AgentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("AppointmentDate")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("AppointmentId");
+
+                    b.HasIndex("AgentId");
+
+                    b.HasIndex("DoctorId");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("Appointment");
                 });
 
             modelBuilder.Entity("ArchiMed.Models.Department", b =>
@@ -176,12 +208,45 @@ namespace ArchiMed.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("MedicalFolderId"));
 
-                    b.Property<int?>("PatientFk")
-                        .HasColumnType("integer");
-
                     b.HasKey("MedicalFolderId");
 
                     b.ToTable("MedicalFolder");
+                });
+
+            modelBuilder.Entity("ArchiMed.Models.MedicalOrder", b =>
+                {
+                    b.Property<int>("MedicalOrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("MedicalOrderId"));
+
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("MedicalFolderId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("MedicalOrderDate")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("MedicalOrderDescription")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("MedicalOrderId");
+
+                    b.HasIndex("DoctorId");
+
+                    b.HasIndex("MedicalFolderId");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("MedicalOrder");
                 });
 
             modelBuilder.Entity("ArchiMed.Models.Medications", b =>
@@ -192,13 +257,15 @@ namespace ArchiMed.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("MedicationsId"));
 
-                    b.Property<DateTime>("DateExpiration")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<string>("DateExpiration")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("DateFabrication")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<string>("DateFabrication")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<int?>("MedicalFolderId")
+                    b.Property<int?>("MedicalOrderId")
                         .HasColumnType("integer");
 
                     b.Property<string>("medicationCode")
@@ -206,6 +273,10 @@ namespace ArchiMed.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("medicationComposition")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("medicationContraindication")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -221,21 +292,12 @@ namespace ArchiMed.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("medicationPicture")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("medicationPrice")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("medicationcontraindication")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("medicationPrice")
+                        .HasColumnType("integer");
 
                     b.HasKey("MedicationsId");
 
-                    b.HasIndex("MedicalFolderId");
+                    b.HasIndex("MedicalOrderId");
 
                     b.ToTable("Medications");
                 });
@@ -248,10 +310,7 @@ namespace ArchiMed.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("PatientId"));
 
-                    b.Property<int>("MedicalFolderFk")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("MedicalFolderId")
+                    b.Property<int>("MedicalFolderId")
                         .HasColumnType("integer");
 
                     b.Property<string>("adress")
@@ -311,27 +370,35 @@ namespace ArchiMed.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("RadioId"));
 
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<int>("AgentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Created")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("MedicalFolderId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("RadioDescription")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("RadioName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("RadioType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("medicalFolderFk")
-                        .HasColumnType("integer");
-
                     b.HasKey("RadioId");
 
-                    b.HasIndex("medicalFolderFk");
+                    b.HasIndex("AgentId");
+
+                    b.HasIndex("DoctorId");
+
+                    b.HasIndex("MedicalFolderId");
+
+                    b.HasIndex("PatientId");
 
                     b.ToTable("Radio");
                 });
@@ -344,34 +411,64 @@ namespace ArchiMed.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ScannerId"));
 
-                    b.Property<int>("AgentFk")
+                    b.Property<int>("AgentId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<string>("Created")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("ScannerName")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("ScannerType")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int?>("MedicalFolderId")
+                        .HasColumnType("integer");
 
-                    b.Property<int>("medicalFolderFk")
+                    b.Property<int>("PatientId")
                         .HasColumnType("integer");
 
                     b.HasKey("ScannerId");
 
-                    b.HasIndex("AgentFk");
+                    b.HasIndex("AgentId");
 
-                    b.HasIndex("medicalFolderFk");
+                    b.HasIndex("DoctorId");
+
+                    b.HasIndex("MedicalFolderId");
+
+                    b.HasIndex("PatientId");
 
                     b.ToTable("Scanner");
+                });
+
+            modelBuilder.Entity("ArchiMed.Models.Appointment", b =>
+                {
+                    b.HasOne("ArchiMed.Models.Agent", "Agent")
+                        .WithMany()
+                        .HasForeignKey("AgentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ArchiMed.Models.Doctor", "Doctor")
+                        .WithMany()
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ArchiMed.Models.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Agent");
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("ArchiMed.Models.Doctor", b =>
@@ -383,50 +480,107 @@ namespace ArchiMed.Migrations
                     b.Navigation("Department");
                 });
 
+            modelBuilder.Entity("ArchiMed.Models.MedicalOrder", b =>
+                {
+                    b.HasOne("ArchiMed.Models.Doctor", "Doctor")
+                        .WithMany()
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ArchiMed.Models.MedicalFolder", null)
+                        .WithMany("MedicalOrders")
+                        .HasForeignKey("MedicalFolderId");
+
+                    b.HasOne("ArchiMed.Models.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
+                });
+
             modelBuilder.Entity("ArchiMed.Models.Medications", b =>
                 {
-                    b.HasOne("ArchiMed.Models.MedicalFolder", null)
+                    b.HasOne("ArchiMed.Models.MedicalOrder", null)
                         .WithMany("Medications")
-                        .HasForeignKey("MedicalFolderId");
+                        .HasForeignKey("MedicalOrderId");
                 });
 
             modelBuilder.Entity("ArchiMed.Models.Patient", b =>
                 {
                     b.HasOne("ArchiMed.Models.MedicalFolder", "MedicalFolder")
                         .WithMany()
-                        .HasForeignKey("MedicalFolderId");
+                        .HasForeignKey("MedicalFolderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("MedicalFolder");
                 });
 
             modelBuilder.Entity("ArchiMed.Models.Radio", b =>
                 {
-                    b.HasOne("ArchiMed.Models.MedicalFolder", "medicalFolder")
-                        .WithMany("Radios")
-                        .HasForeignKey("medicalFolderFk")
+                    b.HasOne("ArchiMed.Models.Agent", "Agent")
+                        .WithMany()
+                        .HasForeignKey("AgentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("medicalFolder");
+                    b.HasOne("ArchiMed.Models.Doctor", "Doctor")
+                        .WithMany()
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ArchiMed.Models.MedicalFolder", null)
+                        .WithMany("Radios")
+                        .HasForeignKey("MedicalFolderId");
+
+                    b.HasOne("ArchiMed.Models.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Agent");
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("ArchiMed.Models.Scanner", b =>
                 {
-                    b.HasOne("ArchiMed.Models.Agent", "agent")
+                    b.HasOne("ArchiMed.Models.Agent", "Agent")
                         .WithMany()
-                        .HasForeignKey("AgentFk")
+                        .HasForeignKey("AgentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ArchiMed.Models.MedicalFolder", "medicalFolder")
+                    b.HasOne("ArchiMed.Models.Doctor", "Doctor")
+                        .WithMany()
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ArchiMed.Models.MedicalFolder", null)
                         .WithMany("Scanners")
-                        .HasForeignKey("medicalFolderFk")
+                        .HasForeignKey("MedicalFolderId");
+
+                    b.HasOne("ArchiMed.Models.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("agent");
+                    b.Navigation("Agent");
 
-                    b.Navigation("medicalFolder");
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("ArchiMed.Models.Department", b =>
@@ -436,11 +590,16 @@ namespace ArchiMed.Migrations
 
             modelBuilder.Entity("ArchiMed.Models.MedicalFolder", b =>
                 {
-                    b.Navigation("Medications");
+                    b.Navigation("MedicalOrders");
 
                     b.Navigation("Radios");
 
                     b.Navigation("Scanners");
+                });
+
+            modelBuilder.Entity("ArchiMed.Models.MedicalOrder", b =>
+                {
+                    b.Navigation("Medications");
                 });
 #pragma warning restore 612, 618
         }
