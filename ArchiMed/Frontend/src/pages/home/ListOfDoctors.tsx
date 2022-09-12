@@ -251,7 +251,7 @@ export default function ListOfDoctors() {
         "specialty": specialty,
         "phone": phone,
         "headofDepartment": headofDepartment,
-        "departmentFk": departmentId
+        "departmentFk" : departmentId
     }
 
     const deleteDoctor = async () => {
@@ -274,7 +274,6 @@ export default function ListOfDoctors() {
                 console.log(err);
             }
         )
-        putDoctorInDepartementList(departmentId);
     }
 
     const editDoctor = async () => {
@@ -367,6 +366,7 @@ export default function ListOfDoctors() {
                                             <input onChange={(e) => setCity(e.target.value)} placeholder="City" type="text" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                             <input onChange={(e) => setCountry(e.target.value)} placeholder="Country" type="text" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                             <select onChange={(e) => setdepartmentId(e.target.value)} className="w-3/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                                                <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose department</option>
                                                 {
                                                     departmentsListData.map((item) => (
                                                         <option value={item.departmentId} className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.departmentName}</option>

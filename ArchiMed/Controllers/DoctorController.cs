@@ -90,10 +90,12 @@ namespace ArchiMed.Controllers
               return Problem("Entity set 'ArchiMedDB.Doctors'  is null.");
           }
 
-          // var dep = _context.Departments
-          //     .Where(d => d.DepartmentId == doctor.Department.DepartmentId);
-
-          var dep = _context.Departments.FindAsync(doctor.DepartmentFk);
+          
+          var dep = _context.Departments
+              .Where(d => d.DepartmentId == doctor.DepartmentFk);
+          
+          //
+          // // var dep = _context.Departments.FindAsync(doctor.DepartmentFk);
           if(dep == null)
           {
             return Problem("Department not found.");
@@ -115,8 +117,9 @@ namespace ArchiMed.Controllers
               phone = doctor.phone,
               headofDepartment = doctor.headofDepartment,
               DepartmentFk = doctor.DepartmentFk,
+              Department = dep.FirstOrDefault(),
           };
-            _context.Doctors.Add(doctor);
+            _context.Doctors.Add(Newdoc);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetDoctor", new { id = doctor.DoctorId }, doctor);

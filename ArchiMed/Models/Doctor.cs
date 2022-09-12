@@ -23,5 +23,9 @@ public class Doctor
     public int phone { get; set; }
     public bool headofDepartment { get; set; } = false;
     
+    
+    public Department? Department { get; set; }
+    
     public int DepartmentFk { get; set; }
+    
 }

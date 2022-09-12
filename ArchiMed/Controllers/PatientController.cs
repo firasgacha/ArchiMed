@@ -28,7 +28,8 @@ namespace ArchiMed.Controllers
           {
               return NotFound();
           }
-            return await _context.Patient.ToListAsync();
+          
+          return await _context.Patient.ToListAsync();;
         }
 
         // GET: api/Patient/5
@@ -89,9 +90,8 @@ namespace ArchiMed.Controllers
           {
               return Problem("Entity set 'ArchiMedDB.Patient'  is null.");
           }
-
           _context.Patient.Add(patient);
-          await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetPatient", new { id = patient.PatientId }, patient);
         }

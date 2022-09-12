@@ -61,6 +61,7 @@ export default function ListOfDepartements() {
     await axios.get('Department')
       .then((res) => {
         setDepartmentsListData(res.data);
+        console.log('gvgh',res.data);
       }).catch((err) => {
         console.log(err);
       })
@@ -149,8 +150,7 @@ export default function ListOfDepartements() {
   const departement = {
     "departmentId": departmentId,
     "departmentName": departmentName,
-    "doctorsList": departmentdoctorsList
-
+    "doctors": departmentdoctorsList
   }
 
   const deleteDepartement = async () => {
@@ -165,10 +165,11 @@ export default function ListOfDepartements() {
     alert("Doctor deleted");
   }
   const addDepartement = async () => {
-    await axios.post('Department', departement)
+    await axios.post('Department', { "departmentName": departmentName, "doctors": departmentdoctorsList })
       .then((res) => {
         alert("Departement added");
         fetchDepartemnetsData();
+        setdepartmentId(0);
       }).catch((err) => {
         console.log(err);
       }
@@ -177,7 +178,11 @@ export default function ListOfDepartements() {
 
   const editDepartement = async () => {
     setdepartmentdoctorsList([]);
-    await axios.put(`Department/${departmentId}`, departement)
+    await axios.put(`Department/${departmentId}`, {
+      "departmentId": departmentId,
+      "departmentName": departmentName,
+      "doctors": departmentdoctorsList
+    })
       .then((res) => {
         alert("Departement updated");
         fetchDepartemnetsData();
@@ -198,7 +203,7 @@ export default function ListOfDepartements() {
     }
   }
 
-
+  
 
   useEffect(() => {
     fetchDepartemnetsData();
@@ -338,6 +343,7 @@ export default function ListOfDepartements() {
                       <div className="w-40 mt-2 p-4 bg-white shadow rounded">
                         {/* element */}
                         {
+                        
                           allColumns.map(column => (
                             <div key={column.id}>
                               <div className="flex items-center justify-between">

@@ -6,13 +6,9 @@ namespace ArchiMed.Models;
 
 public class MedicalFolder
 {
-    [Key]
-    public int FolderNumber { get; set; }
+    public int MedicalFolderId { get; set; }
     
-    [JsonIgnore]
-    public virtual Patient patient { get; set; }
-    
-    [ForeignKey("patient")]
-    public int PatientFk { get; set; }
-    
+    public ICollection<Scanner> Scanners { get; set; }
+    public ICollection<Radio> Radios { get; set; }
+    public ICollection<Medications>Medications  { get; set; }
 }

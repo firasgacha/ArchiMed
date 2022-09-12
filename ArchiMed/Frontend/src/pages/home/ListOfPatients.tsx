@@ -4,12 +4,14 @@ import GlobalFilter from "../../components/GlobalFilter";
 import ColumnFilter from "components/ColumnFilter";
 import axios from "axios";
 import { format, isDate } from 'date-fns';
+import MaleSvg from "assets/male.svg";
+import FemaleSvg from "assets/female.svg";
 
 export default function ListOfPatients() {
     const fetchData = async () => {
         await axios.get('Patient')
             .then((res) => {
-                setDoctorsListData(res.data);
+                setpatientListData(res.data);
                 console.log(res.data);
             }).catch((err) => {
                 console.log(err);
@@ -19,12 +21,24 @@ export default function ListOfPatients() {
     const COLUMNS = [
         {
             Header: 'First Name',
-            accessor: 'nom',
+            accessor: 'fisrtName',
             Filter: ColumnFilter
         },
         {
             Header: 'Last Name',
-            accessor: 'prenom',
+            accessor: 'lastName',
+            Filter: ColumnFilter
+        },
+        {
+            Header: 'Gender',
+            accessor: 'gender',
+            Filter: ColumnFilter,
+            Cell: ({ value }) => (value == 'Male' ?
+                <MaleSvg /> : <FemaleSvg />)
+        },
+        {
+            Header: 'medicalFolderId',
+            accessor: 'medicalFolderId',
             Filter: ColumnFilter
         },
         {
@@ -34,7 +48,7 @@ export default function ListOfPatients() {
         },
         {
             Header: 'Birthday',
-            accessor: 'naissance',
+            accessor: 'birthday',
             Filter: ColumnFilter,
             // Cell: ({ cell: { value } }) => format(new Date(value), 'dd/MM/yyyy')
         },
@@ -45,40 +59,41 @@ export default function ListOfPatients() {
         },
         {
             Header: 'Phone',
-            accessor: 'telephone',
+            accessor: 'phone',
             Filter: ColumnFilter
         },
         {
             Header: 'Adress',
-            accessor: 'adresse',
+            accessor: 'adress',
             Filter: ColumnFilter
         },
         {
             Header: 'Postal_Code',
-            accessor: 'zipcode',
+            accessor: 'postalCode',
             Filter: ColumnFilter
         },
 
         {
             Header: 'City',
-            accessor: 'ville',
+            accessor: 'city',
             Filter: ColumnFilter
         },
         {
             Header: 'Country',
-            accessor: 'pays',
+            accessor: 'country',
             Filter: ColumnFilter
-        }
+        },
+
     ]
-    const [doctorsListData, setDoctorsListData] = useState([]);
-    const [showAddDosctor, setshowAddDosctor] = useState(false);
-    const [showEditDosctor, setshowEditDosctor] = useState(false);
+    const [patientListData, setpatientListData] = useState([]);
+    const [showAddPatient, setshowAddpatient] = useState(false);
+    const [showEditPatient, setshowEditpatient] = useState(false);
 
 
 
 
     const columns = useMemo(() => COLUMNS, []);
-    const data = useMemo(() => doctorsListData, [doctorsListData]);
+    const data = useMemo(() => patientListData, [patientListData]);
 
     const { allColumns, selectedFlatRows, getToggleHideAllColumnsProps, getTableProps, getTableBodyProps, headerGroups, footerGroups, page, nextPage, previousPage, setPageSize, setColumnOrder, canNextPage, canPreviousPage, pageOptions, gotoPage, pageCount, prepareRow, state, setGlobalFilter } =
         useTable({
@@ -135,8 +150,9 @@ export default function ListOfPatients() {
     const [isList, setIsList] = useState(false);
 
 
-    const [DoctorId, setDoctorId] = useState();
+    const [patientId, setpatientId] = useState();
     const [fisrtName, setFisrtName] = useState(String);
+    const [gender, setGender] = useState(String);
     const [lastName, setLastName] = useState(String);
     const [birthday, setBirthday] = useState(String);
     const [cin, setCIN] = useState(0);
@@ -146,29 +162,11 @@ export default function ListOfPatients() {
     const [postalCode, setPostalCode] = useState(0);
     const [email, setEmail] = useState(String);
     const [phone, setPhone] = useState(String);
+    const [medicalFolderId, setmedicalFolderId] = useState(0);
 
 
-    const patient = {
-        "patientId": DoctorId,
-        "nom": fisrtName,
-        "prenom": lastName,
-        // "birthday": birthday + "T14:44:10.01Z",
-        "naissance": birthday,
-        "cin": cin,
-        "adresse": adress,
-        "ville": city,
-        "pays": country,
-        "zipcode": postalCode,
-        "email": email,
-        "telephone": phone,
-        "mdp": "string",
-        "profileUrl": "string",
-        "profileImage": "string",
-        "consultationList": [],
-        "dossierMedicalFk": 0
-    }
 
-    const deleteDoctor = async () => {
+    const deletePatient = async () => {
         selectedFlatRows.map(async (row) => {
             await axios.delete(`Patient/${row.original.patientId}`)
                 .then((res) => {
@@ -179,8 +177,28 @@ export default function ListOfPatients() {
         })
         alert("Patient deleted");
     }
-    const addDoctor = async () => {
-        await axios.post('Patient', patient)
+    const addPatient = async () => {
+        await axios.post('Patient',
+            {
+                "patientId": patientId,
+                "fisrtName": fisrtName,
+                "lastName": lastName,
+                "gender": gender,
+                "birthday": birthday,
+                "cin": cin,
+                "adress": adress,
+                "city": city,
+                "country": country,
+                "postalCode": postalCode,
+                "email": email,
+                "phone": phone,
+                "medicalFolder": {
+                    "medicalFolderId": 0,
+                    "scanners": [],
+                    "radios": [],
+                    "medications": []
+                }
+            })
             .then((res) => {
                 console.log(res.data);
                 alert("Patient added");
@@ -191,8 +209,23 @@ export default function ListOfPatients() {
             )
     }
 
-    const editDoctor = async () => {
-        await axios.put(`Doctor/${DoctorId}`, patient)
+    const editPatient = async () => {
+        await axios.put(`Patient/${patientId}`,
+            {
+                "patientId": patientId,
+                "fisrtName": fisrtName,
+                "lastName": lastName,
+                "gender": gender,
+                "birthday": birthday,
+                "cin": cin,
+                "adress": adress,
+                "city": city,
+                "country": country,
+                "postalCode": postalCode,
+                "email": email,
+                "phone": phone,
+                "medicalFolderId": medicalFolderId
+            })
             .then((res) => {
                 alert("Patient updated");
                 fetchData();
@@ -205,20 +238,21 @@ export default function ListOfPatients() {
     const EditFunction = () => {
         if (selectedFlatRows.length === 1) {
             selectedFlatRows.map(async (row) => {
-                setDoctorId(row.original.patientId);
-                setFisrtName(row.original.nom);
-                setLastName(row.original.prenom);
-                setBirthday(new Date(row.original.naissance));
+                setpatientId(row.original.patientId);
+                setFisrtName(row.original.fisrtName);
+                setLastName(row.original.lastName);
+                setGender(row.original.gender);
+                setBirthday(new Date(row.original.birthday));
                 setCIN(row.original.cin);
-                setAdress(row.original.adresse);
-                setCity(row.original.ville);
-                setCountry(row.original.pays);
-                setPostalCode(row.original.zipcode);
+                setAdress(row.original.adress);
+                setCity(row.original.city);
+                setCountry(row.original.country);
+                setPostalCode(row.original.postalCode);
                 setEmail(row.original.email);
-                setPhone(row.original.telephone);
-                // setConsultationList(row.original.consultationList);
+                setPhone(row.original.phone);
+                setmedicalFolderId(row.original.medicalFolderId);
             })
-            setshowEditDosctor(!showEditDosctor);
+            setshowEditpatient(!showEditPatient);
         }
     }
 
@@ -235,57 +269,54 @@ export default function ListOfPatients() {
 
     return (
         <>
-            {showAddDosctor &&
+            {showAddPatient &&
                 < div id="Add" className="z-50 fixed w-full flex justify-center inset-0">
                     <div className="w-full h-full bg-gray-500 bg-opacity-75 transition-opacity z-0 absolute inset-0" />
                     <div className="mx-auto container">
                         <div className="flex items-center justify-center h-full w-full">
                             <div className="bg-white rounded-md shadow fixed overflow-y-auto sm:h-auto w-10/12 md:w-8/12 lg:w-1/2 2xl:w-2/5">
                                 <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
-                                    <p className="text-base font-semibold">Register new patient</p>
+                                    <p className="text-base font-semibold">Create New Doctor</p>
                                     <button className="focus:outline-none">
-                                        <svg onClick={() => setshowAddDosctor(!showAddDosctor)} width={30} height={30} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <svg onClick={() => setshowAddpatient(!showAddPatient)} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                                             <path d="M7 7L21 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
                                     </button>
                                 </div>
                                 <div className="px-4 md:px-10 pt-6 md:pt-12 md:pb-4 pb-7">
-                                    <div className="flex items-center justify-center">
-                                        <div className="w-40 h-40 p-16 bg-gray-100 rounded-md flex items-center justify-center">
-                                            <svg width={36} height={36} viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M22.5 12H22.515" stroke="#94A3B8" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" />
-                                                <path d="M25.5 6H10.5C8.01472 6 6 8.01472 6 10.5V25.5C6 27.9853 8.01472 30 10.5 30H25.5C27.9853 30 30 27.9853 30 25.5V10.5C30 8.01472 27.9853 6 25.5 6Z" stroke="#94A3B8" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" />
-                                                <path d="M6 22.4999L12 16.4999C12.6841 15.8417 13.4601 15.4951 14.25 15.4951C15.0399 15.4951 15.8159 15.8417 16.5 16.4999L24 23.9999" stroke="#94A3B8" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" />
-                                                <path d="M21 20.9999L22.5 19.4999C23.1841 18.8417 23.9601 18.4951 24.75 18.4951C25.5399 18.4951 26.3159 18.8417 27 19.4999L30 22.4999" stroke="#94A3B8" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <form className="mt-11">
+                                    <form className="mt-2">
                                         <div className="flex items-center space-x-9">
                                             <input onChange={(e) => setFisrtName(e.target.value)} placeholder="First Name" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                             <input onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <select onChange={(e) => setGender(e.target.value)} name="Gender" id="Gender" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                                                <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Gender</option>
+                                                <option value="Male" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Male</option>
+                                                <option value="Female" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Female</option>
+                                            </select>
+                                        </div>
+                                        <div className="flex items-center space-x-9 mt-8">
                                             <input onChange={(e) => setBirthday(e.target.value)} placeholder="Birthday" type="date" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                        </div>
-                                        <div className="flex items-center space-x-9 mt-8">
                                             <input onChange={(e) => setCIN(Number(e.target.value))} placeholder="CIN" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                        </div>
+                                        <div className="flex items-center space-x-9 mt-8">
                                             <input onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input onChange={(e) => setPhone(e.target.value)} placeholder="Phone" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input onChange={(e) => setPhone(Number(e.target.value))} placeholder="Phone" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
-                                            <input onChange={(e) => setAdress(e.target.value)} placeholder="Adress" type="text" className="w-3/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input onChange={(e) => setPostalCode(Number(e.target.value))} placeholder="Postal Code" type="number" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input onChange={(e) => setAdress(e.target.value)} placeholder="Adress" type="text" className="w-2/3 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input onChange={(e) => setPostalCode(Number(e.target.value))} placeholder="Postal Code" type="number" className="w-1/3 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
-                                            <input onChange={(e) => setCity(e.target.value)} placeholder="City" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input onChange={(e) => setCountry(e.target.value)} placeholder="Country" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input onChange={(e) => setCity(e.target.value)} placeholder="City" type="text" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input onChange={(e) => setCountry(e.target.value)} placeholder="Country" type="text" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
                                     </form>
                                     <div className="flex items-center justify-between mt-9">
-                                        <button onClick={() => setshowAddDosctor(!showAddDosctor)} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
+                                        <button onClick={() => setshowAddpatient(!showAddPatient)} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
                                             Cancel
                                         </button>
-                                        <button onClick={() => addDoctor()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Add Patient</button>
+                                        <button onClick={() => addPatient()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Add Patient</button>
                                     </div>
                                 </div>
                             </div>
@@ -293,46 +324,43 @@ export default function ListOfPatients() {
                     </div>
                 </div>
             }
-            {showEditDosctor &&
+            {showEditPatient &&
                 < div id="Edit" className="z-50 fixed w-full flex justify-center inset-0">
                     <div className="w-full h-full bg-gray-500 bg-opacity-75 transition-opacity z-0 absolute inset-0" />
                     <div className="mx-auto container">
                         <div className="flex items-center justify-center h-full w-full">
                             <div className="bg-white rounded-md shadow fixed overflow-y-auto sm:h-auto w-10/12 md:w-8/12 lg:w-1/2 2xl:w-2/5">
                                 <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
-                                    <p className="text-base font-semibold">Edit Patient</p>
+                                    <p className="text-base font-semibold">Edit Patient Informations</p>
                                     <button className="focus:outline-none">
-                                        <svg onClick={() => setshowEditDosctor(!showEditDosctor)} width={30} height={30} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <svg onClick={() => setshowEditpatient(!showEditPatient)} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                                             <path d="M7 7L21 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
                                     </button>
                                 </div>
                                 <div className="px-4 md:px-10 pt-6 md:pt-12 md:pb-4 pb-7">
-                                    <div className="flex items-center justify-center">
-                                        <div className="w-40 h-40 p-16 bg-gray-100 rounded-md flex items-center justify-center">
-                                            <svg width={36} height={36} viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M22.5 12H22.515" stroke="#94A3B8" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" />
-                                                <path d="M25.5 6H10.5C8.01472 6 6 8.01472 6 10.5V25.5C6 27.9853 8.01472 30 10.5 30H25.5C27.9853 30 30 27.9853 30 25.5V10.5C30 8.01472 27.9853 6 25.5 6Z" stroke="#94A3B8" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" />
-                                                <path d="M6 22.4999L12 16.4999C12.6841 15.8417 13.4601 15.4951 14.25 15.4951C15.0399 15.4951 15.8159 15.8417 16.5 16.4999L24 23.9999" stroke="#94A3B8" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" />
-                                                <path d="M21 20.9999L22.5 19.4999C23.1841 18.8417 23.9601 18.4951 24.75 18.4951C25.5399 18.4951 26.3159 18.8417 27 19.4999L30 22.4999" stroke="#94A3B8" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <form className="mt-11">
+                                    <form className="mt-2">
                                         <div className="flex items-center space-x-9">
                                             <input defaultValue={fisrtName} onChange={(e) => setFisrtName(e.target.value)} placeholder="First Name" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                             <input defaultValue={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input defaultValue={birthday} onChange={(e) => setBirthday(format(new Date(e.target.value), 'dd/MM/yyyy'))} placeholder="Birthday" type="date" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <select defaultValue={gender} onChange={(e) => setGender(e.target.value)} name="Gender" id="Gender" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                                                <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Gender</option>
+                                                <option value="Male" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Male</option>
+                                                <option value="Female" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Female</option>
+                                            </select>
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
+                                            <input defaultValue={birthday} onChange={(e) => setBirthday(e.target.value)} placeholder="Birthday" type="date" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                             <input defaultValue={cin} onChange={(e) => setCIN(Number(e.target.value))} placeholder="CIN" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input defaultValue={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input defaultValue={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
-                                            <input defaultValue={adress} onChange={(e) => setAdress(e.target.value)} placeholder="Adress" type="text" className="w-3/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input defaultValue={postalCode} onChange={(e) => setPostalCode(Number(e.target.value))} placeholder="Postal Code" type="number" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input defaultValue={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input defaultValue={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                        </div>
+                                        <div className="flex items-center space-x-9 mt-8">
+                                            <input defaultValue={adress} onChange={(e) => setAdress(e.target.value)} placeholder="Adress" type="text" className="w-2/3 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input defaultValue={postalCode} onChange={(e) => setPostalCode(Number(e.target.value))} placeholder="Postal Code" type="number" className="w-1/3 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
                                             <input defaultValue={city} onChange={(e) => setCity(e.target.value)} placeholder="City" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
@@ -340,10 +368,10 @@ export default function ListOfPatients() {
                                         </div>
                                     </form>
                                     <div className="flex items-center justify-between mt-9">
-                                        <button onClick={() => setshowEditDosctor(!showEditDosctor)} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
+                                        <button onClick={() => setshowEditpatient(!showEditPatient)} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
                                             Cancel
                                         </button>
-                                        <button onClick={() => editDoctor()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Save changes</button>
+                                        <button onClick={() => editPatient()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Save changes</button>
                                     </div>
                                 </div>
                             </div>
@@ -352,7 +380,7 @@ export default function ListOfPatients() {
                 </div>
             }
 
-            <code>
+            {/* <code>
                 {JSON.stringify(
                     {
                         selectedFlatRows: selectedFlatRows.map((row) => row.original),
@@ -361,7 +389,7 @@ export default function ListOfPatients() {
                     2
                 )}
                 {JSON.stringify(patient)}
-            </code>
+            </code> */}
 
             <div id="listOfDoctors">
                 <div className="bg-white p-10 2xl:p-5">
@@ -369,13 +397,13 @@ export default function ListOfPatients() {
                         <div className="flex justify-between border-b border-gray-300 py-5 bg-white">
                             <div className="flex mx-auto xl:w-full xl:mx-0 items-center">
                                 <p className="text-lg text-gray-800 font-bold mr-3">List of patients</p>
-                                <svg onClick={() => setshowAddDosctor(!showAddDosctor)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                <svg onClick={() => setshowAddpatient(!showAddPatient)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM3 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 019.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
                                 </svg>
                                 <svg onClick={() => EditFunction()} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 ml-3">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                                 </svg>
-                                <svg onClick={() => deleteDoctor()} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 ml-3">
+                                <svg onClick={() => deletePatient()} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 ml-3">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                                 </svg>
                                 <svg onClick={() => fetchData()} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 ml-3">
