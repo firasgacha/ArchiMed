@@ -1,15 +1,23 @@
 interface props {
+  id: number;
   name: string;
   description: string;
   image: string;
+  callToAction: Function;
 }
 
 export default function MedicalFolder(props: props) {
+  const click = () => {
+    props.callToAction(props.id);
+  };
   return (
     <>
-      <div className="cursor-pointer rounded overflow-hidden shadow-lg m-5 hover:scale-110">
+      <div
+        onClick={click}
+        className="cursor-pointer rounded overflow-hidden shadow-lg m-5 hover:scale-110"
+      >
         <img
-          className="w-full"
+          className="w-full max-h-[250px]"
           src={props.image}
           alt="Sunset in the mountains"
         />

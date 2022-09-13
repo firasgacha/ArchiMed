@@ -1,16 +1,26 @@
 ﻿import axios from "axios";
 import Card from "components/card";
-import { useEffect, useState } from "react";
+import Modal from "components/model";
+import { useEffect, useState, useRef } from "react";
 import { useQuery } from "react-query";
 
 interface cardInput {
+  id: number;
   name: string;
   description: string;
   image: string;
+  callToAction: Function;
 }
 
 export default function MedicalFolder() {
-  const [medicalHistory, SetMedicalHistory] = useState<cardInput[]>([]);
+  const [medicalHistory, setMedicalHistory] = useState<cardInput[]>([]);
+  const [show, setShow] = useState<boolean>(false);
+  const elmId = useRef<number | undefined>();
+  const showModal = (id: number) => {
+    console.log("hiiiiiiiiiiiiiiiiiiii");
+    elmId.current = id;
+    setShow(true);
+  };
   const { data, isLoading, isFetched } = useQuery("Folder", async () => {
     const res = await axios.get(
       "https://zoo-animal-api.herokuapp.com/animals/rand/10"
@@ -20,19 +30,21 @@ export default function MedicalFolder() {
 
   useEffect(() => {
     if (isFetched && data) {
-      console.log(data.data);
-      SetMedicalHistory(
+      setMedicalHistory(
         data.data.map((el) => {
           const temp = {
+            id: el.id,
             name: el.name,
             description: `${el.diet} | ${el.habitat}`,
             image: el.image_link,
+            callToAction: showModal,
           };
           return temp;
         })
       );
     }
   }, [isFetched, data]);
+
   return (
     <>
       {!isLoading ? (
@@ -46,11 +58,12 @@ after:inline-block after:bg-blue-500 after:h-1 after:ml-5 after:w-[80%] mb-2"
 
           <div className="flex justify-start flex-wrap pl-5 border-solid border-l-4 border-blue-500">
             {medicalHistory.map((el) => (
-              <div className="min-w-[250px] max-w-[350px]">
+              <div className="min-w-[250px] max-w-[350px]" key={el.id}>
                 <Card {...el} />
               </div>
             ))}
           </div>
+          <Modal show={show} id={elmId.current} setShow={setShow} />
         </>
       ) : (
         <div> ...Loading</div>
