@@ -7,7 +7,7 @@ interface props {
 export default function MedicalFolder(props: props) {
   return (
     <>
-      <div className="min-w-max rounded overflow-hidden shadow-lg">
+      <div className="cursor-pointer rounded overflow-hidden shadow-lg m-5 hover:scale-110">
         <img
           className="w-full"
           src={props.image}
