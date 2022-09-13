@@ -474,7 +474,7 @@ export default function ListOfDoctors() {
                 </div>
             }
 
-            <code>
+            {/* <code>
                 {JSON.stringify(
                     {
                         selectedFlatRows: selectedFlatRows.map((row) => row.original),
@@ -483,7 +483,7 @@ export default function ListOfDoctors() {
                     2
                 )}
                 {JSON.stringify(doctor)}
-            </code>
+            </code> */}
             <div id="listOfDoctors">
                 <div className="bg-white p-10 2xl:p-5">
                     <div className="container mx-auto bg-white rounded">
