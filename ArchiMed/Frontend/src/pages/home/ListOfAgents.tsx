@@ -6,6 +6,7 @@ import axios from "axios";
 import { format, isDate } from 'date-fns';
 import MaleSvg from "assets/male.svg";
 import FemaleSvg from "assets/female.svg";
+import { useQuery } from "react-query";
 
 export default function ListOfAgents() {
 
@@ -97,12 +98,12 @@ export default function ListOfAgents() {
 
 
   const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => AgentListData, [AgentListData]);
+  const data2 = useMemo(() => AgentListData, [AgentListData]);
 
   const { allColumns, selectedFlatRows, getToggleHideAllColumnsProps, getTableProps, getTableBodyProps, headerGroups, footerGroups, page, nextPage, previousPage, setPageSize, setColumnOrder, canNextPage, canPreviousPage, pageOptions, gotoPage, pageCount, prepareRow, state, setGlobalFilter } =
     useTable({
       columns,
-      data,
+      data:data2,
       initialState: { pageIndex: 0, pageSize: 10 }
     },
       useColumnOrder,
@@ -177,6 +178,15 @@ export default function ListOfAgents() {
   const [role, setRole] = useState(String);
 
 
+  const { data, isLoading, isFetched } = useQuery("Department", async () => {
+    await axios.get(
+      "Agent"
+    ).then((res) => {
+      setAgentListData(res.data);
+    }).catch((err) => {
+      console.log(err);
+    })
+  });
 
   const fetchData = async () => {
     await axios.get('Agent')
@@ -186,7 +196,6 @@ export default function ListOfAgents() {
       }).catch((err) => {
         console.log(err);
       })
-
   }
 
   const deleteAgent = async () => {
@@ -281,9 +290,6 @@ export default function ListOfAgents() {
   }, [])
 
 
-  // if (isLoading) {
-  //     return <h2>Loading...</h2>
-  // }
 
   return (
     <>
@@ -423,7 +429,7 @@ export default function ListOfAgents() {
           <div className="container mx-auto bg-white rounded">
             <div className="flex justify-between border-b border-gray-300 py-5 bg-white">
               <div className="flex mx-auto xl:w-full xl:mx-0 items-center">
-                <p className="text-lg text-gray-800 font-bold mr-3">List of Agents</p>
+                {/* <p className="text-lg text-gray-800 font-bold mr-3">List of Agents</p> */}
                 <svg onClick={() => setshowAddAgent(!showAddAgent)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM3 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 019.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
                 </svg>
@@ -594,22 +600,28 @@ export default function ListOfAgents() {
                           ))}
                         </thead>
                         <tbody {...getTableBodyProps()}>
-                          {
-                            page.map(row => {
-                              prepareRow(row)
-                              return (
-                                <tr {...row.getRowProps()} className="h-24 text-center border-gray-300 border-b">
-                                  {row.cells.map(cell => (
-                                    <td {...cell.getCellProps()} className="text-sm pr-6 whitespace-no-wrap text-gray-800 tracking-normal leading-4">
-                                      {
-                                        cell.render('Cell')
-                                      }
-                                    </td>
-                                  ))}
-                                </tr>
-                              )
-                            })
-                          }
+                          {!isLoading ? (
+                            <>
+                              {
+                                page.map(row => {
+                                  prepareRow(row)
+                                  return (
+                                    <tr {...row.getRowProps()} className="h-24 text-center border-gray-300 border-b">
+                                      {row.cells.map(cell => (
+                                        <td {...cell.getCellProps()} className="text-sm pr-6 whitespace-no-wrap text-gray-800 tracking-normal leading-4">
+                                          {
+                                            cell.render('Cell')
+                                          }
+                                        </td>
+                                      ))}
+                                    </tr>
+                                  )
+                                })
+                              }
+                            </>
+                          ) : (
+                            <div>is Loading.....</div>
+                          )}
                         </tbody>
                       </table>
                     </div>
