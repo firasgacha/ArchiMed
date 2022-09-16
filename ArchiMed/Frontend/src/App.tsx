@@ -19,6 +19,7 @@ import ListOfAgents from "pages/home/ListOfAgents";
 import ListOfHospitals from "pages/home/ListOfHospitals";
 import ListOfScanners from "pages/home/ListOfScanners";
 import ListOfRadios from "pages/home/ListOfRadios";
+import ListOfContacts from "pages/home/ListOfContacts";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Route path="medical-orders" element={<ListOfMedicalOrder />} />
           <Route path="radios" element={< ListOfRadios/>} />
           <Route path="scanners" element={<ListOfScanners />} />
+          <Route path="contacts" element={<ListOfContacts />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<LandingPage />} />

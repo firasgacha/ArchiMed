@@ -1,4 +1,5 @@
 ﻿import { Link } from "react-router-dom";
+import About from "./About";
 
 export default function LandingPage() {
     // @ts-ignore
@@ -24,24 +25,11 @@ export default function LandingPage() {
                 </div>
             </div>
             {/*CTA*/}
-            
+            {/* ABout */}
+            <About/>
+            {/* ABout */}
             {/* FAQ*/}
-            <div>
-                <div className="relative py-16 bg-gradient-to-b from-indigo-700 to-indigo-600 flex justify-center items-center">
-                    <div>
-                        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-10 text-white">How can we help you?</h1>
-                        <div className="bg-indigo-800 rounded relative mt-6 lg:mt-14 py-4 pl-4 flex items-center w-full">
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-search" width={16} height={16} viewBox="0 0 24 24" strokeWidth="1.5" stroke="#ffffff" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <circle cx={10} cy={10} r={7} />
-                                    <line x1={21} y1={21} x2={15} y2={15} />
-                                </svg>
-                            </div>
-                            <input type="text" placeholder="Search for answers" className=" ml-4 w-full bg-transparent text-base leading-none text-white placeholder-white focus:outline-none" />
-                        </div>
-                    </div>
-                </div>
+            <div id="help">
                 <div className="container mx-auto py-9 flex flex-col items-center justify-center">
                     <div className="mt-9 md:mt-11 lg:mt-16">
                         <div className="text-center">
@@ -57,7 +45,34 @@ export default function LandingPage() {
                 </div>
             </div>
             {/*FAQ*/}
-            
+
+            {/* Footer */}
+            <div className=" bg-linear-pink-invert pb-12">
+                <div className="mx-auto container pt-20 lg:pt-32 flex flex-col items-center justify-center">
+                    <div className="w-9/12  h-0.5 bg-indigo-200 rounded-full mb-10" />
+                    <div>
+                        <img src="src/assets/logo.jpg" alt="logo" />
+                    </div>
+                    <div className="text-black flex flex-col md:items-center f-f-l pt-3 mt-2">
+                        <h1 className="text-2xl font-black">Archi.MED.Online.</h1>
+                        <div className="my-6 text-base text-color f-f-l">
+                            <ul className="md:flex items-center">
+                                <li className=" md:mr-6 cursor-pointer pt-4 lg:py-0"><a href="#about">About</a></li>
+                                <li className=" md:mr-6 cursor-pointer pt-4 lg:py-0">License</li>
+                                <li className=" md:mr-6 cursor-pointer pt-4 lg:py-0"><a href="#help">Help</a></li>
+                                <li className="cursor-pointer pt-4 lg:py-0">Privacy Policy</li>
+                            </ul>
+                        </div>
+                        <div className="text-sm text-color mb-10 f-f-l">
+                            <p> Copyright © 2022 - All right reserved by ArchiMEDOnline</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/* Footer */}
+
+
+
             {/*Partners*/}
             {/* <div className="2xl:px-20 md:px-10 2xl:mx-auto 2xl:container">
                 <div className="md:py-12 py-8 px-4">

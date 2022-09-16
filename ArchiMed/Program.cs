@@ -119,6 +119,7 @@ public class ArchiMedDB: DbContext {
     public DbSet<ArchiMed.Models.Medications>? Medications { get; set; }
     public DbSet<ArchiMed.Models.Scanner>? Scanner { get; set; }
     public DbSet<ArchiMed.Models.Radio>? Radio { get; set; }
+    public DbSet<ArchiMed.Models.Contact>? Contact { get; set; }
 
     
 }

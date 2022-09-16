@@ -24,7 +24,7 @@ export default function ListOfDoctors() {
             accessor: 'gender',
             Filter: ColumnFilter,
             Cell: ({ value }) => (value == 'Male' ?
-                <MaleSvg /> : <FemaleSvg />)
+                <div className="ml-6"><MaleSvg /></div> : <div className="ml-6"><FemaleSvg /></div>)
         },
         {
             Header: 'Specialty',
@@ -35,7 +35,16 @@ export default function ListOfDoctors() {
             Header: 'Department',
             accessor: 'departmentFk',
             Filter: ColumnFilter,
-            Cell: ({ value }) => (value ? value : 'Not affected')
+            // Cell: ({ value }) => (value ? <img onClick={() => {
+            //     getDepartementById(value);
+            //     setshowDepartment(!showDepartment);
+            // }} className="ml-8 w-[24px] h-[24px]" src="src/assets/hide.svg" /> : 'Not affected')
+            Cell: ({ value }) => (value ?
+                <button onClick={() => {
+                    getDepartementById(value);
+                    setshowDepartment(!showDepartment);
+                }} className="ml-3 rounded-full bg-green-400 text-white text-sm px-6 py-2 flex justify-center items-center">See</button>
+                : 'Not affected')
         },
         {
             Header: 'Head of department',
@@ -108,6 +117,9 @@ export default function ListOfDoctors() {
         "Other"
     ];
 
+    const [showDepartment, setshowDepartment] = useState(false);
+    const [DepartmentName, setDepartmentName] = useState(String);
+
     const [doctorsListData, setDoctorsListData] = useState([]);
     const [departmentsListData, setDepartmentsListData] = useState([]);
     const [showAddDosctor, setshowAddDosctor] = useState(false);
@@ -148,30 +160,15 @@ export default function ListOfDoctors() {
                 console.log(err);
             })
     }
-    const putDoctorInDepartementList = async (id:Number) => {
+
+    const getDepartementById = async (id: Number) => {
         await axios.get(`Department/${id}`)
-            .then(async (res) => {
-                const dep = res.data;
-                const depObj = {
-                    "departmentId": dep.departmentId,
-                    "departmentName": dep.departmentName,
-                    "doctorsList": []
-                }
-                depObj.doctorsList.push(doctor);
-                console.log('depObj', depObj);
-                await axios.put(`Department/${dep.departmentId}`, depObj)
-                    .then((res) => {
-                        alert("Departement updated");
-                    }).catch((err) => {
-                        console.log(err.message);
-                    }
-                    )
+            .then((res) => {
+                console.log("depppp", res.data.departmentName);
+                setDepartmentName(res.data.departmentName);
             }).catch((err) => {
-                console.log(err.message);
-            }
-            )
-        
-        
+                console.log(err);
+            })
     }
 
 
@@ -251,7 +248,7 @@ export default function ListOfDoctors() {
         "specialty": specialty,
         "phone": phone,
         "headofDepartment": headofDepartment,
-        "departmentFk" : departmentId
+        "departmentFk": departmentId
     }
 
     const deleteDoctor = async () => {
@@ -273,7 +270,7 @@ export default function ListOfDoctors() {
             }).catch((err) => {
                 console.log(err);
             }
-        )
+            )
     }
 
     const editDoctor = async () => {
@@ -293,7 +290,7 @@ export default function ListOfDoctors() {
                 setDoctorId(row.original.doctorId);
                 setFisrtName(row.original.fisrtName);
                 setLastName(row.original.lastName);
-                setBirthday(new Date(row.original.birthday));
+                setBirthday(row.original.birthday);
                 setCIN(row.original.cin);
                 setAdress(row.original.adress);
                 setCity(row.original.city);
@@ -314,7 +311,7 @@ export default function ListOfDoctors() {
     useEffect(() => {
         fetchDoctorData();
         fetchDepartemnetsData();
-        
+
     }, [])
 
 
@@ -737,6 +734,35 @@ export default function ListOfDoctors() {
                     </div>
                 </div>
             </div>
+            {showDepartment &&
+                < div id="Add" className="z-50 fixed w-full flex justify-center inset-0">
+                    <div className="w-full h-full bg-gray-500 bg-opacity-75 transition-opacity z-0 absolute inset-0" />
+                    <div className="mx-auto container">
+                        <div className="flex items-center justify-center h-full w-full">
+                            <div className="bg-white rounded-md shadow fixed overflow-y-auto sm:h-auto w-10/12 md:w-8/12 lg:w-1/2 2xl:w-2/5">
+                                <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
+                                    <p className="text-base font-semibold text-center">Departement</p>
+                                    <button className="focus:outline-none">
+                                        <svg onClick={() => setshowDepartment(!showDepartment)} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+                                            <path d="M7 7L21 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div className="px-4 md:px-10 pt-6 md:pt-12 md:pb-4 pb-7">
+                                    <form>
+                                        <div className="flex items-center space-x-9 justify-center mb-6">
+                                            <div className="text-center xl:text-left mb-3 xl:mb-0 flex flex-col xl:flex-row items-center justify-between xl:justify-start">
+                                                <h2 className="text-2xl bg-indigo-700 dark:bg-indigo-600 text-white px-5 py-1 font-normal rounded-full">{DepartmentName}</h2>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
         </>
     );
 }

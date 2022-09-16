@@ -3,9 +3,7 @@ import { useTable, useSortBy, useGlobalFilter, useFilters, usePagination, useCol
 import GlobalFilter from "../../components/GlobalFilter";
 import ColumnFilter from "components/ColumnFilter";
 import axios from "axios";
-import { format, isDate } from 'date-fns';
-import MaleSvg from "assets/male.svg";
-import FemaleSvg from "assets/female.svg";
+
 
 export default function ListOfAppointment() {
 
@@ -152,7 +150,6 @@ export default function ListOfAppointment() {
       }).catch((err) => {
         console.log(err);
       })
-
   }
 
   const deleteAppointment = async () => {
