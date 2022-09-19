@@ -5,67 +5,47 @@ import ColumnFilter from "components/ColumnFilter";
 import axios from "axios";
 import { useQuery } from "react-query";
 
-export default function ListOfMedicaments() {
+export default function ListOfRadios() {
 
 
   const COLUMNS = [
     {
-      Header: 'Name',
-      accessor: 'medicationName',
-      Filter: ColumnFilter
-    },
-    {
       Header: 'Description',
-      accessor: 'medicationDescription',
+      accessor: 'radioDescription',
       Filter: ColumnFilter
     },
     {
-      Header: 'Composition',
-      accessor: 'medicationComposition',
+      Header: 'Date',
+      accessor: 'created',
       Filter: ColumnFilter
     },
     {
-      Header: 'Effets',
-      accessor: 'medicationEffets',
+      Header: 'doctorId',
+      accessor: 'doctorId',
       Filter: ColumnFilter
     },
     {
-      Header: 'Contraindications',
-      accessor: 'medicationContraindication',
-      Filter: ColumnFilter,
+      Header: 'patientId',
+      accessor: 'patientId',
+      Filter: ColumnFilter
     },
     {
-      Header: 'Price',
-      accessor: 'medicationPrice',
-      Filter: ColumnFilter,
-    },
-    {
-      Header: 'Code',
-      accessor: 'medicationCode',
-      Filter: ColumnFilter,
-    },
-    {
-      Header: 'Date Fabrication',
-      accessor: 'dateFabrication',
-      Filter: ColumnFilter,
-    },
-    {
-      Header: 'Date Expiration',
-      accessor: 'dateExpiration',
+      Header: 'agentId',
+      accessor: 'agentId',
       Filter: ColumnFilter,
     }
   ]
-  const [MedicamentListData, setMedicamentListData] = useState([]);
-  const [showAddMedicament, setshowAddMedicament] = useState(false);
-  const [showEditMedicament, setshowEditMedicament] = useState(false);
+  const [RadiosListData, setRadiosListData] = useState([]);
+  const [showAddRadios, setshowAddRadios] = useState(false);
+  const [showEditRadios, setshowEditRadios] = useState(false);
 
 
 
 
   const columns = useMemo(() => COLUMNS, []);
-  const data2 = useMemo(() => MedicamentListData, [MedicamentListData]);
+  const data2 = useMemo(() => RadiosListData, [RadiosListData]);
 
-  const { allColumns, selectedFlatRows, getToggleHideAllColumnsProps, getTableProps, getTableBodyProps, headerGroups, page, nextPage, previousPage, setPageSize, setColumnOrder, canNextPage, canPreviousPage, pageOptions, gotoPage, pageCount, prepareRow, state, setGlobalFilter } =
+  const { allColumns, selectedFlatRows, getToggleHideAllColumnsProps, getTableProps, getTableBodyProps, headerGroups, footerGroups, page, nextPage, previousPage, setPageSize, setColumnOrder, canNextPage, canPreviousPage, pageOptions, gotoPage, pageCount, prepareRow, state, setGlobalFilter } =
     useTable({
       columns,
       data: data2,
@@ -120,56 +100,83 @@ export default function ListOfMedicaments() {
   const [isList, setIsList] = useState(false);
 
 
-  const [medicationsId, setmedicationsId] = useState();
-  const [medicationName, setmedicationName] = useState(String);
-  const [medicationDescription, setmedicationDescription] = useState(String);
-  const [medicationComposition, setmedicationComposition] = useState(String);
-  const [medicationEffets, setmedicationEffets] = useState(String);
-  const [medicationContraindication, setmedicationContraindication] = useState(String);
-  const [medicationPrice, setmedicationPrice] = useState(0);
-  const [medicationCode, setmedicationCode] = useState(String);
-  const [dateFabrication, setdateFabrication] = useState(String);
-  const [dateExpiration, setdateExpiration] = useState(String);
+  const [radioId, setradioId] = useState();
+  const [radioDescription, setradioDescription] = useState(String);
+  const [radioDate, setradioDate] = useState(String);
+  const [doctorId, setdoctorId] = useState(0);
+  const [patientId, setpatientId] = useState(0);
+  const [agentId, setagentId] = useState(0);
+  const [patientListData, setpatientListData] = useState([]);
+  const [doctorsListData, setDoctorsListData] = useState([]);
+  const [agentsListData, setAgentsListData] = useState([]);
+
+
+
 
   const fetchData = async () => {
-    await axios.get('Medications')
+    await axios.get('Radio')
       .then((res) => {
-        setMedicamentListData(res.data);
+        setRadiosListData(res.data);
+        console.log(res.data);
+      }).catch((err) => {
+        console.log(err);
+      })
+  }
+  const { data, isLoading, isFetched } = useQuery("Radio", fetchData);
+
+  const fetchDoctorData = async () => {
+    await axios.get('Doctor')
+      .then((res) => {
+        setDoctorsListData(res.data);
+        console.log(res.data);
       }).catch((err) => {
         console.log(err);
       })
   }
 
-  const { data, isLoading, isFetched } = useQuery("Medications", fetchData);
+  const fetchPateintData = async () => {
+    await axios.get('Patient')
+      .then((res) => {
+        setpatientListData(res.data);
+        console.log(res.data);
+      }).catch((err) => {
+        console.log(err);
+      })
+  }
 
-
-  const deleteMedications = async () => {
+  const fetchAgentData = async () => {
+    await axios.get('Agent')
+      .then((res) => {
+        setAgentsListData(res.data);
+        console.log(res.data);
+      }).catch((err) => {
+        console.log(err);
+      })
+  }
+  const deleteRadio = async () => {
     selectedFlatRows.map(async (row) => {
-      await axios.delete(`Medications/${row.original.medicationsId}`)
+      await axios.delete(`Radio/${row.original.radioId}`)
         .then((res) => {
           fetchData();
         }).catch((err) => {
           console.log(err);
         })
     })
-    alert("Medication deleted");
+    alert("Radio deleted");
   }
-  const addMedications = async () => {
-    await axios.post('Medications',
+  const addRadio = async () => {
+    await axios.post('Radio',
       {
-        "medicationName": medicationName,
-        "medicationDescription": medicationDescription,
-        "medicationComposition": medicationComposition,
-        "medicationEffets": medicationEffets,
-        "medicationContraindication": medicationContraindication,
-        "medicationPrice": medicationPrice,
-        "medicationCode": medicationCode,
-        "dateFabrication": dateFabrication,
-        "dateExpiration": dateExpiration
+        "radioDescription": radioDescription,
+        "created": radioDate,
+        "doctorId": doctorId,
+        "patientId": patientId,
+        "agentId": agentId
       }
     )
       .then((res) => {
-        alert("Medications added");
+        console.log(res.data);
+        alert("Radio added");
         fetchData();
       }).catch((err) => {
         console.log(err);
@@ -177,22 +184,18 @@ export default function ListOfMedicaments() {
       )
   }
 
-  const editMedications = async () => {
-    await axios.put(`Medications/${medicationsId}`,
+  const editRadio = async () => {
+    await axios.put(`Radio/${radioId}`,
       {
-        "medicationsId": medicationsId,
-        "medicationName": medicationName,
-        "medicationDescription": medicationDescription,
-        "medicationComposition": medicationComposition,
-        "medicationEffets": medicationEffets,
-        "medicationContraindication": medicationContraindication,
-        "medicationPrice": medicationPrice,
-        "medicationCode": medicationCode,
-        "dateFabrication": dateFabrication,
-        "dateExpiration": dateExpiration
+        "radioId": radioId,
+        "radioDescription": radioDescription,
+        "created": radioDate,
+        "doctorId": doctorId,
+        "patientId": patientId,
+        "agentId": agentId
       })
       .then((res) => {
-        alert("Medications updated");
+        alert("Radio updated");
         fetchData();
       }).catch((err) => {
         console.log(err.message);
@@ -203,18 +206,14 @@ export default function ListOfMedicaments() {
   const EditFunction = () => {
     if (selectedFlatRows.length === 1) {
       selectedFlatRows.map(async (row) => {
-        setmedicationsId(row.original.medicationsId);
-        setmedicationName(row.original.medicationName);
-        setmedicationDescription(row.original.medicationDescription);
-        setmedicationComposition(row.original.medicationComposition);
-        setmedicationEffets(row.original.medicationEffets);
-        setmedicationContraindication(row.original.medicationContraindication);
-        setmedicationPrice(row.original.medicationPrice);
-        setmedicationCode(row.original.medicationCode);
-        setdateFabrication(row.original.dateFabrication);
-        setdateExpiration(row.original.dateExpiration);
+        setradioId(row.original.radioId);
+        setradioDescription(row.original.radioDescription);
+        setradioDate(row.original.created);
+        setdoctorId(row.original.doctorId);
+        setpatientId(row.original.patientId);
+        setagentId(row.original.agentId);
       })
-      setshowEditMedicament(!showEditMedicament);
+      setshowEditRadios(!showEditRadios);
     }
   }
 
@@ -222,21 +221,24 @@ export default function ListOfMedicaments() {
 
   useEffect(() => {
     fetchData();
+    fetchDoctorData();
+    fetchPateintData();
+    fetchAgentData();
   }, [])
 
 
   return (
     <>
-      {showAddMedicament &&
+      {showAddRadios &&
         < div id="Add" className="z-50 fixed w-full flex justify-center inset-0">
           <div className="w-full h-full bg-gray-500 bg-opacity-75 transition-opacity z-0 absolute inset-0" />
           <div className="mx-auto container">
             <div className="flex items-center justify-center h-full w-full">
               <div className="bg-white rounded-md shadow fixed overflow-y-auto sm:h-auto w-10/12 md:w-8/12 lg:w-1/2 2xl:w-2/5">
                 <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
-                  <p className="text-base font-semibold">Add New Medication</p>
+                  <p className="text-base font-semibold">Add New Radio</p>
                   <button className="focus:outline-none">
-                    <svg onClick={() => setshowAddMedicament(!showAddMedicament)} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg onClick={() => setshowAddRadios(!showAddRadios)} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                       <path d="M7 7L21 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -245,36 +247,45 @@ export default function ListOfMedicaments() {
                 <div className="px-4 md:px-10 pt-6 md:pt-12 md:pb-4 pb-7">
                   <form>
                     <div className="flex justify-center text-center items-center space-x-9">
-                      <input placeholder="Name" onChange={(e) => setmedicationName(e.target.value)} type="text" className="w-2/5 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                      <input placeholder="Code" onChange={(e) => setmedicationCode(e.target.value)} type="text" className="w-2/5 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                      <input placeholder="Price" onChange={(e) => setmedicationPrice(Number(e.target.value))} type="number" className="w-1/5 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                      <input onChange={(e) => setradioDate(e.target.value)} type="date" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                     </div>
                     <div className="flex justify-center text-center items-center space-x-9 mt-3">
-                      <div className="flex-col justify-center text-center items-center space-x-9 mt-3 mb-3">
-                        <p>Production Date</p>
-                        <input onChange={(e) => setdateFabrication(e.target.value)} type="date"/>
-                      </div>
-                      <div className="flex-col justify-center text-center items-center space-x-9 mt-3 mb-3">
-                        <p>Expiry Date</p>
-                        <input onChange={(e) => setdateExpiration(e.target.value)} type="date" />
-                      </div>
+                      <select onChange={(e) => setdoctorId(e.target.value)} className="w-3/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                        <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose a Doctor</option>
+                        {
+                          doctorsListData.map((item) => (
+                            <option value={item.doctorId} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / {item.specialty}</option>
+                          ))
+                        }
+                      </select>
+                      <select onChange={(e) => setpatientId(e.target.value)} className="w-3/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                        <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose a patient</option>
+                        {
+                          patientListData.map((item) => (
+                            <option value={item.patientId} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / CIN : {item.cin}</option>
+                          ))
+                        }
+                      </select>
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
-                      <textarea placeholder="Medication Contraindication" onChange={(e) => setmedicationContraindication(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={3} cols={100} />
+                      <textarea placeholder="Radio description" onChange={(e) => setradioDescription(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={5} cols={100} defaultValue={""} />
                     </div>
-                    <div className="flex items-center space-x-9 mt-8">
-                      <textarea placeholder="Medication Composition" onChange={(e) => setmedicationComposition(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={3} cols={100} />
-                      <textarea placeholder="Medication Effets" onChange={(e) => setmedicationEffets(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={3} cols={100} />
-                    </div>
-                    <div className="flex items-center space-x-9 mt-8">
-                      <textarea placeholder="Medication Description" onChange={(e) => setmedicationDescription(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={3} cols={100} />
+                    <div className="flex justify-center text-center items-center space-x-9 mt-3">
+                      <select onChange={(e) => setagentId(e.target.value)} className="w-3/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                        <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose an Agent</option>
+                        {
+                          agentsListData.map((item) => (
+                            <option value={item.agentId} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName}</option>
+                          ))
+                        }
+                      </select>
                     </div>
                   </form>
                   <div className="flex items-center justify-between mt-9">
-                    <button onClick={() => setshowAddMedicament(!showAddMedicament)} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
+                    <button onClick={() => setshowAddRadios(!showAddRadios)} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
                       Cancel
                     </button>
-                    <button onClick={() => addMedications()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Confirm</button>
+                    <button onClick={() => addRadio()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Confirm</button>
                   </div>
                 </div>
               </div>
@@ -282,16 +293,16 @@ export default function ListOfMedicaments() {
           </div>
         </div>
       }
-      {showEditMedicament &&
+      {showEditRadios &&
         < div id="Add" className="z-50 fixed w-full flex justify-center inset-0">
           <div className="w-full h-full bg-gray-500 bg-opacity-75 transition-opacity z-0 absolute inset-0" />
           <div className="mx-auto container">
             <div className="flex items-center justify-center h-full w-full">
               <div className="bg-white rounded-md shadow fixed overflow-y-auto sm:h-auto w-10/12 md:w-8/12 lg:w-1/2 2xl:w-2/5">
                 <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
-                  <p className="text-base font-semibold">Edit Scanner</p>
+                  <p className="text-base font-semibold">Edit Radio</p>
                   <button className="focus:outline-none">
-                    <svg onClick={() => setshowEditMedicament(!showEditMedicament)} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg onClick={() => setshowEditRadios(!showEditRadios)} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                       <path d="M7 7L21 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -300,36 +311,45 @@ export default function ListOfMedicaments() {
                 <div className="px-4 md:px-10 pt-6 md:pt-12 md:pb-4 pb-7">
                   <form>
                     <div className="flex justify-center text-center items-center space-x-9">
-                      <input defaultValue={medicationName} placeholder="Name" onChange={(e) => setmedicationName(e.target.value)} type="text" className="w-2/5 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                      <input defaultValue={medicationCode} placeholder="Code" onChange={(e) => setmedicationCode(e.target.value)} type="text" className="w-2/5 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                      <input defaultValue={medicationPrice} placeholder="Price" onChange={(e) => setmedicationPrice(Number(e.target.value))} type="number" className="w-1/5 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                      <input defaultValue={radioDate} onChange={(e) => setradioDate(e.target.value)} type="date" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                     </div>
                     <div className="flex justify-center text-center items-center space-x-9 mt-3">
-                      <div className="flex-col justify-center text-center items-center space-x-9 mt-3 mb-3">
-                        <p>Production Date</p>
-                        <input defaultValue={dateFabrication} onChange={(e) => setdateFabrication(e.target.value)} type="date" />
-                      </div>
-                      <div className="flex-col justify-center text-center items-center space-x-9 mt-3 mb-3">
-                        <p>Expiry Date</p>
-                        <input defaultValue={dateExpiration} onChange={(e) => setdateExpiration(e.target.value)} type="date" />
-                      </div>
+                      <select defaultValue={doctorId} onChange={(e) => setdoctorId(e.target.value)} className="w-3/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                        <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose a Doctor</option>
+                        {
+                          doctorsListData.map((item) => (
+                            <option value={item.doctorId} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / {item.specialty}</option>
+                          ))
+                        }
+                      </select>
+                      <select defaultValue={patientId} onChange={(e) => setpatientId(e.target.value)} className="w-3/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                        <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose a patient</option>
+                        {
+                          patientListData.map((item) => (
+                            <option value={item.patientId} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / CIN : {item.cin}</option>
+                          ))
+                        }
+                      </select>
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
-                      <textarea defaultValue={medicationContraindication} placeholder="Medication Contraindication" onChange={(e) => setmedicationContraindication(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={3} cols={100} />
+                      <textarea placeholder="Radio description" defaultValue={radioDescription} onChange={(e) => setradioDescription(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={5} cols={100} />
                     </div>
-                    <div className="flex items-center space-x-9 mt-8">
-                      <textarea defaultValue={medicationComposition} placeholder="Medication Composition" onChange={(e) => setmedicationComposition(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={3} cols={100} />
-                      <textarea defaultValue={medicationEffets} placeholder="Medication Effets" onChange={(e) => setmedicationEffets(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={3} cols={100} />
-                    </div>
-                    <div className="flex items-center space-x-9 mt-8">
-                      <textarea defaultValue={medicationDescription} placeholder="Medication Description" onChange={(e) => setmedicationDescription(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={3} cols={100} />
+                    <div className="flex justify-center text-center items-center space-x-9 mt-3">
+                      <select defaultValue={agentId} onChange={(e) => setagentId(e.target.value)} className="w-3/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                        <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose an Agent</option>
+                        {
+                          agentsListData.map((item) => (
+                            <option value={item.agentId} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName}</option>
+                          ))
+                        }
+                      </select>
                     </div>
                   </form>
                   <div className="flex items-center justify-between mt-9">
-                    <button onClick={() => setshowEditMedicament(!showEditMedicament)} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
+                    <button onClick={() => setshowEditRadios(!showEditRadios)} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
                       Cancel
                     </button>
-                    <button onClick={() => editMedications()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Save changes</button>
+                    <button onClick={() => editRadio()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Confirm</button>
                   </div>
                 </div>
               </div>
@@ -355,13 +375,13 @@ export default function ListOfMedicaments() {
             <div className="flex justify-between border-b border-gray-300 py-5 bg-white">
               <div className="flex mx-auto xl:w-full xl:mx-0 items-center">
                 {/* <p className="text-lg text-gray-800 font-bold mr-3">List of patients</p> */}
-                <svg onClick={() => setshowAddMedicament(!showAddMedicament)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                <svg onClick={() => setshowAddRadios(!showAddRadios)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM3 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 019.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
                 </svg>
                 <svg onClick={() => EditFunction()} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 ml-3">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                 </svg>
-                <svg onClick={() => deleteMedications()} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 ml-3">
+                <svg onClick={() => deleteRadio()} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 ml-3">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                 </svg>
                 <svg onClick={() => fetchData()} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 ml-3">

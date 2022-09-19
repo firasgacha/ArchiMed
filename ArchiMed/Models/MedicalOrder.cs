@@ -6,22 +6,18 @@ namespace ArchiMed.Models;
 public class MedicalOrder
 {
     public int  MedicalOrderId { get; set; }
-    public string  MedicalOrderName { get; set; }
     public string  MedicalOrderDescription { get; set; }
     public string  MedicalOrderDate { get; set; }
     
-    //Les relations entre les tables
-    [JsonIgnore]
-    public virtual Doctor doctor { get; set; }
     
-    [ForeignKey("doctor")]
-    public int DoctorFk { get; set; }
+    public Doctor? Doctor { get; set; }
     
-    public virtual IList<Medications> MedicationsList { get; set; }
+    public int DoctorId { get; set; }
     
-    [JsonIgnore]
-    public virtual MedicalFolder medicalFolder { get; set; }
+    public Patient? Patient { get; set; }
     
-    [ForeignKey("medicalFolder")]
-    public int DossierMedicalFk { get; set; }
+    public int PatientId { get; set; }
+    
+    public ICollection<Medications>Medications  { get; set; }
+    
 }

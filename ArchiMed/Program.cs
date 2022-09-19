@@ -101,15 +101,25 @@ public class ArchiMedDB: DbContext {
     public ArchiMedDB(DbContextOptions<ArchiMedDB> options): base(options) {
 
     }
-    public DbSet<Patient> Patients => Set<Patient>();
-    public DbSet<Appointment> Appointments { get; set; }
-    public DbSet<Doctor> Doctors { get; set; }
-    public DbSet<Scanner> Scanners{ get; set; }
-    public DbSet<MedicalFolder> MedicalFolders { get; set; }
-    public DbSet<Medications> Medications { get; set; }
-    public DbSet<MedicalOrder> MedicalOrders { get; set; }
-    public DbSet<Radio> Radios { get; set; }
-    public DbSet<Agent> Agents { get; set; }
+    // public DbSet<Patient> Patients => Set<Patient>();
+    // public DbSet<Appointment> Appointments { get; set; }
+    // public DbSet<Scanner> Scanners{ get; set; }
+    // public DbSet<MedicalFolder> MedicalFolders { get; set; }
+    // public DbSet<Medications> Medications { get; set; }
+    // public DbSet<MedicalOrder> MedicalOrders { get; set; }
+    // public DbSet<Radio> Radios { get; set; }
+    // public DbSet<Agent> Agents { get; set; }
     public DbSet<Department> Departments { get; set; }
+    public DbSet<Doctor> Doctors { get; set; }
+    public DbSet<ArchiMed.Models.Patient>? Patient { get; set; }
+    public DbSet<ArchiMed.Models.MedicalFolder>? MedicalFolder { get; set; }
+    public DbSet<ArchiMed.Models.Appointment>? Appointment { get; set; }
+    public DbSet<ArchiMed.Models.Agent>? Agent { get; set; }
+    public DbSet<ArchiMed.Models.MedicalOrder>? MedicalOrder { get; set; }
+    public DbSet<ArchiMed.Models.Medications>? Medications { get; set; }
+    public DbSet<ArchiMed.Models.Scanner>? Scanner { get; set; }
+    public DbSet<ArchiMed.Models.Radio>? Radio { get; set; }
+    public DbSet<ArchiMed.Models.Contact>? Contact { get; set; }
+
     
 }

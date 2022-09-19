@@ -7,25 +7,20 @@ public class Appointment
 {
     public int AppointmentId { get; set; }
     
-    public DateTime AppointmentDate { get; set; }
+    public String AppointmentDate { get; set; }
     
-    //Les relations entre les tables
-    [JsonIgnore]    
-    public virtual Patient patient { get; set; }
     
-    [JsonIgnore]
-    public virtual Doctor doctor { get; set; }
     
-    [JsonIgnore]
-    public virtual Agent agent { get; set; }
+    public Patient? Patient { get; set; }
     
-    [ForeignKey("agent")]
-    public int AgentFk { get; set; }
+    public int PatientId { get; set; }
     
-    [ForeignKey("Patient")]
-    public int PatientFk { get; set; }
+    public Agent? Agent { get; set; }
     
-    [ForeignKey("doctor")]
-    public int DoctorFk { get; set; }
+    public int AgentId { get; set; }
     
+    public Doctor? Doctor { get; set; }
+    
+    public int DoctorId { get; set; }
+
 }

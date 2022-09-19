@@ -1,10 +1,9 @@
-import React, { useEffect, useMemo, useState, useRef } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTable, useSortBy, useGlobalFilter, useFilters, usePagination, useColumnOrder, useRowSelect } from "react-table";
 import GlobalFilter from "../../components/GlobalFilter";
 import ColumnFilter from "components/ColumnFilter";
 import axios from "axios";
-import MaleSvg from "assets/male.svg";
-import FemaleSvg from "assets/female.svg";
+import { useQuery } from "react-query";
 
 export default function ListOfDepartements() {
 
@@ -21,42 +20,15 @@ export default function ListOfDepartements() {
     }
   ]
 
-  const [doctorsListData, setDoctorsListData] = useState([]);
   const [departmentsListData, setDepartmentsListData] = useState([]);
   const [showAddDepartment, setshowAddDepartment] = useState(false);
   const [showEditDepartment, setshowEditDepartment] = useState(false);
 
 
-  const [DoctorId, setDoctorId] = useState();
-  const [fisrtName, setFisrtName] = useState(String);
-  const [lastName, setLastName] = useState(String);
-  const [gender, setGender] = useState(String);
-  const [birthday, setBirthday] = useState(Date);
-  const [cin, setCIN] = useState(0);
-  const [adress, setAdress] = useState(String);
-  const [city, setCity] = useState(String);
-  const [country, setCountry] = useState(String);
-  const [postalCode, setPostalCode] = useState(0);
-  const [email, setEmail] = useState(String);
-  const [specialty, setSpecialty] = useState(String);
-  const [phone, setPhone] = useState(0);
-  const [headofDepartment, setHeadofDepartment] = useState(false);
-
   const [departmentId, setdepartmentId] = useState(Number);
   const [departmentName, setdepartmentName] = useState(String);
   const [departmentdoctorsList, setdepartmentdoctorsList] = useState(null);
 
-
-  const fetchDoctorData = async () => {
-    await axios.get('Doctor')
-      .then((res) => {
-        setDoctorsListData(res.data);
-        console.log(res.data);
-      }).catch((err) => {
-        console.log(err);
-      })
-
-  }
   const fetchDepartemnetsData = async () => {
     await axios.get('Department')
       .then((res) => {
@@ -65,6 +37,10 @@ export default function ListOfDepartements() {
         console.log(err);
       })
   }
+
+  const { data, isLoading, isFetched } = useQuery("Department", fetchDepartemnetsData);
+
+  
   const findDepartementById = async (id: number) => {
     await axios.get(`Doctor/${id}`)
       .then((res) => {
@@ -76,12 +52,12 @@ export default function ListOfDepartements() {
 
 
   const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => departmentsListData, [departmentsListData]);
+  const data2 = useMemo(() => departmentsListData, [departmentsListData]);
 
   const { allColumns, selectedFlatRows, getToggleHideAllColumnsProps, getTableProps, getTableBodyProps, headerGroups, footerGroups, page, nextPage, previousPage, setPageSize, setColumnOrder, canNextPage, canPreviousPage, pageOptions, gotoPage, pageCount, prepareRow, state, setGlobalFilter } =
     useTable({
       columns,
-      data,
+      data: data2,
       initialState: { pageIndex: 0, pageSize: 10 }
     },
       useColumnOrder,
@@ -124,33 +100,10 @@ export default function ListOfDepartements() {
   }
   const [isList, setIsList] = useState(false);
 
-
-
-
-  const doctor = {
-    "doctorId": DoctorId,
-    "fisrtName": fisrtName,
-    "lastName": lastName,
-    "birthday": birthday,
-    "gender": gender,
-    // "birthday": "2022-08-31T18:14:59.228Z",
-    "cin": cin,
-    "adress": adress,
-    "city": city,
-    "country": country,
-    "postalCode": postalCode,
-    "email": email,
-    "specialty": specialty,
-    "phone": phone,
-    "headofDepartment": headofDepartment,
-    "departmentFk": departmentId
-  }
-
   const departement = {
     "departmentId": departmentId,
     "departmentName": departmentName,
-    "doctorsList": departmentdoctorsList
-
+    "doctors": departmentdoctorsList
   }
 
   const deleteDepartement = async () => {
@@ -165,10 +118,11 @@ export default function ListOfDepartements() {
     alert("Doctor deleted");
   }
   const addDepartement = async () => {
-    await axios.post('Department', departement)
+    await axios.post('Department', { "departmentName": departmentName, "doctors": departmentdoctorsList })
       .then((res) => {
         alert("Departement added");
         fetchDepartemnetsData();
+        setdepartmentId(0);
       }).catch((err) => {
         console.log(err);
       }
@@ -177,7 +131,11 @@ export default function ListOfDepartements() {
 
   const editDepartement = async () => {
     setdepartmentdoctorsList([]);
-    await axios.put(`Department/${departmentId}`, departement)
+    await axios.put(`Department/${departmentId}`, {
+      "departmentId": departmentId,
+      "departmentName": departmentName,
+      "doctors": departmentdoctorsList
+    })
       .then((res) => {
         alert("Departement updated");
         fetchDepartemnetsData();
@@ -198,17 +156,13 @@ export default function ListOfDepartements() {
     }
   }
 
-
+  
 
   useEffect(() => {
     fetchDepartemnetsData();
     setdepartmentdoctorsList([]);
   }, [])
 
-
-  // if (isLoading) {
-  //     return <h2>Loading...</h2>
-  // }
 
   return (
     <>
@@ -237,7 +191,7 @@ export default function ListOfDepartements() {
                     <button onClick={() => setshowAddDepartment(!showAddDepartment)} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
                       Cancel
                     </button>
-                    <button onClick={() => addDepartement()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Add Departement</button>
+                    <button onClick={() => addDepartement()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Confirm</button>
                   </div>
                 </div>
               </div>
@@ -279,7 +233,7 @@ export default function ListOfDepartements() {
         </div>
       }
 
-      <code>
+      {/* <code>
         {JSON.stringify(
           {
             selectedFlatRows: selectedFlatRows.map((row) => row.original),
@@ -288,13 +242,13 @@ export default function ListOfDepartements() {
           2
         )}
         {JSON.stringify(departement)}
-      </code>
+      </code> */}
       <div id="listOfDoctors">
         <div className="bg-white p-10 2xl:p-5">
           <div className="container mx-auto bg-white rounded">
             <div className="flex justify-between border-b border-gray-300 py-5 bg-white">
               <div className="flex mx-auto xl:w-full xl:mx-0 items-center">
-                <p className="text-lg text-gray-800 font-bold mr-3">List of departements</p>
+                {/* <p className="text-lg text-gray-800 font-bold mr-3">List of departements</p> */}
                 <svg onClick={() => setshowAddDepartment(!showAddDepartment)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM3 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 019.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
                 </svg>
@@ -338,6 +292,7 @@ export default function ListOfDepartements() {
                       <div className="w-40 mt-2 p-4 bg-white shadow rounded">
                         {/* element */}
                         {
+                        
                           allColumns.map(column => (
                             <div key={column.id}>
                               <div className="flex items-center justify-between">
@@ -464,22 +419,28 @@ export default function ListOfDepartements() {
                           ))}
                         </thead>
                         <tbody {...getTableBodyProps()}>
-                          {
-                            page.map(row => {
-                              prepareRow(row)
-                              return (
-                                <tr {...row.getRowProps()} className="h-24 text-center border-gray-300 border-b">
-                                  {row.cells.map(cell => (
-                                    <td {...cell.getCellProps()} className="text-sm pr-6 whitespace-no-wrap text-gray-800 tracking-normal leading-4">
-                                      {
-                                        cell.render('Cell')
-                                      }
-                                    </td>
-                                  ))}
-                                </tr>
-                              )
-                            })
-                          }
+                          {!isLoading ? (
+                            <>
+                              {
+                                page.map(row => {
+                                  prepareRow(row)
+                                  return (
+                                    <tr {...row.getRowProps()} className="h-24 text-center border-gray-300 border-b">
+                                      {row.cells.map(cell => (
+                                        <td {...cell.getCellProps()} className="text-sm pr-6 whitespace-no-wrap text-gray-800 tracking-normal leading-4">
+                                          {
+                                            cell.render('Cell')
+                                          }
+                                        </td>
+                                      ))}
+                                    </tr>
+                                  )
+                                })
+                              }
+                            </>
+                          ) : (
+                              <div>is Loading.....</div>
+                          )}
                         </tbody>
                       </table>
                     </div>

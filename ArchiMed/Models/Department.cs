@@ -5,8 +5,9 @@ namespace ArchiMed.Models;
 
 public class Department
 {
+    //create constructor
     public int DepartmentId { get; set; }
     public string departmentName { get; set; } 
     
-    public List<Doctor> DoctorsList { get; set; }
+    public ICollection<Doctor> Doctors { get; set; }
 }
