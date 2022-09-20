@@ -2,7 +2,9 @@ namespace ArchiMed.Models;
 
 public abstract class User
 {
+    public int id { get; set; }
     public string fisrtName { get; set; }
+    public string passwod { get; set; }
     public string lastName { get; set; }
     public string birthday { get; set; }
     public string gender { get; set; }

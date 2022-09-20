@@ -1,7 +1,14 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using ArchiMed.Models;
+using ArchiMed.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore; // place this line at the beginning of file.
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models; // place this line at the beginning of file.
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,16 +17,52 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Description = "Bearer Authentication with JWT Token",
+        Type = SecuritySchemeType.Http
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Id = "Bearer",
+                    Type = ReferenceType.SecurityScheme
+                }
+            },
+            new List<string>()
+        }
+    });
+});
+
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateActor = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
+});
+builder.Services.AddAuthorization();
 
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("dev",
-        policy  =>
-        {
-            policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
-        });
+        policy => { policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod(); });
 });
 
 // Connect to PostgreSQL Database
@@ -96,11 +139,55 @@ app.MapControllers();
 //     return Results.NoContent();
 // });
 
-app.Run();
-public class ArchiMedDB: DbContext {
-    public ArchiMedDB(DbContextOptions<ArchiMedDB> options): base(options) {
 
+
+app.MapPost("/login",
+        (UserLogin user, IUserService service) => Login(user, service))
+    .Accepts<UserLogin>("application/json")
+    .Produces<string>();
+
+IResult Login(UserLogin user, IUserService service)
+{
+    if (!string.IsNullOrEmpty(user.email) &&
+        !string.IsNullOrEmpty(user.password))
+    {
+        var loggedInUser = service.Get(user);
+        if (loggedInUser is null) return Results.NotFound("User not found");
+
+        var claims = new[]
+        {
+            new Claim(ClaimTypes.Email, loggedInUser.email),
+            new Claim(ClaimTypes.Surname, loggedInUser.lastName),
+            new Claim(ClaimTypes.Role, loggedInUser.role)
+        };
+
+        var token = new JwtSecurityToken
+        (
+            claims: claims,
+            expires: DateTime.UtcNow.AddDays(60),
+            notBefore: DateTime.UtcNow,
+            signingCredentials: new SigningCredentials(
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+                SecurityAlgorithms.HmacSha256)
+        );
+
+        var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+        return Results.Ok(tokenString);
     }
+    return Results.BadRequest("Invalid user credentials");
+}
+
+app.Run();
+
+
+
+public class ArchiMedDB : DbContext
+{
+    public ArchiMedDB(DbContextOptions<ArchiMedDB> options) : base(options)
+    {
+    }
+
     // public DbSet<Patient> Patients => Set<Patient>();
     // public DbSet<Appointment> Appointments { get; set; }
     // public DbSet<Scanner> Scanners{ get; set; }
@@ -120,6 +207,4 @@ public class ArchiMedDB: DbContext {
     public DbSet<ArchiMed.Models.Scanner>? Scanner { get; set; }
     public DbSet<ArchiMed.Models.Radio>? Radio { get; set; }
     public DbSet<ArchiMed.Models.Contact>? Contact { get; set; }
-
-    
 }
