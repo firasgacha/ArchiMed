@@ -38,7 +38,7 @@ export default function Navbar() {
         <div className=" fixed w-64 h-screen top-16 shadow bg-gray-100 hidden lg:block">
           <div className="h-16 w-full flex items-center px-8">
             <Link to={"/"}>
-              <img src="src\assets\logo.jpg" alt="logo" className="mt-6 w-[160px] h-[70px]" />
+              <img src="src\assets\archimedLogo.png" alt="logo" className="mt-6" />
             </Link>
           </div>
           <ul aria-orientation="vertical" className=" py-6">

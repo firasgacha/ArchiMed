@@ -263,7 +263,7 @@ export default function MedicalFolder() {
                 <div className="bg-white dark:bg-gray-800 rounded shadow px-8 py-6 flex items-center">
                     <div className="flex-col">
                         <div className="p-4 rounded">
-                            <img src="src/assets/mri-machine2.svg" alt="machine2" />
+                            <img src="src/assets/mri-machine2.svg" alt="machine2" className="h-[100px]" />
                         </div>
                         <p className="text-center">Scanners</p>
                     </div>
@@ -274,7 +274,7 @@ export default function MedicalFolder() {
                 <div className="bg-white dark:bg-gray-800 rounded shadow px-8 py-6 flex items-center">
                     <div className="flex-col">
                         <div className="p-4 rounded">
-                            <img src="src/assets/redio.svg" alt="redio" />
+                            <img src="src/assets/redio.svg" alt="redio" className="h-[100px]" />
                         </div>
                         <p className="text-center">Radios</p>
                     </div>
@@ -296,7 +296,7 @@ export default function MedicalFolder() {
                 <div className="bg-white dark:bg-gray-800 rounded shadow px-8 py-6 flex items-center">
                     <div className="flex-col">
                         <div className="p-4 rounded">
-                            <img src="src/assets/calendar22.svg" alt="calendar22" />
+                            <img src="src/assets/calendar22.svg" alt="calendar22" className="h-[100px]" />
                         </div>
                         <p className="text-center">Appointments</p>
                    </div>
