@@ -12,4 +12,5 @@ public class Medications
     public string medicationCode { get; set; }
     public string DateFabrication { get; set; }
     public string DateExpiration { get; set; }
+    public string ImageUrl { get; set; }
 }

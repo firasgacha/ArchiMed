@@ -8,11 +8,11 @@ interface props {
     show: boolean;
 }
 
-export default function tableMedicalFolder(props: props) {
+export default function TableMedicalFolder(props: props) {
 
-    const columns = useMemo(() => props.COLUMNS, []);
+    const columns = useMemo(() => props.COLUMNS, [props.COLUMNS]);
     const data = useMemo(() => props.Data, [props.Data]);
-    const [showModal, setshowModal] = useState(props.show);
+    const [showModal, setshowModal] = useState(true);
 
 
     const { allColumns, selectedFlatRows, getToggleHideAllColumnsProps, getTableProps, getTableBodyProps, headerGroups, footerGroups, page, nextPage, previousPage, setPageSize, setColumnOrder, canNextPage, canPreviousPage, pageOptions, gotoPage, pageCount, prepareRow, state, setGlobalFilter } =

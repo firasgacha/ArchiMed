@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ArchiMed.Migrations
 {
     [DbContext(typeof(ArchiMedDB))]
-    partial class ArchiMedDBModelSnapshot : ModelSnapshot
+    [Migration("20220920223504_phone")]
+    partial class phone
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,10 +30,6 @@ namespace ArchiMed.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("AgentId"));
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<string>("adress")
                         .IsRequired()
@@ -297,10 +295,6 @@ namespace ArchiMed.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int?>("MedicalOrderId")
                         .HasColumnType("integer");
 
@@ -345,10 +339,6 @@ namespace ArchiMed.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("PatientId"));
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<int>("MedicalFolderId")
                         .HasColumnType("integer");
@@ -420,10 +410,6 @@ namespace ArchiMed.Migrations
                     b.Property<int>("DoctorId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int?>("MedicalFolderId")
                         .HasColumnType("integer");
 
@@ -468,10 +454,6 @@ namespace ArchiMed.Migrations
 
                     b.Property<int>("DoctorId")
                         .HasColumnType("integer");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<int?>("MedicalFolderId")
                         .HasColumnType("integer");

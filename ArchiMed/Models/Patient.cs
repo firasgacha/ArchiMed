@@ -17,7 +17,8 @@ public class Patient
     public int postalCode { get; set; }
     public string email { get; set; }
     public string phone { get; set; }
-    
+    public string ImageUrl { get; set; }
+
     public MedicalFolder? MedicalFolder { get; set; }
     
     public int MedicalFolderId { get; set; }

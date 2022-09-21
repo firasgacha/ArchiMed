@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ArchiMed.Models;
+using Microsoft.AspNetCore.Cors;
 
 namespace ArchiMed.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("dev")]
     public class DoctorController : ControllerBase
     {
         private readonly ArchiMedDB _context;
@@ -48,7 +50,26 @@ namespace ArchiMed.Controllers
 
             return doctor;
         }
+        
+       
+        [HttpGet("GetDoctorByDepartement/{id}")]
+        public async Task<ActionResult<IEnumerable<Doctor>>> GetDoctorByDepartement(int id)
+        {
+          if (_context.Doctors == null)
+          {
+              return NotFound();
+          }
+            var doctor = await _context.Doctors
+                .Where(d => d.DepartmentFk == id).ToListAsync();
 
+            if (doctor == null)
+            {
+                return NotFound();
+            }
+
+            return doctor;
+        }
+        
         // PUT: api/Doctor/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -116,6 +137,7 @@ namespace ArchiMed.Controllers
               specialty = doctor.specialty,
               phone = doctor.phone,
               headofDepartment = doctor.headofDepartment,
+              ImageUrl = doctor.ImageUrl,
               DepartmentFk = doctor.DepartmentFk,
               Department = dep.FirstOrDefault(),
           };

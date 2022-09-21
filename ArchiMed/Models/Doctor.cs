@@ -20,8 +20,10 @@ public class Doctor
     public int postalCode { get; set; }
     public string email { get; set; }
     public string specialty { get; set; }
-    public int phone { get; set; }
+    public string phone { get; set; }
     public bool headofDepartment { get; set; } = false;
+    
+    public string ImageUrl { get; set; }
     
     
     public Department? Department { get; set; }
