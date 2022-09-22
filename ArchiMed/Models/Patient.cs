@@ -3,9 +3,8 @@ using System.Text.Json.Serialization;
 
 namespace ArchiMed.Models;
 
-public class Patient
+public class Patient: User
 {
-    public int PatientId { get; set; }
     public MedicalFolder? MedicalFolder { get; set; }
     public int MedicalFolderId { get; set; }
 }

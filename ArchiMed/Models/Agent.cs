@@ -2,5 +2,8 @@
 
 public class Agent : User
 {
-    public int AgentId { get; set; }
+    public Agent()
+    {
+    }
+
 }

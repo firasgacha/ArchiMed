@@ -54,7 +54,7 @@ namespace ArchiMed.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDoctor(int id, Doctor doctor)
         {
-            if (id != doctor.DoctorId)
+            if (id != doctor.id)
             {
                 return BadRequest();
             }
@@ -102,7 +102,7 @@ namespace ArchiMed.Controllers
           }
           var Newdoc = new Doctor
           {
-              DoctorId = doctor.DoctorId,
+              id = doctor.id,
               fisrtName = doctor.fisrtName,
               lastName = doctor.lastName,
               gender = doctor.gender,
@@ -122,7 +122,7 @@ namespace ArchiMed.Controllers
             _context.Doctors.Add(Newdoc);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetDoctor", new { id = doctor.DoctorId }, doctor);
+            return CreatedAtAction("GetDoctor", new { id = doctor.id }, doctor);
         }
 
         // DELETE: api/Doctor/5
@@ -147,7 +147,7 @@ namespace ArchiMed.Controllers
 
         private bool DoctorExists(int id)
         {
-            return (_context.Doctors?.Any(e => e.DoctorId == id)).GetValueOrDefault();
+            return (_context.Doctors?.Any(e => e.id == id)).GetValueOrDefault();
         }
     }
 }

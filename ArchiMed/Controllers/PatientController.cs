@@ -24,23 +24,23 @@ namespace ArchiMed.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Patient>>> GetPatient()
         {
-          if (_context.Patient == null)
+          if (_context.Patients == null)
           {
               return NotFound();
           }
           
-          return await _context.Patient.ToListAsync();;
+          return await _context.Patients.ToListAsync();;
         }
 
         // GET: api/Patient/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Patient>> GetPatient(int id)
         {
-          if (_context.Patient == null)
+          if (_context.Patients == null)
           {
               return NotFound();
           }
-            var patient = await _context.Patient.FindAsync(id);
+            var patient = await _context.Patients.FindAsync(id);
 
             if (patient == null)
             {
@@ -55,7 +55,7 @@ namespace ArchiMed.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPatient(int id, Patient patient)
         {
-            if (id != patient.PatientId)
+            if (id != patient.id)
             {
                 return BadRequest();
             }
@@ -86,31 +86,31 @@ namespace ArchiMed.Controllers
         [HttpPost]
         public async Task<ActionResult<Patient>> PostPatient(Patient patient)
         {
-          if (_context.Patient == null)
+          if (_context.Patients == null)
           {
               return Problem("Entity set 'ArchiMedDB.Patient'  is null.");
           }
-          _context.Patient.Add(patient);
+          _context.Patients.Add(patient);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPatient", new { id = patient.PatientId }, patient);
+            return CreatedAtAction("GetPatient", new { id = patient.id }, patient);
         }
 
         // DELETE: api/Patient/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePatient(int id)
         {
-            if (_context.Patient == null)
+            if (_context.Patients == null)
             {
                 return NotFound();
             }
-            var patient = await _context.Patient.FindAsync(id);
+            var patient = await _context.Patients.FindAsync(id);
             if (patient == null)
             {
                 return NotFound();
             }
 
-            _context.Patient.Remove(patient);
+            _context.Patients.Remove(patient);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -118,7 +118,7 @@ namespace ArchiMed.Controllers
 
         private bool PatientExists(int id)
         {
-            return (_context.Patient?.Any(e => e.PatientId == id)).GetValueOrDefault();
+            return (_context.Patients?.Any(e => e.id == id)).GetValueOrDefault();
         }
     }
 }

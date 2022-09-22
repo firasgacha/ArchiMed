@@ -8,7 +8,6 @@ namespace ArchiMed.Models;
 
 public class Doctor : User
 {
-    public int DoctorId { get; set; }
     public string specialty { get; set; }
     public bool headofDepartment { get; set; } = false;
     

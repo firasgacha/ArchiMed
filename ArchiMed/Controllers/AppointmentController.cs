@@ -24,10 +24,11 @@ namespace ArchiMed.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Appointment>>> GetAppointment()
         {
-          if (_context.Appointment == null)
-          {
-              return NotFound();
-          }
+            if (_context.Appointment == null)
+            {
+                return NotFound();
+            }
+
             return await _context.Appointment.ToListAsync();
         }
 
@@ -35,10 +36,11 @@ namespace ArchiMed.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Appointment>> GetAppointment(int id)
         {
-          if (_context.Appointment == null)
-          {
-              return NotFound();
-          }
+            if (_context.Appointment == null)
+            {
+                return NotFound();
+            }
+
             var appointment = await _context.Appointment.FindAsync(id);
 
             if (appointment == null)
@@ -85,14 +87,15 @@ namespace ArchiMed.Controllers
         [HttpPost]
         public async Task<ActionResult<Appointment>> PostAppointment(Appointment appointment)
         {
-          if (_context.Appointment == null)
-          {
-              return Problem("Entity set 'ArchiMedDB.Appointment'  is null.");
-          }
+            if (_context.Appointment == null)
+            {
+                return Problem("Entity set 'ArchiMedDB.Appointment'  is null.");
+            }
+
             _context.Appointment.Add(appointment);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAppointment", new { id = appointment.AppointmentId }, appointment);
+            return CreatedAtAction("GetAppointment", new {id = appointment.AppointmentId}, appointment);
         }
 
         // DELETE: api/Appointment/5
@@ -103,6 +106,7 @@ namespace ArchiMed.Controllers
             {
                 return NotFound();
             }
+
             var appointment = await _context.Appointment.FindAsync(id);
             if (appointment == null)
             {

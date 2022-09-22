@@ -24,22 +24,22 @@ namespace ArchiMed.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Agent>>> GetAgent()
         {
-          if (_context.Agent == null)
+          if (_context.Agents == null)
           {
               return NotFound();
           }
-            return await _context.Agent.ToListAsync();
+            return await _context.Agents.ToListAsync();
         }
 
         // GET: api/Agent/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Agent>> GetAgent(int id)
         {
-          if (_context.Agent == null)
+          if (_context.Agents == null)
           {
               return NotFound();
           }
-            var agent = await _context.Agent.FindAsync(id);
+            var agent = await _context.Agents.FindAsync(id);
 
             if (agent == null)
             {
@@ -54,7 +54,7 @@ namespace ArchiMed.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAgent(int id, Agent agent)
         {
-            if (id != agent.AgentId)
+            if (id != agent.id)
             {
                 return BadRequest();
             }
@@ -85,31 +85,31 @@ namespace ArchiMed.Controllers
         [HttpPost]
         public async Task<ActionResult<Agent>> PostAgent(Agent agent)
         {
-          if (_context.Agent == null)
+          if (_context.Agents == null)
           {
               return Problem("Entity set 'ArchiMedDB.Agent'  is null.");
           }
-            _context.Agent.Add(agent);
+            _context.Agents.Add(agent);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAgent", new { id = agent.AgentId }, agent);
+            return CreatedAtAction("GetAgent", new { id = agent.id }, agent);
         }
 
         // DELETE: api/Agent/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAgent(int id)
         {
-            if (_context.Agent == null)
+            if (_context.Agents == null)
             {
                 return NotFound();
             }
-            var agent = await _context.Agent.FindAsync(id);
+            var agent = await _context.Agents.FindAsync(id);
             if (agent == null)
             {
                 return NotFound();
             }
 
-            _context.Agent.Remove(agent);
+            _context.Agents.Remove(agent);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -117,7 +117,7 @@ namespace ArchiMed.Controllers
 
         private bool AgentExists(int id)
         {
-            return (_context.Agent?.Any(e => e.AgentId == id)).GetValueOrDefault();
+            return (_context.Agents?.Any(e => e.id == id)).GetValueOrDefault();
         }
     }
 }
