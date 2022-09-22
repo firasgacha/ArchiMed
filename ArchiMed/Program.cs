@@ -18,7 +18,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("dev",
         policy  =>
         {
-            policy.WithOrigins("http://localhost:3000","https://ipapi.co").AllowAnyHeader().AllowAnyMethod();
+            policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
         });
 });
 

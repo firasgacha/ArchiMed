@@ -410,7 +410,7 @@ export default function ListOfDoctors() {
                                                 {PublicId == "Empty" ?
                                                     <img src="src/assets/upload.svg" alt="upload" className="h-[100px] w-[100px]" />
                                                     :
-                                                    <div className="h-[50px] w-[50px]"><ImageBalise image={PublicId} /></div>
+                                                    <div className="max-h-auto max-w-[120px] mb-2"><ImageBalise image={PublicId} /></div>
                                                 }
                                             </div>
                                             <div className="flex justify-center items-center">
@@ -515,7 +515,7 @@ export default function ListOfDoctors() {
                                 <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
                                     <p className="text-base font-semibold">Edit Doctor</p>
                                     <button className="focus:outline-none">
-                                        <svg onClick={() => setshowEditDosctor(!showEditDosctor)} width={30} height={30} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <svg onClick={() => { setshowEditDosctor(!showEditDosctor); setImageselected(""); setPublicId("Empty"); }} width={30} height={30} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                                             <path d="M7 7L21 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
@@ -526,7 +526,7 @@ export default function ListOfDoctors() {
                                         <div className="flex-row items-center justify-center mb-4">
                                             <div className="flex justify-center items-center">
                                                 {PublicId != "Empty" ?
-                                                    <ImageBalise image={PublicId} />
+                                                    <div className="max-h-auto max-w-[120px] mb-2"><ImageBalise image={PublicId} /></div>
                                                     :
                                                     <img src="src/assets/upload.svg" alt="upload" className="h-[100px] w-[100px]" />
                                                 }
@@ -610,7 +610,7 @@ export default function ListOfDoctors() {
                                         </div>
                                     </form>
                                     <div className="flex items-center justify-between mt-9">
-                                        <button onClick={() => setshowEditDosctor(!showEditDosctor)} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
+                                        <button onClick={() => { setshowEditDosctor(!showEditDosctor); setImageselected(""); setPublicId("Empty");}} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
                                             Cancel
                                         </button>
                                         <button onClick={() => editDoctor()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Save changes</button>
@@ -904,7 +904,7 @@ export default function ListOfDoctors() {
                                     <form>
                                         <div className="flex items-center space-x-9 justify-center mb-6">
                                             <div className="text-center xl:text-left mb-3 xl:mb-0 flex flex-col xl:flex-row items-center justify-between xl:justify-start">
-                                                <h2 className="text-2xl bg-indigo-700 dark:bg-indigo-600 text-white px-5 py-1 font-normal rounded-full">{DepartmentName}</h2>
+                                                <h2 className="text-2xl bg-indigo-700 text-white px-5 py-1 font-normal rounded-full">{DepartmentName}</h2>
                                             </div>
                                         </div>
                                     </form>

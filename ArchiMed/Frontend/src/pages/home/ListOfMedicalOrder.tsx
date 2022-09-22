@@ -138,7 +138,6 @@ export default function ListOfMedicalOrder() {
       }).catch((err) => {
         console.log(err);
       })
-
   }
   const deleteMedicalOrder = async () => {
     selectedFlatRows.map(async (row) => {
@@ -259,7 +258,7 @@ export default function ListOfMedicalOrder() {
                       </select>
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
-                      <textarea placeholder="Medical order description" onChange={(e) => setmedicalOrderDescription(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={5} cols={100} defaultValue={""} />
+                      <textarea placeholder="Medical order description" onChange={(e) => setmedicalOrderDescription(e.target.value)} className="text-center bg-transparent border border-gray-300 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500" rows={5} cols={100} defaultValue={""} />
                     </div>
                     <div className="flex justify-center text-center items-center space-x-9 mt-3">
                       <select className="w-3/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
@@ -323,7 +322,7 @@ export default function ListOfMedicalOrder() {
                       </select>
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
-                      <textarea defaultValue={medicalOrderDescription} placeholder="Medical order description" onChange={(e) => setmedicalOrderDescription(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={5} cols={100} />
+                      <textarea defaultValue={medicalOrderDescription} placeholder="Medical order description" onChange={(e) => setmedicalOrderDescription(e.target.value)} className="text-center bg-transparent border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 " rows={5} cols={100} />
                     </div>
                     <div className="flex justify-center text-center items-center space-x-9 mt-3">
                       <select className="w-3/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">

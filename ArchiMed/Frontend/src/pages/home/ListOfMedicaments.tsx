@@ -59,7 +59,13 @@ export default function ListOfMedicaments() {
     {
       Header: '',
       accessor: 'imageUrl',
-       Cell: ({ value }) => (value != "Empty" ? <div className="flex h-[60px] w-[100px]"><ImageBalise image={value} /></div> : <img src="src/assets/upload.svg" alt="upload" className="h-[50px] w-[50px]" />
+      Cell: ({ value }) => (value != "Empty" ? <div className="flex items-center h-[70px] w-[100px]"
+        onClick={() => { openImgaeModal(value); setshowImage(!showImage) }}>
+        <ImageBalise image={value} />
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-80 h-30 text-black">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" />
+        </svg>
+      </div> : <img src="src/assets/upload.svg" alt="upload" className="h-[50px] w-[50px]" />
       ),
       Filter: ColumnFilter
     }
@@ -67,6 +73,7 @@ export default function ListOfMedicaments() {
   const [MedicamentListData, setMedicamentListData] = useState([]);
   const [showAddMedicament, setshowAddMedicament] = useState(false);
   const [showEditMedicament, setshowEditMedicament] = useState(false);
+  const [showImage, setshowImage] = useState(false);
 
 
 
@@ -106,6 +113,10 @@ export default function ListOfMedicaments() {
   const { pageIndex, pageSize } = state;
 
   const { globalFilter } = state;
+
+  const openImgaeModal = (v: String) => {
+    setPublicId(v);
+  }
 
   const changeOrdre = (v: String) => {
     switch (v) {
@@ -202,7 +213,7 @@ export default function ListOfMedicaments() {
       }).catch((err) => {
         console.log(err);
       }
-    )
+      )
   }
 
   const editMedications = async () => {
@@ -226,7 +237,7 @@ export default function ListOfMedicaments() {
       }).catch((err) => {
         console.log(err.message);
       }
-    )
+      )
   }
 
   const EditFunction = () => {
@@ -266,7 +277,7 @@ export default function ListOfMedicaments() {
                 <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
                   <p className="text-base font-semibold">Add New Medication</p>
                   <button className="focus:outline-none">
-                    <svg onClick={() => { setshowAddMedicament(!showAddMedicament); setImageselected(""); setPublicId("Empty");}} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg onClick={() => { setshowAddMedicament(!showAddMedicament); setImageselected(""); setPublicId("Empty"); }} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                       <path d="M7 7L21 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -279,7 +290,7 @@ export default function ListOfMedicaments() {
                         {PublicId == "Empty" ?
                           <img src="src/assets/upload.svg" alt="upload" className="h-[100px] w-[100px]" />
                           :
-                          <div className="h-[150px] w-[300px]"><ImageBalise image={PublicId} /></div>
+                          <div className="h-auto w-[300px] mb-2"><ImageBalise image={PublicId} /></div>
                         }
                       </div>
                       <div className="flex justify-center items-center">
@@ -312,7 +323,7 @@ export default function ListOfMedicaments() {
                     <div className="flex justify-center text-center items-center space-x-9 mt-3">
                       <div className="flex-col justify-center text-center items-center space-x-9 mt-3 mb-3">
                         <p>Production Date</p>
-                        <input onChange={(e) => setdateFabrication(e.target.value)} type="date"/>
+                        <input onChange={(e) => setdateFabrication(e.target.value)} type="date" />
                       </div>
                       <div className="flex-col justify-center text-center items-center space-x-9 mt-3 mb-3">
                         <p>Expiry Date</p>
@@ -320,14 +331,14 @@ export default function ListOfMedicaments() {
                       </div>
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
-                      <textarea placeholder="Medication Contraindication" onChange={(e) => setmedicationContraindication(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={3} cols={100} />
+                      <textarea placeholder="Medication Contraindication" onChange={(e) => setmedicationContraindication(e.target.value)} className="text-center bg-transparent border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 " rows={3} cols={100} />
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
-                      <textarea placeholder="Medication Composition" onChange={(e) => setmedicationComposition(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={3} cols={100} />
-                      <textarea placeholder="Medication Effets" onChange={(e) => setmedicationEffets(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={3} cols={100} />
+                      <textarea placeholder="Medication Composition" onChange={(e) => setmedicationComposition(e.target.value)} className="text-center bg-transparent border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 " rows={3} cols={100} />
+                      <textarea placeholder="Medication Effets" onChange={(e) => setmedicationEffets(e.target.value)} className="text-center bg-transparent border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 " rows={3} cols={100} />
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
-                      <textarea placeholder="Medication Description" onChange={(e) => setmedicationDescription(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={3} cols={100} />
+                      <textarea placeholder="Medication Description" onChange={(e) => setmedicationDescription(e.target.value)} className="text-center bg-transparent border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 " rows={3} cols={100} />
                     </div>
                   </form>
                   <div className="flex items-center justify-between mt-9">
@@ -364,7 +375,7 @@ export default function ListOfMedicaments() {
                         {PublicId == "Empty" ?
                           <img src="src/assets/upload.svg" alt="upload" className="h-[100px] w-[100px]" />
                           :
-                          <div className="h-[150px] w-[300px]"><ImageBalise image={PublicId} /></div>
+                          <div className="h-auto w-[300px] mb-2"><ImageBalise image={PublicId} /></div>
                         }
                       </div>
                       <div className="flex justify-center items-center">
@@ -405,14 +416,14 @@ export default function ListOfMedicaments() {
                       </div>
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
-                      <textarea defaultValue={medicationContraindication} placeholder="Medication Contraindication" onChange={(e) => setmedicationContraindication(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={3} cols={100} />
+                      <textarea defaultValue={medicationContraindication} placeholder="Medication Contraindication" onChange={(e) => setmedicationContraindication(e.target.value)} className="text-center bg-transparent border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 " rows={3} cols={100} />
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
-                      <textarea defaultValue={medicationComposition} placeholder="Medication Composition" onChange={(e) => setmedicationComposition(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={3} cols={100} />
-                      <textarea defaultValue={medicationEffets} placeholder="Medication Effets" onChange={(e) => setmedicationEffets(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={3} cols={100} />
+                      <textarea defaultValue={medicationComposition} placeholder="Medication Composition" onChange={(e) => setmedicationComposition(e.target.value)} className="text-center bg-transparent border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 " rows={3} cols={100} />
+                      <textarea defaultValue={medicationEffets} placeholder="Medication Effets" onChange={(e) => setmedicationEffets(e.target.value)} className="text-center bg-transparent border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 " rows={3} cols={100} />
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
-                      <textarea defaultValue={medicationDescription} placeholder="Medication Description" onChange={(e) => setmedicationDescription(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={3} cols={100} />
+                      <textarea defaultValue={medicationDescription} placeholder="Medication Description" onChange={(e) => setmedicationDescription(e.target.value)} className="text-center bg-transparent border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 " rows={3} cols={100} />
                     </div>
                   </form>
                   <div className="flex items-center justify-between mt-9">
@@ -698,6 +709,32 @@ export default function ListOfMedicaments() {
           </div>
         </div>
       </div>
+
+      {showImage &&
+        < div id="Add" className="z-50 fixed w-full flex justify-center inset-0">
+          <div className="w-full h-full bg-gray-500 bg-opacity-75 transition-opacity z-0 absolute inset-0" />
+          <div className="mx-auto container">
+            <div className="flex items-center justify-center h-full w-full">
+              <div className="bg-white rounded-md shadow fixed overflow-y-auto sm:h-auto w-auto md:w-auto lg:w-auto 2xl:w-auto">
+                <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
+                  <p className="text-base font-semibold text-center">Scanner</p>
+                  <button className="focus:outline-none">
+                    <svg onClick={() => { setshowImage(!showImage); setPublicId("Empty") }} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M7 7L21 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                </div>
+                <div className="flex">
+                  <div className="w-auto h-auto mt-10 mb-10 mr-10 ml-10">
+                    {PublicId != "Empty" ? <ImageBalise image={PublicId} /> : "No image found"}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      };
     </>
   );
 }

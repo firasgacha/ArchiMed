@@ -25,7 +25,7 @@ export default function ListOfPatients() {
         {
             Header: '',
             accessor: 'imageUrl',
-            Cell: ({ value }) => (value != "Empty" ? <ImageBalise image={value} /> : <img src="src/assets/upload.svg" alt="upload" className="h-[50px] w-[50px]" />
+            Cell: ({ value }) => (value != "Empty" ? <div className="h-[70px] w-[70px]"><ImageBalise image={value} /></div> : <img src="src/assets/upload.svg" alt="upload" className="h-[50px] w-[50px]" />
             ),
             Filter: ColumnFilter
         },
@@ -312,8 +312,7 @@ export default function ListOfPatients() {
                                     <p className="text-base font-semibold">Add New Patient</p>
                                     <button className="focus:outline-none">
                                         <svg onClick={() => {
-                                            setshowAddpatient(!showAddPatient); setImageselected("");
-                                            setPublicId("Empty");
+                                            setshowAddpatient(!showAddPatient); setImageselected("");setPublicId("Empty");
                                         }} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                                             <path d="M7 7L21 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
@@ -326,7 +325,7 @@ export default function ListOfPatients() {
                                             {PublicId == "Empty" ?
                                                 <img src="src/assets/upload.svg" alt="upload" className="h-[100px] w-[100px]" />
                                                 :
-                                                <ImageBalise image={PublicId} />
+                                                <div className="max-h-auto max-w-[120px] mb-2"><ImageBalise image={PublicId} /></div>
                                             }
                                         </div>
                                         <div className="flex justify-center items-center">
@@ -408,7 +407,7 @@ export default function ListOfPatients() {
                                 <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
                                     <p className="text-base font-semibold">Edit Patient Informations</p>
                                     <button className="focus:outline-none">
-                                        <svg onClick={() => setshowEditpatient(!showEditPatient)} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <svg onClick={() => { setshowEditpatient(!showEditPatient); setImageselected(""); setPublicId("Empty"); }} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                                             <path d="M7 7L21 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
@@ -416,6 +415,34 @@ export default function ListOfPatients() {
                                 </div>
                                 <div className="px-4 md:px-10 pt-6 md:pt-12 md:pb-4 pb-7">
                                     <form className="mt-2">
+                                        <div className="flex justify-center items-center">
+                                            {PublicId == "Empty" ?
+                                                <img src="src/assets/upload.svg" alt="upload" className="h-[100px] w-[100px]" />
+                                                :
+                                                <div className="max-h-auto max-w-[120px] mb-2"><ImageBalise image={PublicId} /></div>
+                                            }
+                                        </div>
+                                        <div className="flex justify-center items-center">
+                                            <input
+                                                type="file"
+                                                placeholder="Upload Your Screen Shot"
+                                                onChange={(event) => {
+                                                    setImageselected(event.target.files[0])
+                                                }} />
+                                            <button
+                                                className="px-6 py-3 bg-blue-500 hover:bg-opacity-80 shadow rounded text-sm text-white"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    PostImage();
+                                                }}>Upload</button>
+                                            <button
+                                                className="px-6 py-3 ml-2 bg-red-500 hover:bg-opacity-80 shadow rounded text-sm text-white"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    setPublicId("Empty");
+                                                    setImageselected("");
+                                                }}>Delete</button>
+                                        </div>
                                         <div className="flex items-center space-x-9">
                                             <input defaultValue={fisrtName} onChange={(e) => setFisrtName(e.target.value)} placeholder="First Name" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                             <input defaultValue={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
@@ -454,7 +481,7 @@ export default function ListOfPatients() {
                                         </div>
                                     </form>
                                     <div className="flex items-center justify-between mt-9">
-                                        <button onClick={() => setshowEditpatient(!showEditPatient)} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
+                                        <button onClick={() => { setshowEditpatient(!showEditPatient); setImageselected(""); setPublicId("Empty"); }} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
                                             Cancel
                                         </button>
                                         <button onClick={() => editPatient()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Save changes</button>

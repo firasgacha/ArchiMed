@@ -331,7 +331,7 @@ export default function ListOfAgents() {
                 <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
                   <p className="text-base font-semibold">Add New Agent</p>
                   <button className="focus:outline-none">
-                    <svg onClick={() => setshowAddAgent(!showAddAgent)} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg onClick={() => { setshowAddAgent(!showAddAgent); setImageselected(""); setPublicId("Empty"); }} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                       <path d="M7 7L21 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -344,7 +344,7 @@ export default function ListOfAgents() {
                         {PublicId == "Empty" ?
                           <img src="src/assets/upload.svg" alt="upload" className="h-[100px] w-[100px]" />
                           :
-                          <div className="h-[100px] w-[100px]"><ImageBalise image={PublicId} /></div>
+                          <div className="max-h-auto max-w-[120px] mb-2"><ImageBalise image={PublicId} /></div>
                         }
                       </div>
                       <div className="flex justify-center items-center">
@@ -403,7 +403,8 @@ export default function ListOfAgents() {
                         {CountryList.map((specialite) => (
                           <option value={specialite.name} className="w-2/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite.name}</option>
                         ))}
-                      </select>                     </div>
+                      </select>
+                    </div>
                     <div className="flex justify-center items-center space-x-9 mt-8">
                       <select onChange={(e) => setRole(e.target.value)} name="Role" id="Role" className="w-3/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
                         <option defaultChecked className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose Role</option>
@@ -416,7 +417,7 @@ export default function ListOfAgents() {
 
 
                   <div className="flex items-center justify-between mt-9">
-                    <button onClick={() => setshowAddAgent(!showAddAgent)} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
+                    <button onClick={() => { setshowAddAgent(!showAddAgent); setImageselected(""); setPublicId("Empty"); }} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
                       Cancel
                     </button>
                     <button onClick={() => addAgent()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Confirm</button>
@@ -436,7 +437,7 @@ export default function ListOfAgents() {
                 <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
                   <p className="text-base font-semibold">Edit Agent Informations</p>
                   <button className="focus:outline-none">
-                    <svg onClick={() => setshowEditAgent(!showEditAgent)} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg onClick={() => { setshowEditAgent(!showEditAgent); setImageselected(""); setPublicId("Empty"); }} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                       <path d="M7 7L21 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -449,7 +450,7 @@ export default function ListOfAgents() {
                         {PublicId == "Empty" ?
                           <img src="src/assets/upload.svg" alt="upload" className="h-[100px] w-[100px]" />
                           :
-                          <div className="h-[100px] w-[100px]"><ImageBalise image={PublicId} /></div>
+                          <div className="max-h-auto max-w-[120px] mb-2"><ImageBalise image={PublicId} /></div>
                         }
                       </div>
                       <div className="flex justify-center items-center">
@@ -521,7 +522,7 @@ export default function ListOfAgents() {
 
 
                   <div className="flex items-center justify-between mt-9">
-                    <button onClick={() => setshowEditAgent(!showEditAgent)} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
+                    <button onClick={() => { setshowEditAgent(!showEditAgent); setImageselected(""); setPublicId("Empty"); }} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
                       Cancel
                     </button>
                     <button onClick={() => editAgent()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Confirm</button>

@@ -17,13 +17,13 @@ export default function LandingPage() {
                 </div>
                 {/*CTA*/}
                 <div>
-                    <div className="dark:bg-gray-900">
+                    <div>
                         <section className="mx-auto container w-full py-36">
                             <div className="flex flex-col justify-center items-center">
                                 <div className="mb-10 md:text-5xl text-4xl font-black text-center text-indigo-600 leading-snug lg:w-3/4">
                                     <h2>ArchiMEDOnline</h2>
                                 </div>
-                                <div className="md:text-5xl text-4xl font-black text-center text-gray-800 dark:text-white leading-snug lg:w-3/4">
+                                <div className="md:text-5xl text-4xl font-black text-center text-gray-800 leading-snug lg:w-3/4">
                                     <h2>Manage your hospital with us</h2>
                                 </div>
                                 <div className="flex justify-center items-center mt-16">
@@ -37,25 +37,25 @@ export default function LandingPage() {
                 </div>
                 {/*CTA*/}
                 {/* why choosing us */}
-                <div className="dark:bg-gray-900">
+                <div>
                     <section className="mx-auto container py-20 ">
                         <div className="flex justify-center items-center flex-col">
-                            <div className="lg:text-6xl md:text-5xl text-4xl font-black leading-10 text-center text-gray-800 dark:text-white">
+                            <div className="lg:text-6xl md:text-5xl text-4xl font-black leading-10 text-center text-gray-800">
                                 <h1>Our features</h1>
                             </div>
                             <div className="pt-24 grid lg:grid-cols-3 md:grid-cols-2 justify-center items-center xl:gap-y-16 gap-y-20 gap-x-16 lg:gap-x-20 xl:gap-x-0 lg:px-10 xl:px-0">
                                 <div className="cursor-pointer hover:shadow py-6 xl:px-4 rounded xl:w-96 w-60 flex justify-center items-center flex-col">
                                     <div className="mb-6">
-                                        <svg className width={32} height={32} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <svg width={32} height={32} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M24 13.3333H32L28 8L24 13.3333ZM24 18.6667H32L28 24L24 18.6667Z" fill="#C7D2FE" />
                                             <path d="M1.33333 0H9.33333V32H1.33333C0.979711 32 0.640572 31.8595 0.390523 31.6095C0.140475 31.3594 0 31.0203 0 30.6667V1.33333C0 0.979711 0.140475 0.640572 0.390523 0.390523C0.640572 0.140475 0.979711 0 1.33333 0Z" fill="#818CF8" />
                                             <path d="M12 0H20C20.3536 0 20.6928 0.140475 20.9428 0.390523C21.1929 0.640572 21.3333 0.979711 21.3333 1.33333V30.6667C21.3333 31.0203 21.1929 31.3594 20.9428 31.6095C20.6928 31.8595 20.3536 32 20 32H12V0Z" fill="#6366F1" />
                                         </svg>
                                     </div>
-                                    <div className="text-gray-800 dark:text-white text-2xl font-semibold text-center">
+                                    <div className="text-gray-800 text-2xl font-semibold text-center">
                                         <h2>Robust workflow</h2>
                                     </div>
-                                    <div className="text-gray-600 dark:text-gray-300 mt-2 text-lg text-center ">
+                                    <div className="text-gray-600 mt-2 text-lg text-center ">
                                         <p>Workflows can help streamline and automate repeatable business tasks.</p>
                                     </div>
                                 </div>
@@ -67,10 +67,10 @@ export default function LandingPage() {
                                             <path d="M5.33325 22.6667H30.6666L26.6666 30.6667H1.33325L5.33325 22.6667Z" fill="#C7D2FE" />
                                         </svg>
                                     </div>
-                                    <div className="text-gray-800 dark:text-white text-2xl font-semibold text-center">
+                                    <div className="text-gray-800 text-2xl font-semibold text-center">
                                         <h2>Flexibility</h2>
                                     </div>
-                                    <div className="text-gray-600 dark:text-gray-300 mt-2 text-lg text-center">
+                                    <div className="text-gray-600 mt-2 text-lg text-center">
                                         <p>A flexible software architecture is able to changes in usability requirements</p>
                                     </div>
                                 </div>
@@ -82,10 +82,10 @@ export default function LandingPage() {
                                             <path d="M12 30.6667H29.3333C29.687 30.6667 30.0261 30.5263 30.2761 30.2762C30.5262 30.0262 30.6667 29.687 30.6667 29.3334V10.6667H12V30.6667Z" fill="#818CF8" />
                                         </svg>
                                     </div>
-                                    <div className="text-gray-800 dark:text-white text-2xl font-semibold text-center">
+                                    <div className="text-gray-800 text-2xl font-semibold text-center">
                                         <h2>User friendly</h2>
                                     </div>
-                                    <div className="text-gray-600 dark:text-gray-300 mt-2 text-lg text-center">
+                                    <div className="text-gray-600 mt-2 text-lg text-center">
                                         <p>Good usability can improve a new software chances of successful adoption.</p>
                                     </div>
                                 </div>
@@ -97,10 +97,10 @@ export default function LandingPage() {
                                             <path d="M28.0001 8H4.00008C3.64646 8 3.30732 8.14047 3.05727 8.39052C2.80722 8.64057 2.66675 8.97971 2.66675 9.33333V22.6667C2.66675 23.0203 2.80722 23.3594 3.05727 23.6095C3.30732 23.8595 3.64646 24 4.00008 24H28.0001C28.3537 24 28.6928 23.8595 28.9429 23.6095C29.1929 23.3594 29.3334 23.0203 29.3334 22.6667V9.33333C29.3334 8.97971 29.1929 8.64057 28.9429 8.39052C28.6928 8.14047 28.3537 8 28.0001 8Z" fill="#818CF8" />
                                         </svg>
                                     </div>
-                                    <div className="text-gray-800 dark:text-white text-2xl font-semibold text-center">
+                                    <div className="text-gray-800  text-2xl font-semibold text-center">
                                         <h2>Multiple layouts</h2>
                                     </div>
-                                    <div className="text-gray-600 dark:text-gray-300 mt-2 text-lg text-center">
+                                    <div className="text-gray-600  mt-2 text-lg text-center">
                                         <p>Smaller components are easier to maintain. Program can be divided</p>
                                     </div>
                                 </div>
@@ -115,10 +115,10 @@ export default function LandingPage() {
                                             <path d="M29.3333 1.33331H25.3333V30.6666H29.3333C29.6869 30.6666 30.026 30.5262 30.2761 30.2761C30.5261 30.0261 30.6666 29.6869 30.6666 29.3333V2.66665C30.6666 2.31302 30.5261 1.97388 30.2761 1.72384C30.026 1.47379 29.6869 1.33331 29.3333 1.33331Z" fill="#6366F1" />
                                         </svg>
                                     </div>
-                                    <div className="text-gray-800 dark:text-white text-2xl font-semibold text-center">
+                                    <div className="text-gray-800  text-2xl font-semibold text-center">
                                         <h2>Better components</h2>
                                     </div>
-                                    <div className="text-gray-600 dark:text-gray-300 mt-2 text-lg text-center">
+                                    <div className="text-gray-600  mt-2 text-lg text-center">
                                         <p>Component-based design makes front-end web development faster.</p>
                                     </div>
                                 </div>
@@ -139,10 +139,10 @@ export default function LandingPage() {
                                             />
                                         </svg>
                                     </div>
-                                    <div className="text-gray-800 dark:text-white text-2xl font-semibold text-center">
+                                    <div className="text-gray-800  text-2xl font-semibold text-center">
                                         <h2>Well organised</h2>
                                     </div>
-                                    <div className="text-gray-600 dark:text-gray-300 mt-2 text-lg text-center">
+                                    <div className="text-gray-600  mt-2 text-lg text-center">
                                         <p>No more running around looking for things.When you write things and plan.</p>
                                     </div>
                                 </div>

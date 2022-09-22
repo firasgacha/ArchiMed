@@ -39,9 +39,13 @@ export default function ListOfRadios() {
     {
       Header: '',
       accessor: 'imageUrl',
-      Cell: ({ value }) => (value != "Empty" ? <div className="flex h-[60px] w-[100px]"
+      Cell: ({ value }) => (value != "Empty" ? <div className="flex items-center h-[70px] w-[100px]"
         onClick={() => { openImgaeModal(value); setshowImage(!showImage) }}>
-        <ImageBalise image={value} /></div> : <img src="src/assets/upload.svg" alt="upload" className="h-[50px] w-[50px]" />
+        <ImageBalise image={value} />
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-60 h-10 text-black">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" />
+        </svg>
+      </div> : <img src="src/assets/upload.svg" alt="upload" className="h-[50px] w-[50px]" />
       ),
       Filter: ColumnFilter
     }
@@ -330,7 +334,7 @@ export default function ListOfRadios() {
                       </select>
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
-                      <textarea placeholder="Radio description" onChange={(e) => setradioDescription(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={5} cols={100} defaultValue={""} />
+                      <textarea placeholder="Radio description" onChange={(e) => setradioDescription(e.target.value)} className="text-center bg-transparent border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 " rows={5} cols={100} defaultValue={""} />
                     </div>
                     <div className="flex justify-center text-center items-center space-x-9 mt-3">
                       <select onChange={(e) => setagentId(e.target.value)} className="w-3/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
@@ -424,7 +428,7 @@ export default function ListOfRadios() {
                       </select>
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
-                      <textarea placeholder="Radio description" defaultValue={radioDescription} onChange={(e) => setradioDescription(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={5} cols={100} />
+                      <textarea placeholder="Radio description" defaultValue={radioDescription} onChange={(e) => setradioDescription(e.target.value)} className="text-center bg-transparent border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 " rows={5} cols={100} />
                     </div>
                     <div className="flex justify-center text-center items-center space-x-9 mt-3">
                       <select defaultValue={agentId} onChange={(e) => setagentId(e.target.value)} className="w-3/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
@@ -737,13 +741,11 @@ export default function ListOfRadios() {
                   </button>
                 </div>
                 <div className="px-4 md:px-10 pt-6 md:pt-12 md:pb-4 pb-7">
-                  <form>
-                    <div className="flex-row text-center">
-                      <div className="w-auto h-auto sm:px-6">
-                        {PublicId != "Empty" ? <div className="h-[700px] w-[1000px]"><ImageBalise image={PublicId} /></div> : "No image found"}
-                      </div>
+                  <div className="flex">
+                    <div className="w-auto h-auto mt-10 mb-10 mr-10 ml-10">
+                      {PublicId != "Empty" ? <ImageBalise image={PublicId} /> : "No image found"}
                     </div>
-                  </form>
+                  </div>
                 </div>
               </div>
             </div>
