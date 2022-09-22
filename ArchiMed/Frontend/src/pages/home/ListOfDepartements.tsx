@@ -4,100 +4,12 @@ import GlobalFilter from "../../components/GlobalFilter";
 import ColumnFilter from "components/ColumnFilter";
 import axios from "axios";
 import { useQuery } from "react-query";
+// @ts-ignore
 import ImageBalise from "./ImageBalise";
 
 
 export default function ListOfDepartements() {
-  const DoctorsCOLUMNS = [
-    {
-      Header: '',
-      accessor: 'imageUrl',
-      Cell: ({ value }) => (value != "Empty" ? <ImageBalise image={value} /> : <img src="src/assets/upload.svg" alt="upload" className="h-[50px] w-[50px]" />
-      ),
-      Filter: ColumnFilter
-    },
-    {
-      Header: 'First Name',
-      accessor: 'fisrtName',
-      Filter: ColumnFilter
-    },
-    {
-      Header: 'Last Name',
-      accessor: 'lastName',
-      Filter: ColumnFilter
-    },
-    {
-      Header: 'Gender',
-      accessor: 'gender',
-      Filter: ColumnFilter,
-      Cell: ({ value }) => (value == 'Male' ?
-        <div className="ml-6"><MaleSvg /></div> : <div className="ml-6"><FemaleSvg /></div>)
-    },
-    {
-      Header: 'Specialty',
-      accessor: 'specialty',
-      Filter: ColumnFilter
-    },
-    {
-      Header: 'Department',
-      accessor: 'departmentFk',
-      Filter: ColumnFilter,
-      Cell: ({ value }) => (value ?
-        <button onClick={() => {
-          getDepartementById(value);
-          setshowDepartment(!showDepartment);
-        }} className="ml-3 rounded-full bg-green-400 text-white text-sm px-6 py-2 flex justify-center items-center">See</button>
-        : 'Not affected')
-    },
-    {
-      Header: 'Head of department',
-      accessor: 'headofDepartment',
-      Cell: ({ cell: { value } }) => (value ? 'Yes' : 'No'),
-      Filter: ColumnFilter
-    },
-    {
-      Header: 'CIN',
-      accessor: 'cin',
-      Filter: ColumnFilter
-    },
-    {
-      Header: 'Birthday',
-      accessor: 'birthday',
-      Filter: ColumnFilter,
-      // Cell: ({ cell: { value } }) => format(new Date(value), 'dd/MM/yyyy')
-    },
-    {
-      Header: 'Email',
-      accessor: 'email',
-      Filter: ColumnFilter
-    },
-    {
-      Header: 'Phone',
-      accessor: 'phone',
-      Filter: ColumnFilter
-    },
-    {
-      Header: 'Adress',
-      accessor: 'adress',
-      Filter: ColumnFilter
-    },
-    {
-      Header: 'Postal_Code',
-      accessor: 'postalCode',
-      Filter: ColumnFilter
-    },
-
-    {
-      Header: 'City',
-      accessor: 'city',
-      Filter: ColumnFilter
-    },
-    {
-      Header: 'Country',
-      accessor: 'country',
-      Filter: ColumnFilter
-    }
-  ]
+  
   const COLUMNS = [
     {
       Header: 'Department Name',
@@ -109,7 +21,7 @@ export default function ListOfDepartements() {
       accessor: 'departmentId',
       Filter: ColumnFilter,
       Cell: ({ value }) => (value ?
-        <button onClick={async() => {
+        <button onClick={async () => {
           await GetDoctorByDepartement(value);
           setshowDoctorsList(!showDoctorsList);
           console.log(showDoctorsList);
@@ -127,7 +39,7 @@ export default function ListOfDepartements() {
   const [departmentId, setdepartmentId] = useState(Number);
   const [departmentName, setdepartmentName] = useState(String);
   const [departmentdoctorsList, setdepartmentdoctorsList] = useState(null);
-  
+
   const [doctorsList, setdoctorsList] = useState([]);
 
   const fetchDepartemnetsData = async () => {
@@ -141,7 +53,7 @@ export default function ListOfDepartements() {
 
   const { data, isLoading, isFetched } = useQuery("Department", fetchDepartemnetsData);
 
-  
+
   const GetDoctorByDepartement = async (id: number) => {
     await axios.get(`Doctor/GetDoctorByDepartement/${id}`)
       .then((res) => {
@@ -202,11 +114,6 @@ export default function ListOfDepartements() {
   }
   const [isList, setIsList] = useState(false);
 
-  const departement = {
-    "departmentId": departmentId,
-    "departmentName": departmentName,
-    "doctors": departmentdoctorsList
-  }
 
   const deleteDepartement = async () => {
     selectedFlatRows.map(async (row) => {
@@ -258,7 +165,7 @@ export default function ListOfDepartements() {
     }
   }
 
-  
+
 
   useEffect(() => {
     fetchDepartemnetsData();
@@ -394,7 +301,7 @@ export default function ListOfDepartements() {
                       <div className="w-40 mt-2 p-4 bg-white shadow rounded">
                         {/* element */}
                         {
-                        
+
                           allColumns.map(column => (
                             <div key={column.id}>
                               <div className="flex items-center justify-between">
@@ -541,7 +448,7 @@ export default function ListOfDepartements() {
                               }
                             </>
                           ) : (
-                              <div>is Loading.....</div>
+                            <div>is Loading.....</div>
                           )}
                         </tbody>
                       </table>
@@ -610,7 +517,7 @@ export default function ListOfDepartements() {
           <div className="w-full h-full bg-gray-500 bg-opacity-75 transition-opacity z-0 absolute inset-0" />
           <div className="mx-auto container">
             <div className="flex items-center justify-center h-full w-full">
-              <div className="bg-white rounded-md shadow fixed overflow-y-auto sm:h-auto w-10/12 md:w-8/12 lg:w-1/2 2xl:w-2/5">
+              <div className="bg-white rounded-md shadow fixed overflow-y-auto sm:h-auto w-auto md:w-auto lg:w-auto 2xl:w-auto">
                 <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
                   <p className="text-base font-semibold text-center">Doctors</p>
                   <button className="focus:outline-none">
@@ -623,16 +530,58 @@ export default function ListOfDepartements() {
                 <div className="px-4 md:px-10 pt-6 md:pt-12 md:pb-4 pb-7">
                   <form>
                     <div className="flex-row text-center mb-6">
-                        {doctorsList.map(d =>
-                        {
-                            return (
-                              <>
-                                <p key={d.doctorId}>{d.fisrtName} {d.lastName} / {d.specialty} / {d.phone} / {d.email}</p>
-                                <br />
-                              </>
-                            )                          
-                        })
-                        }
+                      <div className="w-full sm:px-6">
+                        <div className="bg-white shadow px-4 md:px-10 pt-4 md:pt-7 pb-5 overflow-y-auto">
+                          <table className="w-full whitespace-nowrap">
+                            <thead>
+                              <tr className="text-center h-16 w-full text-sm leading-none text-gray-800">
+                                <th className="font-normal text-center pl-4"></th>
+                                <th className="font-normal text-center pl-4">Doctor Name</th>
+                                <th className="font-normal text-center pl-12">Specialty</th>
+                                <th className="font-normal text-center pl-12">Phone</th>
+                                <th className="font-normal text-center pl-20">Email</th>
+                              </tr>
+                            </thead>
+                            <tbody className="w-full">
+                              {doctorsList.map(d => {
+                                return (
+                                  <>
+                                    <tr key={d.doctorId} className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100">
+                                      <td className="pl-4 cursor-pointer">
+                                        <div className="flex items-center">
+                                          <div className="pl-4">
+                                            <div>
+                                              {d.imageUrl != "Empty" ? <div className="h-[50px] w-[50px]"><ImageBalise image={d.imageUrl} /></div> : <img src="src/assets/upload.svg" alt="upload" className="h-[50px] w-[50px]" />}
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </td>
+                                      <td className="pl-4 cursor-pointer">
+                                        <div className="flex items-center">
+                                          <div className="pl-4">
+                                            <p className="font-medium">{d.fisrtName} {d.lastName}</p>
+                                          </div>
+                                        </div>
+                                      </td>
+                                      <td className="pl-12">
+                                        <p className="text-sm font-medium leading-none text-gray-800">{d.specialty}</p>
+                                      </td>
+                                      <td className="pl-12">
+                                        <p className="font-medium">{d.phone}</p>
+                                      </td>
+                                      <td className="pl-20">
+                                        <p className="font-medium">{d.email}</p>
+                                      </td>
+                                    </tr>
+                                    <br />
+                                  </>
+                                )
+                              })
+                              }
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
                     </div>
                   </form>
                 </div>
@@ -640,7 +589,7 @@ export default function ListOfDepartements() {
             </div>
           </div>
         </div>
-      }
+      };
     </>
   );
 }

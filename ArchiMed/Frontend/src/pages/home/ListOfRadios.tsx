@@ -4,6 +4,8 @@ import GlobalFilter from "../../components/GlobalFilter";
 import ColumnFilter from "components/ColumnFilter";
 import axios from "axios";
 import { useQuery } from "react-query";
+// @ts-ignore
+import ImageBalise from "./ImageBalise";
 
 export default function ListOfRadios() {
 
@@ -33,11 +35,21 @@ export default function ListOfRadios() {
       Header: 'agentId',
       accessor: 'agentId',
       Filter: ColumnFilter,
+    },
+    {
+      Header: '',
+      accessor: 'imageUrl',
+      Cell: ({ value }) => (value != "Empty" ? <div className="flex h-[60px] w-[100px]"
+        onClick={() => { openImgaeModal(value); setshowImage(!showImage) }}>
+        <ImageBalise image={value} /></div> : <img src="src/assets/upload.svg" alt="upload" className="h-[50px] w-[50px]" />
+      ),
+      Filter: ColumnFilter
     }
   ]
   const [RadiosListData, setRadiosListData] = useState([]);
   const [showAddRadios, setshowAddRadios] = useState(false);
   const [showEditRadios, setshowEditRadios] = useState(false);
+  const [showImage, setshowImage] = useState(false);
 
 
 
@@ -109,9 +121,22 @@ export default function ListOfRadios() {
   const [patientListData, setpatientListData] = useState([]);
   const [doctorsListData, setDoctorsListData] = useState([]);
   const [agentsListData, setAgentsListData] = useState([]);
+  const [imageselected, setImageselected] = useState(String);
+  const [PublicId, setPublicId] = useState("Empty");
 
-
-
+  const PostImage = () => {
+    const formData = new FormData();
+    formData.append("file", imageselected);
+    formData.append("upload_preset", "qysdlxzm");
+    axios.post(
+      "https://api.cloudinary.com/v1_1/du8mkgw6r/image/upload",
+      formData,
+    ).then((response) => {
+      const result = response.data;
+      // setImage(result.secure_url);
+      setPublicId(result.public_id);
+    });
+  }
 
   const fetchData = async () => {
     await axios.get('Radio')
@@ -171,13 +196,16 @@ export default function ListOfRadios() {
         "created": radioDate,
         "doctorId": doctorId,
         "patientId": patientId,
-        "agentId": agentId
+        "agentId": agentId,
+        "imageUrl": PublicId
       }
     )
       .then((res) => {
         console.log(res.data);
         alert("Radio added");
         fetchData();
+        setPublicId("Empty");
+        setImageselected("");
       }).catch((err) => {
         console.log(err);
       }
@@ -192,7 +220,8 @@ export default function ListOfRadios() {
         "created": radioDate,
         "doctorId": doctorId,
         "patientId": patientId,
-        "agentId": agentId
+        "agentId": agentId,
+        "imageUrl": PublicId
       })
       .then((res) => {
         alert("Radio updated");
@@ -212,12 +241,15 @@ export default function ListOfRadios() {
         setdoctorId(row.original.doctorId);
         setpatientId(row.original.patientId);
         setagentId(row.original.agentId);
+        setPublicId(row.original.imageUrl);
       })
       setshowEditRadios(!showEditRadios);
     }
   }
 
-
+  const openImgaeModal = (v: String) => {
+    setPublicId(v);
+  }
 
   useEffect(() => {
     fetchData();
@@ -238,7 +270,7 @@ export default function ListOfRadios() {
                 <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
                   <p className="text-base font-semibold">Add New Radio</p>
                   <button className="focus:outline-none">
-                    <svg onClick={() => setshowAddRadios(!showAddRadios)} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg onClick={() => { setshowAddRadios(!showAddRadios); setImageselected(""); setPublicId("Empty"); }} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                       <path d="M7 7L21 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -246,6 +278,36 @@ export default function ListOfRadios() {
                 </div>
                 <div className="px-4 md:px-10 pt-6 md:pt-12 md:pb-4 pb-7">
                   <form>
+                    <div className="flex-row items-center justify-center mb-4">
+                      <div className="flex justify-center items-center">
+                        {PublicId == "Empty" ?
+                          <img src="src/assets/upload.svg" alt="upload" className="h-[100px] w-[100px]" />
+                          :
+                          <div className="h-[150px] w-[300px]"><ImageBalise image={PublicId} /></div>
+                        }
+                      </div>
+                      <div className="flex justify-center items-center">
+                        <input
+                          type="file"
+                          placeholder="Upload Your Screen Shot"
+                          onChange={(event) => {
+                            setImageselected(event.target.files[0])
+                          }} />
+                        <button
+                          className="px-6 py-3 bg-blue-500 hover:bg-opacity-80 shadow rounded text-sm text-white"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            PostImage();
+                          }}>Upload</button>
+                        <button
+                          className="px-6 py-3 ml-2 bg-red-500 hover:bg-opacity-80 shadow rounded text-sm text-white"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setPublicId("Empty");
+                            setImageselected("");
+                          }}>Delete</button>
+                      </div>
+                    </div>
                     <div className="flex justify-center text-center items-center space-x-9">
                       <input onChange={(e) => setradioDate(e.target.value)} type="date" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                     </div>
@@ -282,7 +344,7 @@ export default function ListOfRadios() {
                     </div>
                   </form>
                   <div className="flex items-center justify-between mt-9">
-                    <button onClick={() => setshowAddRadios(!showAddRadios)} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
+                    <button onClick={() => { setshowAddRadios(!showAddRadios); setImageselected(""); setPublicId("Empty"); }} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
                       Cancel
                     </button>
                     <button onClick={() => addRadio()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Confirm</button>
@@ -302,7 +364,7 @@ export default function ListOfRadios() {
                 <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
                   <p className="text-base font-semibold">Edit Radio</p>
                   <button className="focus:outline-none">
-                    <svg onClick={() => setshowEditRadios(!showEditRadios)} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg onClick={() => { setshowEditRadios(!showEditRadios); setImageselected(""); setPublicId("Empty"); }} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                       <path d="M7 7L21 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -310,6 +372,36 @@ export default function ListOfRadios() {
                 </div>
                 <div className="px-4 md:px-10 pt-6 md:pt-12 md:pb-4 pb-7">
                   <form>
+                    <div className="flex-row items-center justify-center mb-4">
+                      <div className="flex justify-center items-center">
+                        {PublicId == "Empty" ?
+                          <img src="src/assets/upload.svg" alt="upload" className="h-[100px] w-[100px]" />
+                          :
+                          <div className="h-[150px] w-[300px]"><ImageBalise image={PublicId} /></div>
+                        }
+                      </div>
+                      <div className="flex justify-center items-center">
+                        <input
+                          type="file"
+                          placeholder="Upload Your Screen Shot"
+                          onChange={(event) => {
+                            setImageselected(event.target.files[0])
+                          }} />
+                        <button
+                          className="px-6 py-3 bg-blue-500 hover:bg-opacity-80 shadow rounded text-sm text-white"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            PostImage();
+                          }}>Upload</button>
+                        <button
+                          className="px-6 py-3 ml-2 bg-red-500 hover:bg-opacity-80 shadow rounded text-sm text-white"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setPublicId("Empty");
+                            setImageselected("");
+                          }}>Delete</button>
+                      </div>
+                    </div>
                     <div className="flex justify-center text-center items-center space-x-9">
                       <input defaultValue={radioDate} onChange={(e) => setradioDate(e.target.value)} type="date" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                     </div>
@@ -346,7 +438,7 @@ export default function ListOfRadios() {
                     </div>
                   </form>
                   <div className="flex items-center justify-between mt-9">
-                    <button onClick={() => setshowEditRadios(!showEditRadios)} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
+                    <button onClick={() => { setshowEditRadios(!showEditRadios); setImageselected(""); setPublicId("Empty"); }} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
                       Cancel
                     </button>
                     <button onClick={() => editRadio()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Confirm</button>
@@ -628,6 +720,36 @@ export default function ListOfRadios() {
           </div>
         </div>
       </div>
+
+      {showImage &&
+        < div id="Add" className="z-50 fixed w-full flex justify-center inset-0">
+          <div className="w-full h-full bg-gray-500 bg-opacity-75 transition-opacity z-0 absolute inset-0" />
+          <div className="mx-auto container">
+            <div className="flex items-center justify-center h-full w-full">
+              <div className="bg-white rounded-md shadow fixed overflow-y-auto sm:h-auto w-auto md:w-auto lg:w-auto 2xl:w-auto">
+                <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
+                  <p className="text-base font-semibold text-center">Radio</p>
+                  <button className="focus:outline-none">
+                    <svg onClick={() => { setshowImage(!showImage); setPublicId("Empty") }} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M7 7L21 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                </div>
+                <div className="px-4 md:px-10 pt-6 md:pt-12 md:pb-4 pb-7">
+                  <form>
+                    <div className="flex-row text-center">
+                      <div className="w-auto h-auto sm:px-6">
+                        {PublicId != "Empty" ? <div className="h-[700px] w-[1000px]"><ImageBalise image={PublicId} /></div> : "No image found"}
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      };
     </>
   );
 }

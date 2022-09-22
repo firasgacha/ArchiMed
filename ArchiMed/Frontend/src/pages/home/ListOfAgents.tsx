@@ -7,11 +7,20 @@ import { format, isDate } from 'date-fns';
 import MaleSvg from "assets/male.svg";
 import FemaleSvg from "assets/female.svg";
 import { useQuery } from "react-query";
+// @ts-ignore
+import ImageBalise from "./ImageBalise";
+import { CountryList } from '../../components/CountryListCode';
 
 export default function ListOfAgents() {
 
-
   const COLUMNS = [
+    {
+      Header: '',
+      accessor: 'imageUrl',
+      Cell: ({ value }) => (value != "Empty" ? <div className="h-[70px] w-[70px]"><ImageBalise image={value} /></div> : <img src="src/assets/upload.svg" alt="upload" className="h-[50px] w-[50px]" />
+      ),
+      Filter: ColumnFilter
+    },
     {
       Header: 'First Name',
       accessor: 'fisrtName',
@@ -103,7 +112,7 @@ export default function ListOfAgents() {
   const { allColumns, selectedFlatRows, getToggleHideAllColumnsProps, getTableProps, getTableBodyProps, headerGroups, footerGroups, page, nextPage, previousPage, setPageSize, setColumnOrder, canNextPage, canPreviousPage, pageOptions, gotoPage, pageCount, prepareRow, state, setGlobalFilter } =
     useTable({
       columns,
-      data:data2,
+      data: data2,
       initialState: { pageIndex: 0, pageSize: 10 }
     },
       useColumnOrder,
@@ -177,7 +186,22 @@ export default function ListOfAgents() {
   const [phone, setPhone] = useState(String);
   const [role, setRole] = useState(String);
 
+  const [countryCode, setCountryCode] = useState(String);
+  const [imageselected, setImageselected] = useState(String);
+  const [PublicId, setPublicId] = useState("Empty");
 
+  const PostImage = () => {
+    const formData = new FormData();
+    formData.append("file", imageselected);
+    formData.append("upload_preset", "qysdlxzm");
+    axios.post(
+      "https://api.cloudinary.com/v1_1/du8mkgw6r/image/upload",
+      formData,
+    ).then((response) => {
+      const result = response.data;
+      setPublicId(result.public_id);
+    });
+  }
   const { data, isLoading, isFetched } = useQuery("Department", async () => {
     await axios.get(
       "Agent"
@@ -192,7 +216,6 @@ export default function ListOfAgents() {
     await axios.get('Agent')
       .then((res) => {
         setAgentListData(res.data);
-        console.log(res.data);
       }).catch((err) => {
         console.log(err);
       })
@@ -223,20 +246,23 @@ export default function ListOfAgents() {
         "country": country,
         "postalCode": postalCode,
         "email": email,
-        "phone": phone,
-        "role": role
+        "phone": countryCode.concat(String(phone)),
+        "role": role,
+        "imageUrl": PublicId
       }
     )
       .then((res) => {
-        console.log(res.data);
         alert("Agent added");
         fetchData();
+        setPublicId("Empty");
+        setImageselected("");
       }).catch((err) => {
         console.log(err);
       }
       )
+    setCountryCode("");
   }
-  
+
   const editAgent = async () => {
     await axios.put(`Agent/${agentId}`,
       {
@@ -251,8 +277,9 @@ export default function ListOfAgents() {
         "country": country,
         "postalCode": postalCode,
         "email": email,
-        "phone": phone,
-        "role": role
+        "phone": countryCode.concat(String(phone)),
+        "role": role,
+        "imageUrl": PublicId,
       })
       .then((res) => {
         alert("Agent updated");
@@ -261,6 +288,7 @@ export default function ListOfAgents() {
         console.log(err.message);
       }
       )
+    setCountryCode("");
   }
 
   const EditFunction = () => {
@@ -278,6 +306,7 @@ export default function ListOfAgents() {
         setEmail(row.original.email);
         setRole(row.original.role);
         setPhone(row.original.phone);
+        setPublicId(row.original.imageUrl);
       })
       setshowEditAgent(!showEditAgent);
     }
@@ -309,7 +338,37 @@ export default function ListOfAgents() {
                   </button>
                 </div>
                 <div className="px-4 md:px-10 pt-6 md:pt-12 md:pb-4 pb-7">
-                  <form className="mt-2">
+                  <form>
+                    <div className="flex-row items-center justify-center mb-4">
+                      <div className="flex justify-center items-center">
+                        {PublicId == "Empty" ?
+                          <img src="src/assets/upload.svg" alt="upload" className="h-[100px] w-[100px]" />
+                          :
+                          <div className="h-[100px] w-[100px]"><ImageBalise image={PublicId} /></div>
+                        }
+                      </div>
+                      <div className="flex justify-center items-center">
+                        <input
+                          type="file"
+                          placeholder="Upload Your Screen Shot"
+                          onChange={(event) => {
+                            setImageselected(event.target.files[0])
+                          }} />
+                        <button
+                          className="px-6 py-3 bg-blue-500 hover:bg-opacity-80 shadow rounded text-sm text-white"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            PostImage();
+                          }}>Upload</button>
+                        <button
+                          className="px-6 py-3 ml-2 bg-red-500 hover:bg-opacity-80 shadow rounded text-sm text-white"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setPublicId("Empty");
+                            setImageselected("");
+                          }}>Delete</button>
+                      </div>
+                    </div>
                     <div className="flex items-center space-x-9">
                       <input onChange={(e) => setFisrtName(e.target.value)} placeholder="First Name" type="text" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                       <input onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" type="text" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
@@ -320,12 +379,18 @@ export default function ListOfAgents() {
                       </select>
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
-                      <input onChange={(e) => setBirthday(e.target.value)} placeholder="Birthday" type="date" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                      <input onChange={(e) => setCIN(Number(e.target.value))} placeholder="CIN" type="number" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                      <input onChange={(e) => setBirthday(e.target.value)} placeholder="Birthday" type="date" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                      <select onChange={(e) => setCountryCode(e.target.value)} className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                        <option defaultChecked className="text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Country Code</option>
+                        {CountryList.map((specialite) => (
+                          <option value={specialite.dial_code} className="w-2/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite.name} / {specialite.dial_code}</option>
+                        ))}
+                      </select>
+                      <input onChange={(e) => setPhone(e.target.value)} placeholder="Phone" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
-                      <input onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                      <input onChange={(e) => setPhone(e.target.value)} placeholder="Phone" type="number" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                      <input onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" className="w-2/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                      <input onChange={(e) => setCIN(Number(e.target.value))} placeholder="CIN" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
                       <input onChange={(e) => setAdress(e.target.value)} placeholder="Adress" type="text" className="w-2/3 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
@@ -333,8 +398,12 @@ export default function ListOfAgents() {
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
                       <input onChange={(e) => setCity(e.target.value)} placeholder="City" type="text" className="w-1/2 focus:outline-none text-center placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                      <input onChange={(e) => setCountry(e.target.value)} placeholder="Country" type="text" className="w-1/2 focus:outline-none text-center placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                    </div>
+                      <select onChange={(e) => setCountry(e.target.value)} className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                        <option defaultChecked className="focus:outline-none text-center placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Country</option>
+                        {CountryList.map((specialite) => (
+                          <option value={specialite.name} className="w-2/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite.name}</option>
+                        ))}
+                      </select>                     </div>
                     <div className="flex justify-center items-center space-x-9 mt-8">
                       <select onChange={(e) => setRole(e.target.value)} name="Role" id="Role" className="w-3/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
                         <option defaultChecked className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose Role</option>
@@ -374,7 +443,37 @@ export default function ListOfAgents() {
                   </button>
                 </div>
                 <div className="px-4 md:px-10 pt-6 md:pt-12 md:pb-4 pb-7">
-                  <form className="mt-2">
+                  <form>
+                    <div className="flex-row items-center justify-center mb-4">
+                      <div className="flex justify-center items-center">
+                        {PublicId == "Empty" ?
+                          <img src="src/assets/upload.svg" alt="upload" className="h-[100px] w-[100px]" />
+                          :
+                          <div className="h-[100px] w-[100px]"><ImageBalise image={PublicId} /></div>
+                        }
+                      </div>
+                      <div className="flex justify-center items-center">
+                        <input
+                          type="file"
+                          placeholder="Upload Your Screen Shot"
+                          onChange={(event) => {
+                            setImageselected(event.target.files[0])
+                          }} />
+                        <button
+                          className="px-6 py-3 bg-blue-500 hover:bg-opacity-80 shadow rounded text-sm text-white"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            PostImage();
+                          }}>Upload</button>
+                        <button
+                          className="px-6 py-3 ml-2 bg-red-500 hover:bg-opacity-80 shadow rounded text-sm text-white"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setPublicId("Empty");
+                            setImageselected("");
+                          }}>Delete</button>
+                      </div>
+                    </div>
                     <div className="flex items-center space-x-9">
                       <input defaultValue={fisrtName} onChange={(e) => setFisrtName(e.target.value)} placeholder="First Name" type="text" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                       <input defaultValue={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" type="text" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
@@ -385,12 +484,18 @@ export default function ListOfAgents() {
                       </select>
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
-                      <input defaultValue={birthday} onChange={(e) => setBirthday(e.target.value)} placeholder="Birthday" type="date" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                      <input defaultValue={cin} onChange={(e) => setCIN(Number(e.target.value))} placeholder="CIN" type="number" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                      <input defaultValue={birthday} onChange={(e) => setBirthday(e.target.value)} placeholder="Birthday" type="date" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                      <select onChange={(e) => setCountryCode(e.target.value)} className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                        <option defaultChecked className="focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Country Code</option>
+                        {CountryList.map((specialite) => (
+                          <option value={specialite.dial_code} className="w-2/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite.name} / {specialite.dial_code}</option>
+                        ))}
+                      </select>
+                      <input defaultValue={phone.slice(4)} onChange={(e) => setPhone(e.target.value)} placeholder="Phone" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
-                      <input defaultValue={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                      <input defaultValue={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone" type="number" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                      <input defaultValue={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                      <input defaultValue={cin} onChange={(e) => setCIN(Number(e.target.value))} placeholder="CIN" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
                       <input defaultValue={adress} onChange={(e) => setAdress(e.target.value)} placeholder="Adress" type="text" className="w-2/3 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
@@ -398,8 +503,12 @@ export default function ListOfAgents() {
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
                       <input defaultValue={city} onChange={(e) => setCity(e.target.value)} placeholder="City" type="text" className="w-1/2 focus:outline-none text-center placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                      <input defaultValue={country} onChange={(e) => setCountry(e.target.value)} placeholder="Country" type="text" className="w-1/2 focus:outline-none text-center placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                    </div>
+                      <select defaultValue={country} onChange={(e) => setCountry(e.target.value)} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                        <option defaultChecked className="focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Country</option>
+                        {CountryList.map((specialite) => (
+                          <option value={specialite.name} className="w-2/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite.name}</option>
+                        ))}
+                      </select>                    </div>
                     <div className="flex justify-center items-center space-x-9 mt-8">
                       <select defaultValue={role} onChange={(e) => setRole(e.target.value)} name="Role" id="Role" className="w-3/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
                         <option defaultChecked className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose Role</option>

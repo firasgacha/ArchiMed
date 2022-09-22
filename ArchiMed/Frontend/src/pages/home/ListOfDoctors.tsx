@@ -15,7 +15,7 @@ export default function ListOfDoctors() {
         {
             Header: '',
             accessor: 'imageUrl',
-            Cell: ({ value }) => (value != "Empty" ? <ImageBalise image={value} /> : <img src="src/assets/upload.svg" alt="upload" className="h-[50px] w-[50px]" />
+            Cell: ({ value }) => (value != "Empty" ? <div className="h-[70px] w-[70px]"><ImageBalise image={value} /></div> : <img src="src/assets/upload.svg" alt="upload" className="h-[50px] w-[50px]" />
             ),
             Filter: ColumnFilter
         },
@@ -165,7 +165,6 @@ export default function ListOfDoctors() {
             const result = response.data;
             // setImage(result.secure_url);
             setPublicId(result.public_id);
-            console.log(PublicId);
         });
     }
 
@@ -411,7 +410,7 @@ export default function ListOfDoctors() {
                                                 {PublicId == "Empty" ?
                                                     <img src="src/assets/upload.svg" alt="upload" className="h-[100px] w-[100px]" />
                                                     :
-                                                    <ImageBalise image={PublicId} />
+                                                    <div className="h-[50px] w-[50px]"><ImageBalise image={PublicId} /></div>
                                                 }
                                             </div>
                                             <div className="flex justify-center items-center">
@@ -446,10 +445,10 @@ export default function ListOfDoctors() {
                                                 <option value="Female" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Female</option>
                                             </select>
                                         </div>
-                                        <div className="flex items-center space-x-9 mt-8">
+                                        <div className="flex text-center items-center space-x-9 mt-8">
                                             <input onChange={(e) => setBirthday(e.target.value)} placeholder="Birthday" type="date" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                             <select onChange={(e) => setCountryCode(e.target.value)} className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
-                                                <option defaultChecked className="focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Country Code</option>
+                                                <option defaultChecked className="text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Country Code</option>
                                                 {CountryList.map((specialite) => (
                                                     <option value={specialite.dial_code} className="w-2/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite.name} / {specialite.dial_code}</option>
                                                 ))}
