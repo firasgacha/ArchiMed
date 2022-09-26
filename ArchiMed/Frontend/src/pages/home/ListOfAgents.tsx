@@ -9,7 +9,8 @@ import FemaleSvg from "assets/female.svg";
 import { useQuery } from "react-query";
 // @ts-ignore
 import ImageBalise from "./ImageBalise";
-import { CountryList } from '../../components/CountryListCode';
+import { CountryList } from '../../Utilities/CountryListCode';
+import randomPassword from "Utilities/randomPassword";
 
 export default function ListOfAgents() {
 
@@ -66,7 +67,7 @@ export default function ListOfAgents() {
     },
     {
       Header: 'Adress',
-      accessor: 'adress',
+      accessor: 'address',
       Filter: ColumnFilter
     },
     {
@@ -185,6 +186,7 @@ export default function ListOfAgents() {
   const [email, setEmail] = useState(String);
   const [phone, setPhone] = useState(String);
   const [role, setRole] = useState(String);
+  const [pwd, setPwd] = useState(String);
 
   const [countryCode, setCountryCode] = useState(String);
   const [imageselected, setImageselected] = useState(String);
@@ -223,14 +225,14 @@ export default function ListOfAgents() {
 
   const deleteAgent = async () => {
     selectedFlatRows.map(async (row) => {
-      await axios.delete(`Agent/${row.original.agentId}`)
+      await axios.delete(`Agent/${row.original.id}`)
         .then((res) => {
           fetchData();
         }).catch((err) => {
           console.log(err);
         })
     })
-    alert("Agent deleted");
+    alert("Agent(s) deleted");
   }
 
   const addAgent = async () => {
@@ -241,14 +243,15 @@ export default function ListOfAgents() {
         "birthday": birthday,
         "gender": gender,
         "cin": cin,
-        "adress": adress,
+        "address": adress,
         "city": city,
         "country": country,
         "postalCode": postalCode,
         "email": email,
         "phone": countryCode.concat(String(phone)),
         "role": role,
-        "imageUrl": PublicId
+        "imageUrl": PublicId,
+        "password": randomPassword()
       }
     )
       .then((res) => {
@@ -272,7 +275,7 @@ export default function ListOfAgents() {
         "birthday": birthday,
         "gender": gender,
         "cin": cin,
-        "adress": adress,
+        "address": adress,
         "city": city,
         "country": country,
         "postalCode": postalCode,
@@ -280,6 +283,7 @@ export default function ListOfAgents() {
         "phone": countryCode.concat(String(phone)),
         "role": role,
         "imageUrl": PublicId,
+        "password": pwd
       })
       .then((res) => {
         alert("Agent updated");
@@ -294,12 +298,12 @@ export default function ListOfAgents() {
   const EditFunction = () => {
     if (selectedFlatRows.length === 1) {
       selectedFlatRows.map(async (row) => {
-        setagentId(row.original.agentId);
+        setagentId(row.original.id);
         setFisrtName(row.original.fisrtName);
         setLastName(row.original.lastName);
         setBirthday(row.original.birthday);
         setCIN(row.original.cin);
-        setAdress(row.original.adress);
+        setAdress(row.original.address);
         setCity(row.original.city);
         setCountry(row.original.country);
         setPostalCode(row.original.postalCode);
@@ -307,6 +311,7 @@ export default function ListOfAgents() {
         setRole(row.original.role);
         setPhone(row.original.phone);
         setPublicId(row.original.imageUrl);
+        setPwd(row.original.password);
       })
       setshowEditAgent(!showEditAgent);
     }
@@ -386,11 +391,11 @@ export default function ListOfAgents() {
                           <option value={specialite.dial_code} className="w-2/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite.name} / {specialite.dial_code}</option>
                         ))}
                       </select>
-                      <input onChange={(e) => setPhone(e.target.value)} placeholder="Phone" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                      <input onChange={(e) => setPhone(e.target.value)} placeholder="Phone" type="number" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
-                      <input onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" className="w-2/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                      <input onChange={(e) => setCIN(Number(e.target.value))} placeholder="CIN" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                      <input onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" className="w-2/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                      <input onChange={(e) => setCIN(Number(e.target.value))} placeholder="CIN" type="number" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
                       <input onChange={(e) => setAdress(e.target.value)} placeholder="Adress" type="text" className="w-2/3 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
@@ -492,11 +497,11 @@ export default function ListOfAgents() {
                           <option value={specialite.dial_code} className="w-2/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite.name} / {specialite.dial_code}</option>
                         ))}
                       </select>
-                      <input defaultValue={phone.slice(4)} onChange={(e) => setPhone(e.target.value)} placeholder="Phone" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                      <input defaultValue={phone.slice(4)} onChange={(e) => setPhone(e.target.value)} placeholder="Phone" type="text" className="text-center w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
-                      <input defaultValue={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                      <input defaultValue={cin} onChange={(e) => setCIN(Number(e.target.value))} placeholder="CIN" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                      <input defaultValue={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                      <input defaultValue={cin} onChange={(e) => setCIN(Number(e.target.value))} placeholder="CIN" type="number" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
                       <input defaultValue={adress} onChange={(e) => setAdress(e.target.value)} placeholder="Adress" type="text" className="w-2/3 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />

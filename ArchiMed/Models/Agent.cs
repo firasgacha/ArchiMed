@@ -2,8 +2,5 @@
 
 public class Agent : User
 {
-<<<<<<< HEAD
-    public Agent()
-    {
-    }
+    public String role { get; set; }
 }

@@ -7,7 +7,8 @@ import MaleSvg from "assets/male.svg";
 import FemaleSvg from "assets/female.svg";
 // @ts-ignore
 import ImageBalise from "./ImageBalise";
-import { CountryList } from '../../components/CountryListCode';
+import { CountryList } from '../../Utilities/CountryListCode';
+import randomPassword from "Utilities/randomPassword";
 
 export default function ListOfDoctors() {
 
@@ -81,7 +82,7 @@ export default function ListOfDoctors() {
         },
         {
             Header: 'Adress',
-            accessor: 'adress',
+            accessor: 'address',
             Filter: ColumnFilter
         },
         {
@@ -145,7 +146,7 @@ export default function ListOfDoctors() {
     const [specialty, setSpecialty] = useState(String);
     const [phone, setPhone] = useState(Number);
     const [headofDepartment, setHeadofDepartment] = useState(false);
-
+    const [pwd, setPwd] = useState(String);
     const [countryCode, setCountryCode] = useState(String);
 
     const [imageselected, setImageselected] = useState(String);
@@ -256,7 +257,7 @@ export default function ListOfDoctors() {
 
     const deleteDoctor = async () => {
         selectedFlatRows.map(async (row) => {
-            await axios.delete(`Doctor/${row.original.doctorId}`)
+            await axios.delete(`Doctor/${row.original.id}`)
                 .then((res) => {
                     fetchDoctorData();
                 }).catch((err) => {
@@ -272,9 +273,9 @@ export default function ListOfDoctors() {
                 "lastName": lastName,
                 "birthday": birthday,
                 "gender": gender,
-                // "birthday": "2022-08-31T18:14:59.228Z",
+                "password": randomPassword(),
                 "cin": cin,
-                "adress": adress,
+                "address": adress,
                 "city": city,
                 "country": country,
                 "postalCode": postalCode,
@@ -300,14 +301,13 @@ export default function ListOfDoctors() {
     const editDoctor = async () => {
         await axios.put(`Doctor/${DoctorId}`,
             {
-                "doctorId": DoctorId,
+                "id": DoctorId,
                 "fisrtName": fisrtName,
                 "lastName": lastName,
                 "birthday": birthday,
                 "gender": gender,
-                // "birthday": "2022-08-31T18:14:59.228Z",
                 "cin": cin,
-                "adress": adress,
+                "address": adress,
                 "city": city,
                 "country": country,
                 "postalCode": postalCode,
@@ -316,7 +316,8 @@ export default function ListOfDoctors() {
                 "phone": countryCode.concat(String(phone)),
                 "headofDepartment": headofDepartment,
                 "imageUrl": PublicId,
-                "departmentFk": departmentId
+                "departmentFk": departmentId,
+                "password": pwd
             })
             .then((res) => {
                 alert("Doctor updated");
@@ -331,12 +332,12 @@ export default function ListOfDoctors() {
     const EditFunction = () => {
         if (selectedFlatRows.length === 1) {
             selectedFlatRows.map(async (row) => {
-                setDoctorId(row.original.doctorId);
+                setDoctorId(row.original.id);
                 setFisrtName(row.original.fisrtName);
                 setLastName(row.original.lastName);
                 setBirthday(row.original.birthday);
                 setCIN(row.original.cin);
-                setAdress(row.original.adress);
+                setAdress(row.original.address);
                 setCity(row.original.city);
                 setCountry(row.original.country);
                 setPostalCode(row.original.postalCode);
@@ -346,6 +347,7 @@ export default function ListOfDoctors() {
                 setHeadofDepartment(row.original.headofDepartment);
                 setdepartmentId(row.original.departmentFk);
                 setPublicId(row.original.imageUrl);
+                setPwd(row.original.password);
             })
             setshowEditDosctor(!showEditDosctor);
         }
@@ -377,6 +379,7 @@ export default function ListOfDoctors() {
 
 
     useEffect(() => {
+        console.log('hhhhhhhhh',randomPassword())
         fetchDoctorData();
         fetchDepartemnetsData();
     }, [])

@@ -161,7 +161,7 @@ export default function ListOfAppointment() {
           console.log(err);
         })
     })
-    alert("Appointment deleted");
+    alert("Appointment(s) deleted");
   }
 
   const addAppointment = async () => {
@@ -244,7 +244,7 @@ export default function ListOfAppointment() {
             <div className="flex items-center justify-center h-full w-full">
               <div className="bg-white rounded-md shadow fixed overflow-y-auto sm:h-auto w-10/12 md:w-8/12 lg:w-1/2 2xl:w-2/5">
                 <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
-                  <p className="text-base font-semibold">Create New Doctor</p>
+                  <p className="text-base font-semibold">Pick New Appointment</p>
                   <button className="focus:outline-none">
                     <svg onClick={() => setshowAddAppointment(!showAddAppointment)} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
@@ -262,7 +262,7 @@ export default function ListOfAppointment() {
                         <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose a Doctor</option>
                         {
                           doctorsListData.map((item) => (
-                            <option value={item.doctorId} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / {item.specialty}</option>
+                            <option value={item.id} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / {item.specialty}</option>
                           ))
                         }
                       </select>
@@ -270,7 +270,7 @@ export default function ListOfAppointment() {
                         <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose an Agent</option>
                         {
                           agentListData.map((item) => (
-                            <option value={item.agentId} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName}</option>
+                            <option value={item.id} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName}</option>
                           ))
                         }
                       </select>
@@ -280,7 +280,7 @@ export default function ListOfAppointment() {
                         <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose a patient</option>
                         {
                           patientListData.map((item) => (
-                            <option value={item.patientId} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / CIN : {item.cin}</option>
+                            <option value={item.id} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / CIN : {item.cin}</option>
                           ))
                         }
                       </select>
@@ -324,7 +324,7 @@ export default function ListOfAppointment() {
                         <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose a Doctor</option>
                         {
                           doctorsListData.map((item) => (
-                            <option value={item.doctorId} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / {item.specialty}</option>
+                            <option value={item.id} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / {item.specialty}</option>
                           ))
                         }
                       </select>
@@ -332,7 +332,7 @@ export default function ListOfAppointment() {
                         <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose an Agent</option>
                         {
                           agentListData.map((item) => (
-                            <option value={item.agentId} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName}</option>
+                            <option value={item.id} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName}</option>
                           ))
                         }
                       </select>
@@ -342,7 +342,7 @@ export default function ListOfAppointment() {
                         <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose a patient</option>
                         {
                           patientListData.map((item) => (
-                            <option value={item.patientId} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / CIN : {item.cin}</option>
+                            <option value={item.id} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / CIN : {item.cin}</option>
                           ))
                         }
                       </select>

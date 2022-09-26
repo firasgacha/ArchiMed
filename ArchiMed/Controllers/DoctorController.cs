@@ -52,23 +52,6 @@ namespace ArchiMed.Controllers
         }
         
        
-        [HttpGet("GetDoctorByDepartement/{id}")]
-        public async Task<ActionResult<IEnumerable<Doctor>>> GetDoctorByDepartement(int id)
-        {
-          if (_context.Doctors == null)
-          {
-              return NotFound();
-          }
-            var doctor = await _context.Doctors
-                .Where(d => d.DepartmentFk == id).ToListAsync();
-
-            if (doctor == null)
-            {
-                return NotFound();
-            }
-
-            return doctor;
-        }
         
         // PUT: api/Doctor/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -79,8 +62,28 @@ namespace ArchiMed.Controllers
             {
                 return BadRequest();
             }
+            var Newdoc = new Doctor
+            {
+                id = doctor.id,
+                fisrtName = doctor.fisrtName,
+                lastName = doctor.lastName,
+                gender = doctor.gender,
+                password = doctor.password,
+                birthday = doctor.birthday,
+                cin = doctor.cin,
+                address = doctor.address,
+                city = doctor.city,
+                country = doctor.country,
+                email = doctor.email,
+                postalCode = doctor.postalCode,
+                specialty = doctor.specialty,
+                phone = doctor.phone,
+                headofDepartment = doctor.headofDepartment,
+                ImageUrl = doctor.ImageUrl,
+                DepartmentFk = doctor.DepartmentFk,
+            };
 
-            _context.Entry(doctor).State = EntityState.Modified;
+            _context.Entry(Newdoc).State = EntityState.Modified;
 
             try
             {
@@ -126,10 +129,11 @@ namespace ArchiMed.Controllers
               id = doctor.id,
               fisrtName = doctor.fisrtName,
               lastName = doctor.lastName,
+              password = doctor.password,
               gender = doctor.gender,
               birthday = doctor.birthday,
               cin = doctor.cin,
-              adress = doctor.adress,
+              address = doctor.address,
               city = doctor.city,
               country = doctor.country,
               email = doctor.email,

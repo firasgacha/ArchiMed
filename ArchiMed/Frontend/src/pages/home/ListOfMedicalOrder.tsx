@@ -244,7 +244,7 @@ export default function ListOfMedicalOrder() {
                         <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose a Doctor</option>
                         {
                           doctorsListData.map((item) => (
-                            <option value={item.doctorId} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / {item.specialty}</option>
+                            <option value={item.id} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / {item.specialty}</option>
                           ))
                         }
                       </select>
@@ -252,7 +252,7 @@ export default function ListOfMedicalOrder() {
                         <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose a patient</option>
                         {
                           patientListData.map((item) => (
-                            <option value={item.patientId} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / CIN : {item.cin}</option>
+                            <option value={item.id} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / CIN : {item.cin}</option>
                           ))
                         }
                       </select>
@@ -308,7 +308,7 @@ export default function ListOfMedicalOrder() {
                         <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose a Doctor</option>
                         {
                           doctorsListData.map((item) => (
-                            <option value={item.doctorId} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / {item.specialty}</option>
+                            <option value={item.id} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / {item.specialty}</option>
                           ))
                         }
                       </select>
@@ -316,7 +316,7 @@ export default function ListOfMedicalOrder() {
                         <option  defaultValue={patientId} defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose a patient</option>
                         {
                           patientListData.map((item) => (
-                            <option value={item.patientId} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / CIN : {item.cin}</option>
+                            <option value={item.id} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / CIN : {item.cin}</option>
                           ))
                         }
                       </select>

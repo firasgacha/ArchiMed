@@ -22,5 +22,4 @@ public class User
     [DataType(DataType.PhoneNumber)]
     public string phone { get; set; }
     public string ImageUrl { get; set; }
-    public string role { get; set; }
 }

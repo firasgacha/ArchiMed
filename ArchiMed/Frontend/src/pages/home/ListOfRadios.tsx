@@ -320,7 +320,7 @@ export default function ListOfRadios() {
                         <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose a Doctor</option>
                         {
                           doctorsListData.map((item) => (
-                            <option value={item.doctorId} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / {item.specialty}</option>
+                            <option value={item.id} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / {item.specialty}</option>
                           ))
                         }
                       </select>
@@ -328,7 +328,7 @@ export default function ListOfRadios() {
                         <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose a patient</option>
                         {
                           patientListData.map((item) => (
-                            <option value={item.patientId} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / CIN : {item.cin}</option>
+                            <option value={item.id} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / CIN : {item.cin}</option>
                           ))
                         }
                       </select>
@@ -341,7 +341,7 @@ export default function ListOfRadios() {
                         <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose an Agent</option>
                         {
                           agentsListData.map((item) => (
-                            <option value={item.agentId} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName}</option>
+                            <option value={item.id} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName}</option>
                           ))
                         }
                       </select>
@@ -414,7 +414,7 @@ export default function ListOfRadios() {
                         <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose a Doctor</option>
                         {
                           doctorsListData.map((item) => (
-                            <option value={item.doctorId} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / {item.specialty}</option>
+                            <option value={item.id} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / {item.specialty}</option>
                           ))
                         }
                       </select>
@@ -422,7 +422,7 @@ export default function ListOfRadios() {
                         <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose a patient</option>
                         {
                           patientListData.map((item) => (
-                            <option value={item.patientId} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / CIN : {item.cin}</option>
+                            <option value={item.id} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName} / CIN : {item.cin}</option>
                           ))
                         }
                       </select>
@@ -435,7 +435,7 @@ export default function ListOfRadios() {
                         <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose an Agent</option>
                         {
                           agentsListData.map((item) => (
-                            <option value={item.agentId} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName}</option>
+                            <option value={item.id} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.fisrtName}_{item.lastName}</option>
                           ))
                         }
                       </select>
