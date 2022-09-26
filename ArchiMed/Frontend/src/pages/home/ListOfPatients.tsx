@@ -190,7 +190,7 @@ export default function ListOfPatients() {
         })
         alert("Patient deleted");
     }
-    const addPatient = async () => {    
+    const addPatient = async () => {
         await axios.post('Patient',
             {
                 "fisrtName": fisrtName,
@@ -221,7 +221,7 @@ export default function ListOfPatients() {
             }).catch((err) => {
                 console.log(err);
             }
-        )
+            )
         setCountryCode("");
     }
 
@@ -249,7 +249,7 @@ export default function ListOfPatients() {
             }).catch((err) => {
                 console.log(err.message);
             }
-        )
+            )
         setCountryCode("");
     }
 
@@ -312,7 +312,7 @@ export default function ListOfPatients() {
                                     <p className="text-base font-semibold">Add New Patient</p>
                                     <button className="focus:outline-none">
                                         <svg onClick={() => {
-                                            setshowAddpatient(!showAddPatient); setImageselected("");setPublicId("Empty");
+                                            setshowAddpatient(!showAddPatient); setImageselected(""); setPublicId("Empty");
                                         }} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                                             <path d="M7 7L21 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
@@ -350,41 +350,42 @@ export default function ListOfPatients() {
                                                 }}>Delete</button>
                                         </div>
                                         <div className="flex items-center space-x-9 mt-2">
-                                            <input onChange={(e) => setFisrtName(e.target.value)} placeholder="First Name" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <select onChange={(e) => setGender(e.target.value)} name="Gender" id="Gender" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
-                                                <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Gender</option>
-                                                <option value="Male" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Male</option>
-                                                <option value="Female" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Female</option>
+                                            <input onChange={(e) => setFisrtName(e.target.value)} placeholder="First Name" type="text" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" type="text" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <select onChange={(e) => setGender(e.target.value)} name="Gender" id="Gender" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                                                <option defaultChecked className="w-1/2 focus:outline-none text-center placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Gender</option>
+                                                <option value="Male" className="w-1/2 focus:outline-none text-center placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Male</option>
+                                                <option value="Female" className="w-1/2 focus:outline-none text-center placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Female</option>
                                             </select>
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
-                                            <input onChange={(e) => setBirthday(e.target.value)} placeholder="Birthday" type="date" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <select onChange={(e) => setCountryCode(e.target.value)} className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
-                                                <option defaultChecked className="focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Country Code</option>
+                                            <input onChange={(e) => setBirthday(e.target.value)} placeholder="Birthday" type="date" className="w-1/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <select onChange={(e) => setCountryCode(e.target.value)} className="w-1/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                                                <option defaultChecked className="focus:outline-none text-center placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Country Code</option>
                                                 {CountryList.map((specialite) => (
-                                                    <option value={specialite.dial_code} className="w-2/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite.name} / {specialite.dial_code}</option>
+                                                    <option value={specialite.dial_code} className="w-2/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite.name} / {specialite.dial_code}</option>
                                                 ))}
                                             </select>
-                                            <input onChange={(e) => setPhone(e.target.value)} placeholder="Phone" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input onChange={(e) => setPhone(e.target.value)} placeholder="Phone" type="number" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
-                                            <input onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" className="w-2/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input onChange={(e) => setCIN(Number(e.target.value))} placeholder="CIN" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" className="w-2/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input onChange={(e) => setCIN(Number(e.target.value))} placeholder="CIN" type="number" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
 
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
-                                            <input onChange={(e) => setAdress(e.target.value)} placeholder="Adress" type="text" className="w-2/3 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input onChange={(e) => setPostalCode(Number(e.target.value))} placeholder="Postal Code" type="number" className="w-1/3 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input onChange={(e) => setAdress(e.target.value)} placeholder="Adress" type="text" className="w-2/3 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input onChange={(e) => setPostalCode(Number(e.target.value))} placeholder="Postal Code" type="number" className="w-1/3 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
-                                            <input onChange={(e) => setCity(e.target.value)} placeholder="City" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <select onChange={(e) => setCountry(e.target.value)} className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
-                                                <option defaultChecked className="focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Country</option>
+                                            <input onChange={(e) => setCity(e.target.value)} placeholder="City" type="text" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <select onChange={(e) => setCountry(e.target.value)} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                                                <option defaultChecked className="focus:outline-none text-center placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Country</option>
                                                 {CountryList.map((specialite) => (
-                                                    <option value={specialite.name} className="w-2/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite.name}</option>
+                                                    <option value={specialite.name} className="w-2/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite.name}</option>
                                                 ))}
-                                            </select>                                        </div>
+                                            </select>
+                                        </div>
                                     </form>
                                     <div className="flex items-center justify-between mt-9">
                                         <button onClick={() => { setshowAddpatient(!showAddPatient); setPublicId("Empty"); setImageselected(""); }} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
@@ -444,44 +445,44 @@ export default function ListOfPatients() {
                                                 }}>Delete</button>
                                         </div>
                                         <div className="flex items-center space-x-9">
-                                            <input defaultValue={fisrtName} onChange={(e) => setFisrtName(e.target.value)} placeholder="First Name" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input defaultValue={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <select defaultValue={gender} onChange={(e) => setGender(e.target.value)} name="Gender" id="Gender" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
-                                                <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Gender</option>
-                                                <option value="Male" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Male</option>
-                                                <option value="Female" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Female</option>
+                                            <input defaultValue={fisrtName} onChange={(e) => setFisrtName(e.target.value)} placeholder="First Name" type="text" className="text-center w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input defaultValue={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" type="text" className="text-center first-letter:w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <select defaultValue={gender} onChange={(e) => setGender(e.target.value)} name="Gender" id="Gender" className="text-center w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                                                <option defaultChecked className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Gender</option>
+                                                <option value="Male" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Male</option>
+                                                <option value="Female" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Female</option>
                                             </select>
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
-                                            <input defaultValue={birthday} onChange={(e) => setBirthday(e.target.value)} placeholder="Birthday" type="date" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <select onChange={(e) => setCountryCode(e.target.value)} className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
-                                                <option defaultChecked className="focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Country Code</option>
+                                            <input defaultValue={birthday} onChange={(e) => setBirthday(e.target.value)} placeholder="Birthday" type="date" className="w-1/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <select onChange={(e) => setCountryCode(e.target.value)} className="w-1/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                                                <option defaultChecked className="focus:outline-none text-center placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Country Code</option>
                                                 {CountryList.map((specialite) => (
-                                                    <option value={specialite.dial_code} className="w-2/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite.name} / {specialite.dial_code}</option>
+                                                    <option value={specialite.dial_code} className="w-2/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite.name} / {specialite.dial_code}</option>
                                                 ))}
                                             </select>
-                                            <input defaultValue={phone.slice(4)} onChange={(e) => setPhone(e.target.value)} placeholder="Phone" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input defaultValue={phone.slice(4)} onChange={(e) => setPhone(e.target.value)} placeholder="Phone" type="text" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
-                                            <input defaultValue={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input defaultValue={cin} onChange={(e) => setCIN(Number(e.target.value))} placeholder="CIN" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input defaultValue={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input defaultValue={cin} onChange={(e) => setCIN(Number(e.target.value))} placeholder="CIN" type="number" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
-                                            <input defaultValue={adress} onChange={(e) => setAdress(e.target.value)} placeholder="Adress" type="text" className="w-2/3 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input defaultValue={postalCode} onChange={(e) => setPostalCode(Number(e.target.value))} placeholder="Postal Code" type="number" className="w-1/3 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input defaultValue={adress} onChange={(e) => setAdress(e.target.value)} placeholder="Adress" type="text" className="w-2/3 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input defaultValue={postalCode} onChange={(e) => setPostalCode(Number(e.target.value))} placeholder="Postal Code" type="number" className="text-center w-1/3 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
-                                            <input defaultValue={city} onChange={(e) => setCity(e.target.value)} placeholder="City" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <select defaultValue={country} onChange={(e) => setCountry(e.target.value)} className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
-                                                <option defaultChecked className="focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Country</option>
+                                            <input defaultValue={city} onChange={(e) => setCity(e.target.value)} placeholder="City" type="text" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <select defaultValue={country} onChange={(e) => setCountry(e.target.value)} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                                                <option defaultChecked className="focus:outline-none text-center placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Country</option>
                                                 {CountryList.map((specialite) => (
-                                                    <option value={specialite.name} className="w-2/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite.name}</option>
+                                                    <option value={specialite.name} className="w-2/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite.name}</option>
                                                 ))}
                                             </select>
                                         </div>
                                     </form>
                                     <div className="flex items-center justify-between mt-9">
-                                        <button onClick={() => { setshowEditpatient(!showEditPatient); setImageselected(""); setPublicId("Empty"); }} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
+                                        <button onClick={() => { setshowEditpatient(!showEditPatient); setImageselected(""); setPublicId("Empty"); }} className="text-center px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
                                             Cancel
                                         </button>
                                         <button onClick={() => editPatient()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Save changes</button>

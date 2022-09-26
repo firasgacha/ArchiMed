@@ -65,7 +65,7 @@ export default function Contact() {
                             </div>
                         </div>
                         <div className="xl:w-3/5 lg:w-3/5 bg-gray-200 h-full pt-5 pb-5 xl:pr-5 xl:pl-0 rounded-tr rounded-br">
-                            <form id="contact" className="bg-white py-4 px-8 rounded-tr rounded-br">
+                            <form id="contact" className="bg-white py-12 px-8 rounded-tr rounded-br">
                                 <h1 className="text-4xl text-gray-800 font-extrabold mb-6">Enter Details</h1>
                                 <div className="block xl:flex w-full flex-wrap justify-between mb-6">
                                     <div className="w-2/4 max-w-xs mb-6 xl:mb-0">
