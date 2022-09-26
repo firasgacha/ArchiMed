@@ -5,6 +5,7 @@ namespace ArchiMed.Models;
 
 public class Patient: User
 {
+
     public MedicalFolder? MedicalFolder { get; set; }
     public int MedicalFolderId { get; set; }
 }

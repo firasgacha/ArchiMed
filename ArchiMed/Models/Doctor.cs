@@ -11,9 +11,7 @@ public class Doctor : User
     public string specialty { get; set; }
     public bool headofDepartment { get; set; } = false;
     
-    
     public Department? Department { get; set; }
-    
     public int DepartmentFk { get; set; }
     
 }

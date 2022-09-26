@@ -13,7 +13,7 @@ public class User
     public string birthday { get; set; }
     public string gender { get; set; }
     public int cin { get; set; }
-    public string adress { get; set; }
+    public string address { get; set; }
     public string city { get; set; }
     public string country { get; set; }
     public int postalCode { get; set; }
@@ -21,5 +21,6 @@ public class User
     public string email { get; set; }
     [DataType(DataType.PhoneNumber)]
     public string phone { get; set; }
+    public string ImageUrl { get; set; }
     public string role { get; set; }
 }

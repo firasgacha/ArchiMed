@@ -5,10 +5,20 @@ import ColumnFilter from "components/ColumnFilter";
 import axios from "axios";
 import MaleSvg from "assets/male.svg";
 import FemaleSvg from "assets/female.svg";
+// @ts-ignore
+import ImageBalise from "./ImageBalise";
+import { CountryList } from '../../components/CountryListCode';
 
 export default function ListOfDoctors() {
 
     const COLUMNS = [
+        {
+            Header: '',
+            accessor: 'imageUrl',
+            Cell: ({ value }) => (value != "Empty" ? <div className="h-[70px] w-[70px]"><ImageBalise image={value} /></div> : <img src="src/assets/upload.svg" alt="upload" className="h-[50px] w-[50px]" />
+            ),
+            Filter: ColumnFilter
+        },
         {
             Header: 'First Name',
             accessor: 'fisrtName',
@@ -35,10 +45,6 @@ export default function ListOfDoctors() {
             Header: 'Department',
             accessor: 'departmentFk',
             Filter: ColumnFilter,
-            // Cell: ({ value }) => (value ? <img onClick={() => {
-            //     getDepartementById(value);
-            //     setshowDepartment(!showDepartment);
-            // }} className="ml-8 w-[24px] h-[24px]" src="src/assets/hide.svg" /> : 'Not affected')
             Cell: ({ value }) => (value ?
                 <button onClick={() => {
                     getDepartementById(value);
@@ -137,10 +143,30 @@ export default function ListOfDoctors() {
     const [postalCode, setPostalCode] = useState(0);
     const [email, setEmail] = useState(String);
     const [specialty, setSpecialty] = useState(String);
-    const [phone, setPhone] = useState(0);
+    const [phone, setPhone] = useState(Number);
     const [headofDepartment, setHeadofDepartment] = useState(false);
 
+    const [countryCode, setCountryCode] = useState(String);
+
+    const [imageselected, setImageselected] = useState(String);
+    const [PublicId, setPublicId] = useState("Empty");
+
     const [departmentId, setdepartmentId] = useState(Number);
+
+
+    const PostImage = () => {
+        const formData = new FormData();
+        formData.append("file", imageselected);
+        formData.append("upload_preset", "qysdlxzm");
+        axios.post(
+            "https://api.cloudinary.com/v1_1/du8mkgw6r/image/upload",
+            formData,
+        ).then((response) => {
+            const result = response.data;
+            // setImage(result.secure_url);
+            setPublicId(result.public_id);
+        });
+    }
 
     const fetchDoctorData = async () => {
         await axios.get('Doctor')
@@ -164,7 +190,6 @@ export default function ListOfDoctors() {
     const getDepartementById = async (id: Number) => {
         await axios.get(`Department/${id}`)
             .then((res) => {
-                console.log("depppp", res.data.departmentName);
                 setDepartmentName(res.data.departmentName);
             }).catch((err) => {
                 console.log(err);
@@ -229,28 +254,6 @@ export default function ListOfDoctors() {
     }
     const [isList, setIsList] = useState(false);
 
-
-
-
-    const doctor = {
-        "doctorId": DoctorId,
-        "fisrtName": fisrtName,
-        "lastName": lastName,
-        "birthday": birthday,
-        "gender": gender,
-        // "birthday": "2022-08-31T18:14:59.228Z",
-        "cin": cin,
-        "adress": adress,
-        "city": city,
-        "country": country,
-        "postalCode": postalCode,
-        "email": email,
-        "specialty": specialty,
-        "phone": phone,
-        "headofDepartment": headofDepartment,
-        "departmentFk": departmentId
-    }
-
     const deleteDoctor = async () => {
         selectedFlatRows.map(async (row) => {
             await axios.delete(`Doctor/${row.original.doctorId}`)
@@ -260,21 +263,61 @@ export default function ListOfDoctors() {
                     console.log(err);
                 })
         })
-        alert("Doctor deleted");
+        alert("Doctor(s) deleted");
     }
     const addDoctor = async () => {
-        await axios.post('Doctor', doctor)
+        await axios.post('Doctor',
+            {
+                "fisrtName": fisrtName,
+                "lastName": lastName,
+                "birthday": birthday,
+                "gender": gender,
+                // "birthday": "2022-08-31T18:14:59.228Z",
+                "cin": cin,
+                "adress": adress,
+                "city": city,
+                "country": country,
+                "postalCode": postalCode,
+                "email": email,
+                "specialty": specialty,
+                "phone": countryCode.concat(String(phone)),
+                "headofDepartment": headofDepartment,
+                "imageUrl": PublicId,
+                "departmentFk": departmentId
+            })
             .then((res) => {
                 alert("Doctor added");
                 fetchDoctorData();
+                setPublicId("Empty");
+                setImageselected("");
             }).catch((err) => {
                 console.log(err);
             }
             )
+        setCountryCode("");
     }
 
     const editDoctor = async () => {
-        await axios.put(`Doctor/${DoctorId}`, doctor)
+        await axios.put(`Doctor/${DoctorId}`,
+            {
+                "doctorId": DoctorId,
+                "fisrtName": fisrtName,
+                "lastName": lastName,
+                "birthday": birthday,
+                "gender": gender,
+                // "birthday": "2022-08-31T18:14:59.228Z",
+                "cin": cin,
+                "adress": adress,
+                "city": city,
+                "country": country,
+                "postalCode": postalCode,
+                "email": email,
+                "specialty": specialty,
+                "phone": countryCode.concat(String(phone)),
+                "headofDepartment": headofDepartment,
+                "imageUrl": PublicId,
+                "departmentFk": departmentId
+            })
             .then((res) => {
                 alert("Doctor updated");
                 fetchDoctorData();
@@ -282,6 +325,7 @@ export default function ListOfDoctors() {
                 console.log(err.message);
             }
             )
+        setCountryCode("");
     }
 
     const EditFunction = () => {
@@ -301,23 +345,42 @@ export default function ListOfDoctors() {
                 setPhone(row.original.phone);
                 setHeadofDepartment(row.original.headofDepartment);
                 setdepartmentId(row.original.departmentFk);
+                setPublicId(row.original.imageUrl);
             })
             setshowEditDosctor(!showEditDosctor);
         }
     }
 
 
+    // const getGeoInfo = async () => {
+    //     await fetch('https://ipapi.co/ip/')
+    //         .then(function (response) {
+    //             response.text().then(txt => {
+    //                 console.log(txt);
+    //                 fetch(`https://ipapi.co/${txt}/json/`)
+    //                     .then(function (response) {
+    //                         response.json().then(jsonData => {
+    //                             console.log(jsonData);
+    //                             setCountry(jsonData.country_name);
+    //                             setCountryCode(jsonData.country_calling_code);
+    //                         });
+    //                     })
+    //                     .catch(function (error) {
+    //                         console.log(error)
+    //                     });
+    //             });
+    //         })
+    //         .catch(function (error) {
+    //             console.log(error)
+    //         });
+    // };
+
 
     useEffect(() => {
         fetchDoctorData();
         fetchDepartemnetsData();
-
     }, [])
 
-
-    // if (isLoading) {
-    //     return <h2>Loading...</h2>
-    // }
 
     return (
         <>
@@ -330,15 +393,50 @@ export default function ListOfDoctors() {
                                 <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
                                     <p className="text-base font-semibold">Create New Doctor</p>
                                     <button className="focus:outline-none">
-                                        <svg onClick={() => setshowAddDosctor(!showAddDosctor)} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <svg onClick={() => {
+                                            setshowAddDosctor(!showAddDosctor);
+                                            setImageselected("");
+                                            setPublicId("Empty");
+                                        }} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                                             <path d="M7 7L21 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
                                     </button>
                                 </div>
                                 <div className="px-4 md:px-10 pt-6 md:pt-12 md:pb-4 pb-7">
-                                    <form className="mt-2">
-                                        <div className="flex items-center space-x-9">
+                                    <form>
+                                        <div className="flex-row items-center justify-center mb-4">
+                                            <div className="flex justify-center items-center">
+                                                {PublicId == "Empty" ?
+                                                    <img src="src/assets/upload.svg" alt="upload" className="h-[100px] w-[100px]" />
+                                                    :
+                                                    <div className="max-h-auto max-w-[120px] mb-2"><ImageBalise image={PublicId} /></div>
+                                                }
+                                            </div>
+                                            <div className="flex justify-center items-center">
+                                                <input
+                                                    type="file"
+                                                    placeholder="Upload Your Screen Shot"
+                                                    onChange={(event) => {
+                                                        setImageselected(event.target.files[0])
+                                                    }} />
+                                                <button
+                                                    className="px-6 py-3 bg-blue-500 hover:bg-opacity-80 shadow rounded text-sm text-white"
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        PostImage();
+                                                    }}>Upload</button>
+                                                <button
+                                                    className="px-6 py-3 ml-2 bg-red-500 hover:bg-opacity-80 shadow rounded text-sm text-white"
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        setPublicId("Empty");
+                                                        setImageselected("");
+                                                    }}>Delete</button>
+                                            </div>
+
+                                        </div>
+                                        <div className="flex items-center space-x-9 mt-2">
                                             <input onChange={(e) => setFisrtName(e.target.value)} placeholder="First Name" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                             <input onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                             <select onChange={(e) => setGender(e.target.value)} name="Gender" id="Gender" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
@@ -347,22 +445,32 @@ export default function ListOfDoctors() {
                                                 <option value="Female" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Female</option>
                                             </select>
                                         </div>
+                                        <div className="flex text-center items-center space-x-9 mt-8">
+                                            <input onChange={(e) => setBirthday(e.target.value)} placeholder="Birthday" type="date" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <select onChange={(e) => setCountryCode(e.target.value)} className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                                                <option defaultChecked className="text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Country Code</option>
+                                                {CountryList.map((specialite) => (
+                                                    <option value={specialite.dial_code} className="w-2/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite.name} / {specialite.dial_code}</option>
+                                                ))}
+                                            </select>
+                                            <input onChange={(e) => setPhone(e.target.value)} placeholder="Phone" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                        </div>
                                         <div className="flex items-center space-x-9 mt-8">
-                                            <input onChange={(e) => setBirthday(e.target.value)} placeholder="Birthday" type="date" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" className="w-2/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                             <input onChange={(e) => setCIN(Number(e.target.value))} placeholder="CIN" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
-                                        <div className="flex items-center space-x-9 mt-8">
-                                            <input onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input onChange={(e) => setPhone(Number(e.target.value))} placeholder="Phone" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                        </div>
-                                        <div className="flex items-center space-x-9 mt-8">
+                                        <div className="flex items-center space-x-9 mt-5">
                                             <input onChange={(e) => setAdress(e.target.value)} placeholder="Adress" type="text" className="w-2/3 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                             <input onChange={(e) => setPostalCode(Number(e.target.value))} placeholder="Postal Code" type="number" className="w-1/3 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
-                                        <div className="flex items-center space-x-9 mt-8">
+                                        <div className="flex items-center space-x-9 mt-5">
                                             <input onChange={(e) => setCity(e.target.value)} placeholder="City" type="text" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input onChange={(e) => setCountry(e.target.value)} placeholder="Country" type="text" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <select onChange={(e) => setdepartmentId(e.target.value)} className="w-3/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                                            <select onChange={(e) => setCountry(e.target.value)} className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                                                <option defaultChecked className="focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Country</option>
+                                                {CountryList.map((specialite) => (
+                                                    <option value={specialite.name} className="w-2/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite.name}</option>
+                                                ))}
+                                            </select>                                             <select onChange={(e) => setdepartmentId(e.target.value)} className="w-3/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
                                                 <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose department</option>
                                                 {
                                                     departmentsListData.map((item) => (
@@ -371,7 +479,7 @@ export default function ListOfDoctors() {
                                                 }
                                             </select>
                                         </div>
-                                        <div className="flex items-center space-x-9 mt-8">
+                                        <div className="flex items-center space-x-9 mt-5">
                                             <select onChange={(e) => setSpecialty(e.target.value)} name="specialite" id="specialite" className="w-3/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
                                                 <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose specialite</option>
                                                 {specialityList.map((specialite) => (
@@ -384,8 +492,10 @@ export default function ListOfDoctors() {
                                             </div>
                                         </div>
                                     </form>
-                                    <div className="flex items-center justify-between mt-9">
-                                        <button onClick={() => setshowAddDosctor(!showAddDosctor)} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
+                                    <div className="flex items-center justify-between mt-4">
+                                        <button onClick={() => {
+                                            setshowAddDosctor(!showAddDosctor); setPublicId("Empty"); setImageselected("");
+                                        }} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
                                             Cancel
                                         </button>
                                         <button onClick={() => addDoctor()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Confirm</button>
@@ -405,7 +515,7 @@ export default function ListOfDoctors() {
                                 <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
                                     <p className="text-base font-semibold">Edit Doctor</p>
                                     <button className="focus:outline-none">
-                                        <svg onClick={() => setshowEditDosctor(!showEditDosctor)} width={30} height={30} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <svg onClick={() => { setshowEditDosctor(!showEditDosctor); setImageselected(""); setPublicId("Empty"); }} width={30} height={30} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                                             <path d="M7 7L21 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
@@ -413,6 +523,36 @@ export default function ListOfDoctors() {
                                 </div>
                                 <div className="px-4 md:px-10 pt-6 md:pt-12 md:pb-4 pb-7">
                                     <form className="mt-2">
+                                        <div className="flex-row items-center justify-center mb-4">
+                                            <div className="flex justify-center items-center">
+                                                {PublicId != "Empty" ?
+                                                    <div className="max-h-auto max-w-[120px] mb-2"><ImageBalise image={PublicId} /></div>
+                                                    :
+                                                    <img src="src/assets/upload.svg" alt="upload" className="h-[100px] w-[100px]" />
+                                                }
+                                            </div>
+                                            <div className="flex justify-center items-center">
+                                                <input
+                                                    type="file"
+                                                    placeholder="Upload Your Screen Shot"
+                                                    onChange={(event) => {
+                                                        setImageselected(event.target.files[0])
+                                                    }} />
+                                                <button
+                                                    className="px-6 py-3 bg-blue-500 hover:bg-opacity-80 shadow rounded text-sm text-white"
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        PostImage();
+                                                    }}>Upload</button>
+                                                <button
+                                                    className="px-6 py-3 ml-2 bg-red-500 hover:bg-opacity-80 shadow rounded text-sm text-white"
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        setPublicId("Empty");
+                                                        setImageselected("");
+                                                    }}>Delete</button>
+                                            </div>
+                                        </div>
                                         <div className="flex items-center space-x-9">
                                             <input defaultValue={fisrtName} onChange={(e) => setFisrtName(e.target.value)} placeholder="First Name" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                             <input defaultValue={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
@@ -423,12 +563,18 @@ export default function ListOfDoctors() {
                                             </select>
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
-                                            <input defaultValue={birthday} onChange={(e) => setBirthday(e.target.value)} placeholder="Birthday" type="date" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input defaultValue={cin} onChange={(e) => setCIN(Number(e.target.value))} placeholder="CIN" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input defaultValue={birthday} onChange={(e) => setBirthday(e.target.value)} placeholder="Birthday" type="date" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <select onChange={(e) => setCountryCode(e.target.value)} className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                                                <option defaultChecked className="focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Country Code</option>
+                                                {CountryList.map((specialite) => (
+                                                    <option value={specialite.dial_code} className="w-2/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite.name} / {specialite.dial_code}</option>
+                                                ))}
+                                            </select>
+                                            <input defaultValue={phone.slice(4)} onChange={(e) => setPhone(e.target.value)} placeholder="Phone" type="text" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
                                             <input defaultValue={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input defaultValue={phone} onChange={(e) => setPhone(Number(e.target.value))} placeholder="Phone" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input defaultValue={cin} onChange={(e) => setCIN(Number(e.target.value))} placeholder="CIN" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
                                             <input defaultValue={adress} onChange={(e) => setAdress(e.target.value)} placeholder="Adress" type="text" className="w-2/3 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
@@ -436,7 +582,12 @@ export default function ListOfDoctors() {
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
                                             <input defaultValue={city} onChange={(e) => setCity(e.target.value)} placeholder="City" type="text" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input defaultValue={country} onChange={(e) => setCountry(e.target.value)} placeholder="Country" type="text" className="w-1/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <select defaultValue={country} onChange={(e) => setCountry(e.target.value)} className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
+                                                <option defaultChecked className="focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Country</option>
+                                                {CountryList.map((specialite) => (
+                                                    <option value={specialite.name} className="w-2/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite.name}</option>
+                                                ))}
+                                            </select>
                                             <select defaultValue={departmentId} onChange={(e) => setdepartmentId(e.target.value)} className="w-3/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
                                                 {
                                                     departmentsListData.map((item) => (
@@ -459,7 +610,7 @@ export default function ListOfDoctors() {
                                         </div>
                                     </form>
                                     <div className="flex items-center justify-between mt-9">
-                                        <button onClick={() => setshowEditDosctor(!showEditDosctor)} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
+                                        <button onClick={() => { setshowEditDosctor(!showEditDosctor); setImageselected(""); setPublicId("Empty");}} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
                                             Cancel
                                         </button>
                                         <button onClick={() => editDoctor()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Save changes</button>
@@ -753,7 +904,7 @@ export default function ListOfDoctors() {
                                     <form>
                                         <div className="flex items-center space-x-9 justify-center mb-6">
                                             <div className="text-center xl:text-left mb-3 xl:mb-0 flex flex-col xl:flex-row items-center justify-between xl:justify-start">
-                                                <h2 className="text-2xl bg-indigo-700 dark:bg-indigo-600 text-white px-5 py-1 font-normal rounded-full">{DepartmentName}</h2>
+                                                <h2 className="text-2xl bg-indigo-700 text-white px-5 py-1 font-normal rounded-full">{DepartmentName}</h2>
                                             </div>
                                         </div>
                                     </form>

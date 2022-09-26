@@ -4,6 +4,8 @@ import GlobalFilter from "../../components/GlobalFilter";
 import ColumnFilter from "components/ColumnFilter";
 import axios from "axios";
 import { useQuery } from "react-query";
+// @ts-ignore
+import ImageBalise from "./ImageBalise";
 
 export default function ListOfMedicaments() {
 
@@ -53,11 +55,25 @@ export default function ListOfMedicaments() {
       Header: 'Date Expiration',
       accessor: 'dateExpiration',
       Filter: ColumnFilter,
+    },
+    {
+      Header: '',
+      accessor: 'imageUrl',
+      Cell: ({ value }) => (value != "Empty" ? <div className="flex items-center h-[70px] w-[100px]"
+        onClick={() => { openImgaeModal(value); setshowImage(!showImage) }}>
+        <ImageBalise image={value} />
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-80 h-30 text-black">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" />
+        </svg>
+      </div> : <img src="src/assets/upload.svg" alt="upload" className="h-[50px] w-[50px]" />
+      ),
+      Filter: ColumnFilter
     }
   ]
   const [MedicamentListData, setMedicamentListData] = useState([]);
   const [showAddMedicament, setshowAddMedicament] = useState(false);
   const [showEditMedicament, setshowEditMedicament] = useState(false);
+  const [showImage, setshowImage] = useState(false);
 
 
 
@@ -98,6 +114,10 @@ export default function ListOfMedicaments() {
 
   const { globalFilter } = state;
 
+  const openImgaeModal = (v: String) => {
+    setPublicId(v);
+  }
+
   const changeOrdre = (v: String) => {
     switch (v) {
       case "email": {
@@ -130,6 +150,22 @@ export default function ListOfMedicaments() {
   const [medicationCode, setmedicationCode] = useState(String);
   const [dateFabrication, setdateFabrication] = useState(String);
   const [dateExpiration, setdateExpiration] = useState(String);
+  const [imageselected, setImageselected] = useState(String);
+  const [PublicId, setPublicId] = useState("Empty");
+
+  const PostImage = () => {
+    const formData = new FormData();
+    formData.append("file", imageselected);
+    formData.append("upload_preset", "qysdlxzm");
+    axios.post(
+      "https://api.cloudinary.com/v1_1/du8mkgw6r/image/upload",
+      formData,
+    ).then((response) => {
+      const result = response.data;
+      // setImage(result.secure_url);
+      setPublicId(result.public_id);
+    });
+  }
 
   const fetchData = async () => {
     await axios.get('Medications')
@@ -165,12 +201,15 @@ export default function ListOfMedicaments() {
         "medicationPrice": medicationPrice,
         "medicationCode": medicationCode,
         "dateFabrication": dateFabrication,
-        "dateExpiration": dateExpiration
+        "dateExpiration": dateExpiration,
+        "imageUrl": PublicId
       }
     )
       .then((res) => {
         alert("Medications added");
         fetchData();
+        setPublicId("Empty");
+        setImageselected("");
       }).catch((err) => {
         console.log(err);
       }
@@ -189,7 +228,8 @@ export default function ListOfMedicaments() {
         "medicationPrice": medicationPrice,
         "medicationCode": medicationCode,
         "dateFabrication": dateFabrication,
-        "dateExpiration": dateExpiration
+        "dateExpiration": dateExpiration,
+        "imageUrl": PublicId
       })
       .then((res) => {
         alert("Medications updated");
@@ -213,6 +253,7 @@ export default function ListOfMedicaments() {
         setmedicationCode(row.original.medicationCode);
         setdateFabrication(row.original.dateFabrication);
         setdateExpiration(row.original.dateExpiration);
+        setPublicId(row.original.imageUrl);
       })
       setshowEditMedicament(!showEditMedicament);
     }
@@ -236,7 +277,7 @@ export default function ListOfMedicaments() {
                 <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
                   <p className="text-base font-semibold">Add New Medication</p>
                   <button className="focus:outline-none">
-                    <svg onClick={() => setshowAddMedicament(!showAddMedicament)} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg onClick={() => { setshowAddMedicament(!showAddMedicament); setImageselected(""); setPublicId("Empty"); }} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                       <path d="M7 7L21 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -244,6 +285,36 @@ export default function ListOfMedicaments() {
                 </div>
                 <div className="px-4 md:px-10 pt-6 md:pt-12 md:pb-4 pb-7">
                   <form>
+                    <div className="flex-row items-center justify-center mb-4">
+                      <div className="flex justify-center items-center">
+                        {PublicId == "Empty" ?
+                          <img src="src/assets/upload.svg" alt="upload" className="h-[100px] w-[100px]" />
+                          :
+                          <div className="h-auto w-[300px] mb-2"><ImageBalise image={PublicId} /></div>
+                        }
+                      </div>
+                      <div className="flex justify-center items-center">
+                        <input
+                          type="file"
+                          placeholder="Upload Your Screen Shot"
+                          onChange={(event) => {
+                            setImageselected(event.target.files[0])
+                          }} />
+                        <button
+                          className="px-6 py-3 bg-blue-500 hover:bg-opacity-80 shadow rounded text-sm text-white"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            PostImage();
+                          }}>Upload</button>
+                        <button
+                          className="px-6 py-3 ml-2 bg-red-500 hover:bg-opacity-80 shadow rounded text-sm text-white"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setPublicId("Empty");
+                            setImageselected("");
+                          }}>Delete</button>
+                      </div>
+                    </div>
                     <div className="flex justify-center text-center items-center space-x-9">
                       <input placeholder="Name" onChange={(e) => setmedicationName(e.target.value)} type="text" className="w-2/5 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                       <input placeholder="Code" onChange={(e) => setmedicationCode(e.target.value)} type="text" className="w-2/5 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
@@ -252,7 +323,7 @@ export default function ListOfMedicaments() {
                     <div className="flex justify-center text-center items-center space-x-9 mt-3">
                       <div className="flex-col justify-center text-center items-center space-x-9 mt-3 mb-3">
                         <p>Production Date</p>
-                        <input onChange={(e) => setdateFabrication(e.target.value)} type="date"/>
+                        <input onChange={(e) => setdateFabrication(e.target.value)} type="date" />
                       </div>
                       <div className="flex-col justify-center text-center items-center space-x-9 mt-3 mb-3">
                         <p>Expiry Date</p>
@@ -260,18 +331,18 @@ export default function ListOfMedicaments() {
                       </div>
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
-                      <textarea placeholder="Medication Contraindication" onChange={(e) => setmedicationContraindication(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={3} cols={100} />
+                      <textarea placeholder="Medication Contraindication" onChange={(e) => setmedicationContraindication(e.target.value)} className="text-center bg-transparent border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 " rows={3} cols={100} />
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
-                      <textarea placeholder="Medication Composition" onChange={(e) => setmedicationComposition(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={3} cols={100} />
-                      <textarea placeholder="Medication Effets" onChange={(e) => setmedicationEffets(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={3} cols={100} />
+                      <textarea placeholder="Medication Composition" onChange={(e) => setmedicationComposition(e.target.value)} className="text-center bg-transparent border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 " rows={3} cols={100} />
+                      <textarea placeholder="Medication Effets" onChange={(e) => setmedicationEffets(e.target.value)} className="text-center bg-transparent border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 " rows={3} cols={100} />
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
-                      <textarea placeholder="Medication Description" onChange={(e) => setmedicationDescription(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={3} cols={100} />
+                      <textarea placeholder="Medication Description" onChange={(e) => setmedicationDescription(e.target.value)} className="text-center bg-transparent border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 " rows={3} cols={100} />
                     </div>
                   </form>
                   <div className="flex items-center justify-between mt-9">
-                    <button onClick={() => setshowAddMedicament(!showAddMedicament)} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
+                    <button onClick={() => { setshowAddMedicament(!showAddMedicament); setImageselected(""); setPublicId("Empty"); }} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
                       Cancel
                     </button>
                     <button onClick={() => addMedications()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Confirm</button>
@@ -291,7 +362,7 @@ export default function ListOfMedicaments() {
                 <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
                   <p className="text-base font-semibold">Edit Scanner</p>
                   <button className="focus:outline-none">
-                    <svg onClick={() => setshowEditMedicament(!showEditMedicament)} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg onClick={() => { setshowEditMedicament(!showEditMedicament); setImageselected(""); setPublicId("Empty"); }} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                       <path d="M7 7L21 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -299,6 +370,36 @@ export default function ListOfMedicaments() {
                 </div>
                 <div className="px-4 md:px-10 pt-6 md:pt-12 md:pb-4 pb-7">
                   <form>
+                    <div className="flex-row items-center justify-center mb-4">
+                      <div className="flex justify-center items-center">
+                        {PublicId == "Empty" ?
+                          <img src="src/assets/upload.svg" alt="upload" className="h-[100px] w-[100px]" />
+                          :
+                          <div className="h-auto w-[300px] mb-2"><ImageBalise image={PublicId} /></div>
+                        }
+                      </div>
+                      <div className="flex justify-center items-center">
+                        <input
+                          type="file"
+                          placeholder="Upload Your Screen Shot"
+                          onChange={(event) => {
+                            setImageselected(event.target.files[0])
+                          }} />
+                        <button
+                          className="px-6 py-3 bg-blue-500 hover:bg-opacity-80 shadow rounded text-sm text-white"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            PostImage();
+                          }}>Upload</button>
+                        <button
+                          className="px-6 py-3 ml-2 bg-red-500 hover:bg-opacity-80 shadow rounded text-sm text-white"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setPublicId("Empty");
+                            setImageselected("");
+                          }}>Delete</button>
+                      </div>
+                    </div>
                     <div className="flex justify-center text-center items-center space-x-9">
                       <input defaultValue={medicationName} placeholder="Name" onChange={(e) => setmedicationName(e.target.value)} type="text" className="w-2/5 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                       <input defaultValue={medicationCode} placeholder="Code" onChange={(e) => setmedicationCode(e.target.value)} type="text" className="w-2/5 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
@@ -315,18 +416,18 @@ export default function ListOfMedicaments() {
                       </div>
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
-                      <textarea defaultValue={medicationContraindication} placeholder="Medication Contraindication" onChange={(e) => setmedicationContraindication(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={3} cols={100} />
+                      <textarea defaultValue={medicationContraindication} placeholder="Medication Contraindication" onChange={(e) => setmedicationContraindication(e.target.value)} className="text-center bg-transparent border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 " rows={3} cols={100} />
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
-                      <textarea defaultValue={medicationComposition} placeholder="Medication Composition" onChange={(e) => setmedicationComposition(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={3} cols={100} />
-                      <textarea defaultValue={medicationEffets} placeholder="Medication Effets" onChange={(e) => setmedicationEffets(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={3} cols={100} />
+                      <textarea defaultValue={medicationComposition} placeholder="Medication Composition" onChange={(e) => setmedicationComposition(e.target.value)} className="text-center bg-transparent border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 " rows={3} cols={100} />
+                      <textarea defaultValue={medicationEffets} placeholder="Medication Effets" onChange={(e) => setmedicationEffets(e.target.value)} className="text-center bg-transparent border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 " rows={3} cols={100} />
                     </div>
                     <div className="flex items-center space-x-9 mt-8">
-                      <textarea defaultValue={medicationDescription} placeholder="Medication Description" onChange={(e) => setmedicationDescription(e.target.value)} className="text-center bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" rows={3} cols={100} />
+                      <textarea defaultValue={medicationDescription} placeholder="Medication Description" onChange={(e) => setmedicationDescription(e.target.value)} className="text-center bg-transparent border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 " rows={3} cols={100} />
                     </div>
                   </form>
                   <div className="flex items-center justify-between mt-9">
-                    <button onClick={() => setshowEditMedicament(!showEditMedicament)} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
+                    <button onClick={() => { setshowEditMedicament(!showEditMedicament); setImageselected(""); setPublicId("Empty"); }} className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
                       Cancel
                     </button>
                     <button onClick={() => editMedications()} className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Save changes</button>
@@ -608,6 +709,32 @@ export default function ListOfMedicaments() {
           </div>
         </div>
       </div>
+
+      {showImage &&
+        < div id="Add" className="z-50 fixed w-full flex justify-center inset-0">
+          <div className="w-full h-full bg-gray-500 bg-opacity-75 transition-opacity z-0 absolute inset-0" />
+          <div className="mx-auto container">
+            <div className="flex items-center justify-center h-full w-full">
+              <div className="bg-white rounded-md shadow fixed overflow-y-auto sm:h-auto w-auto md:w-auto lg:w-auto 2xl:w-auto">
+                <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
+                  <p className="text-base font-semibold text-center">Scanner</p>
+                  <button className="focus:outline-none">
+                    <svg onClick={() => { setshowImage(!showImage); setPublicId("Empty") }} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M7 7L21 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                </div>
+                <div className="flex">
+                  <div className="w-auto h-auto mt-10 mb-10 mr-10 ml-10">
+                    {PublicId != "Empty" ? <ImageBalise image={PublicId} /> : "No image found"}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      };
     </>
   );
 }

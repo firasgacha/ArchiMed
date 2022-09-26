@@ -4,9 +4,12 @@ import GlobalFilter from "../../components/GlobalFilter";
 import ColumnFilter from "components/ColumnFilter";
 import axios from "axios";
 import { useQuery } from "react-query";
+// @ts-ignore
+import ImageBalise from "./ImageBalise";
+
 
 export default function ListOfDepartements() {
-
+  
   const COLUMNS = [
     {
       Header: 'Department Name',
@@ -14,20 +17,30 @@ export default function ListOfDepartements() {
       Filter: ColumnFilter
     },
     {
-      Header: 'DoctorsList',
-      accessor: 'DoctorsList',
-      Filter: ColumnFilter
+      Header: 'Doctors List',
+      accessor: 'departmentId',
+      Filter: ColumnFilter,
+      Cell: ({ value }) => (value ?
+        <button onClick={async () => {
+          await GetDoctorByDepartement(value);
+          setshowDoctorsList(!showDoctorsList);
+          console.log(showDoctorsList);
+        }} className="ml-3 rounded-full bg-green-400 text-white text-sm px-6 py-2 text-center">See</button>
+        : 'Empty')
     }
   ]
 
   const [departmentsListData, setDepartmentsListData] = useState([]);
   const [showAddDepartment, setshowAddDepartment] = useState(false);
   const [showEditDepartment, setshowEditDepartment] = useState(false);
+  const [showDoctorsList, setshowDoctorsList] = useState(false);
 
 
   const [departmentId, setdepartmentId] = useState(Number);
   const [departmentName, setdepartmentName] = useState(String);
   const [departmentdoctorsList, setdepartmentdoctorsList] = useState(null);
+
+  const [doctorsList, setdoctorsList] = useState([]);
 
   const fetchDepartemnetsData = async () => {
     await axios.get('Department')
@@ -40,11 +53,12 @@ export default function ListOfDepartements() {
 
   const { data, isLoading, isFetched } = useQuery("Department", fetchDepartemnetsData);
 
-  
-  const findDepartementById = async (id: number) => {
-    await axios.get(`Doctor/${id}`)
+
+  const GetDoctorByDepartement = async (id: number) => {
+    await axios.get(`Doctor/GetDoctorByDepartement/${id}`)
       .then((res) => {
         console.log(res.data);
+        setdoctorsList(res.data);
       }).catch((err) => {
         console.log(err);
       })
@@ -100,11 +114,6 @@ export default function ListOfDepartements() {
   }
   const [isList, setIsList] = useState(false);
 
-  const departement = {
-    "departmentId": departmentId,
-    "departmentName": departmentName,
-    "doctors": departmentdoctorsList
-  }
 
   const deleteDepartement = async () => {
     selectedFlatRows.map(async (row) => {
@@ -156,7 +165,7 @@ export default function ListOfDepartements() {
     }
   }
 
-  
+
 
   useEffect(() => {
     fetchDepartemnetsData();
@@ -292,7 +301,7 @@ export default function ListOfDepartements() {
                       <div className="w-40 mt-2 p-4 bg-white shadow rounded">
                         {/* element */}
                         {
-                        
+
                           allColumns.map(column => (
                             <div key={column.id}>
                               <div className="flex items-center justify-between">
@@ -439,7 +448,7 @@ export default function ListOfDepartements() {
                               }
                             </>
                           ) : (
-                              <div>is Loading.....</div>
+                            <div>is Loading.....</div>
                           )}
                         </tbody>
                       </table>
@@ -502,6 +511,85 @@ export default function ListOfDepartements() {
           </div>
         </div>
       </div>
+
+      {showDoctorsList &&
+        < div id="Add" className="z-50 fixed w-full flex justify-center inset-0">
+          <div className="w-full h-full bg-gray-500 bg-opacity-75 transition-opacity z-0 absolute inset-0" />
+          <div className="mx-auto container">
+            <div className="flex items-center justify-center h-full w-full">
+              <div className="bg-white rounded-md shadow fixed overflow-y-auto sm:h-auto w-auto md:w-auto lg:w-auto 2xl:w-auto">
+                <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
+                  <p className="text-base font-semibold text-center">Doctors</p>
+                  <button className="focus:outline-none">
+                    <svg onClick={() => setshowDoctorsList(!showDoctorsList)} width={20} height={20} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M21 7L7 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M7 7L21 21" stroke="#A1A1AA" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                </div>
+                <div className="px-4 md:px-10 pt-6 md:pt-12 md:pb-4 pb-7">
+                  <form>
+                    <div className="flex-row text-center mb-6">
+                      <div className="w-full sm:px-6">
+                        <div className="bg-white shadow px-4 md:px-10 pt-4 md:pt-7 pb-5 overflow-y-auto">
+                          <table className="w-full whitespace-nowrap">
+                            <thead>
+                              <tr className="text-center h-16 w-full text-sm leading-none text-gray-800">
+                                <th className="font-normal text-center pl-4"></th>
+                                <th className="font-normal text-center pl-4">Doctor Name</th>
+                                <th className="font-normal text-center pl-12">Specialty</th>
+                                <th className="font-normal text-center pl-12">Phone</th>
+                                <th className="font-normal text-center pl-20">Email</th>
+                              </tr>
+                            </thead>
+                            <tbody className="w-full">
+                              {doctorsList.map(d => {
+                                return (
+                                  <>
+                                    <tr key={d.doctorId} className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100">
+                                      <td className="pl-4 cursor-pointer">
+                                        <div className="flex items-center">
+                                          <div className="pl-4">
+                                            <div>
+                                              {d.imageUrl != "Empty" ? <div className="h-[50px] w-[50px]"><ImageBalise image={d.imageUrl} /></div> : <img src="src/assets/upload.svg" alt="upload" className="h-[50px] w-[50px]" />}
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </td>
+                                      <td className="pl-4 cursor-pointer">
+                                        <div className="flex items-center">
+                                          <div className="pl-4">
+                                            <p className="font-medium">{d.fisrtName} {d.lastName}</p>
+                                          </div>
+                                        </div>
+                                      </td>
+                                      <td className="pl-12">
+                                        <p className="text-sm font-medium leading-none text-gray-800">{d.specialty}</p>
+                                      </td>
+                                      <td className="pl-12">
+                                        <p className="font-medium">{d.phone}</p>
+                                      </td>
+                                      <td className="pl-20">
+                                        <p className="font-medium">{d.email}</p>
+                                      </td>
+                                    </tr>
+                                    <br />
+                                  </>
+                                )
+                              })
+                              }
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      };
     </>
   );
 }

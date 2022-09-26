@@ -260,29 +260,29 @@ export default function MedicalFolder() {
         <>
             {/* Card code block start */}
             <div className="w-full grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                <div className="bg-white dark:bg-gray-800 rounded shadow px-8 py-6 flex items-center">
+                <div className="bg-white  rounded shadow px-8 py-6 flex items-center">
                     <div className="flex-col">
                         <div className="p-4 rounded">
-                            <img src="src/assets/mri-machine2.svg" alt="machine2" />
+                            <img src="src/assets/mri-machine2.svg" alt="machine2" className="h-[100px]" />
                         </div>
                         <p className="text-center">Scanners</p>
                     </div>
                     <div className="ml-6">
-                        <h3 className="mb-1 leading-5 text-gray-800 dark:text-gray-100 font-bold text-2xl">{ScannersListData.length}</h3>
+                        <h3 className="mb-1 leading-5 text-gray-800  font-bold text-2xl">{ScannersListData.length}</h3>
                     </div>
                 </div>
-                <div className="bg-white dark:bg-gray-800 rounded shadow px-8 py-6 flex items-center">
+                <div className="bg-white rounded shadow px-8 py-6 flex items-center">
                     <div className="flex-col">
                         <div className="p-4 rounded">
-                            <img src="src/assets/redio.svg" alt="redio" />
+                            <img src="src/assets/redio.svg" alt="redio" className="h-[100px]" />
                         </div>
                         <p className="text-center">Radios</p>
                     </div>
                     <div className="ml-6">
-                        <h3 className="mb-1 leading-5 text-gray-800 dark:text-gray-100 font-bold text-2xl">{RadiosListData.length}</h3>
+                        <h3 className="mb-1 leading-5 text-gray-800  font-bold text-2xl">{RadiosListData.length}</h3>
                     </div>
                 </div>
-                <div className="bg-white dark:bg-gray-800 rounded shadow px-8 py-6 flex items-center">
+                <div className="bg-white  rounded shadow px-8 py-6 flex items-center">
                     <div className="flex-col">
                         <div className="p-4 rounded">
                             <img src="src/assets/md.jpg" alt="md" className="h-[120px]" />
@@ -290,18 +290,18 @@ export default function MedicalFolder() {
                         <p className="text-center">Orders</p>
                     </div>
                     <div className="ml-6">
-                        <h3 className="mb-1 leading-5 text-gray-800 dark:text-gray-100 font-bold text-2xl">{MedicalOrderListData.length}</h3>
+                        <h3 className="mb-1 leading-5 text-gray-800  font-bold text-2xl">{MedicalOrderListData.length}</h3>
                     </div>
                 </div>
-                <div className="bg-white dark:bg-gray-800 rounded shadow px-8 py-6 flex items-center">
+                <div className="bg-white  rounded shadow px-8 py-6 flex items-center">
                     <div className="flex-col">
                         <div className="p-4 rounded">
-                            <img src="src/assets/calendar22.svg" alt="calendar22" />
+                            <img src="src/assets/calendar22.svg" alt="calendar22" className="h-[100px]" />
                         </div>
                         <p className="text-center">Appointments</p>
                    </div>
                     <div className="ml-6">
-                        <h3 className="mb-1 leading-5 text-gray-800 dark:text-gray-100 font-bold text-2xl">{AppointmentListData.length}</h3>
+                        <h3 className="mb-1 leading-5 text-gray-800  font-bold text-2xl">{AppointmentListData.length}</h3>
                     </div>
                 </div>
                 

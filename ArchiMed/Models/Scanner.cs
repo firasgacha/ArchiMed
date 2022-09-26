@@ -11,6 +11,8 @@ public class Scanner
     
     public string Created { get; set; }
     
+    public string ImageUrl { get; set; }
+
     public Doctor? Doctor { get; set; }
     
     public int DoctorId { get; set; }

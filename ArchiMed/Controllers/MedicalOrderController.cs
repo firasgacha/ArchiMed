@@ -90,7 +90,15 @@ namespace ArchiMed.Controllers
               return Problem("Entity set 'ArchiMedDB.MedicalOrder'  is null.");
           }
           _context.MedicalOrder.Add(medicalOrder);
-            await _context.SaveChangesAsync();
+          
+          try
+          {
+              await _context.SaveChangesAsync();
+          }
+          catch (DbUpdateException)
+          {
+              throw;
+          }
 
             return CreatedAtAction("GetMedicalOrder", new { id = medicalOrder.MedicalOrderId }, medicalOrder);
         }
