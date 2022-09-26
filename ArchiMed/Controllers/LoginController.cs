@@ -3,7 +3,9 @@ using System.Security.Claims;
 using System.Text;
 using ArchiMed.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
+using NuGet.Common;
 using ConfigurationBuilder = Microsoft.Extensions.Configuration.ConfigurationBuilder;
 
 namespace ArchiMed.Controllers;
@@ -18,19 +20,30 @@ public class LoginController : Controller
     {
         _context = context;
     }
-    
+
+    public class Response
+    {
+        public string token { get; set; }
+        public string role { get; set; }
+
+        public Response(string token, string role)
+        {
+            this.token = token;
+            this.role = role;
+        }
+    }
     
         [HttpPost]
-     public async Task<ActionResult<String>>  Login(UserLogin luser)
+     public async Task<ActionResult<Response>>  Login(UserLogin user)
     {
     
-    if (string.IsNullOrEmpty(luser.email) ||
-        string.IsNullOrEmpty(luser.password)) return "Invalid user credentials";
-    
+    if (string.IsNullOrEmpty(user.email) ||
+        string.IsNullOrEmpty(user.password)) return BadRequest("Email or Password Not provided");
+
     var loggedInUser =_context.Users.FirstOrDefault(o =>
-            o.email.Equals(luser.email) &&
-            o.password.Equals(luser.password)); 
-    if (loggedInUser is null) return "User not found";
+            o.email.Equals(user.email) &&
+            o.password.Equals(user.password)); 
+    if (loggedInUser is null) return NotFound("User Not Found");
 
     var claims = new[]
     {
@@ -54,6 +67,7 @@ public class LoginController : Controller
 
     var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-    return tokenString;
+    return new Response(tokenString,loggedInUser.GetType().Name);
 }
 }
+
