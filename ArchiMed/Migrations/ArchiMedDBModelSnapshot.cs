@@ -21,69 +21,6 @@ namespace ArchiMed.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("ArchiMed.Models.Agent", b =>
-                {
-                    b.Property<int>("AgentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("AgentId"));
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("adress")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("birthday")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("cin")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("city")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("country")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("fisrtName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("gender")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("lastName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("phone")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("postalCode")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("role")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("AgentId");
-
-                    b.ToTable("Agent");
-                });
-
             modelBuilder.Entity("ArchiMed.Models.Appointment", b =>
                 {
                     b.Property<int>("AppointmentId")
@@ -156,80 +93,6 @@ namespace ArchiMed.Migrations
                     b.HasKey("DepartmentId");
 
                     b.ToTable("Departments");
-                });
-
-            modelBuilder.Entity("ArchiMed.Models.Doctor", b =>
-                {
-                    b.Property<int>("DoctorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("DoctorId"));
-
-                    b.Property<int>("DepartmentFk")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("DepartmentId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("adress")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("birthday")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("cin")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("city")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("country")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("fisrtName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("gender")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("headofDepartment")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("lastName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("phone")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("postalCode")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("specialty")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("DoctorId");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.ToTable("Doctors");
                 });
 
             modelBuilder.Entity("ArchiMed.Models.MedicalFolder", b =>
@@ -338,70 +201,6 @@ namespace ArchiMed.Migrations
                     b.ToTable("Medications");
                 });
 
-            modelBuilder.Entity("ArchiMed.Models.Patient", b =>
-                {
-                    b.Property<int>("PatientId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("PatientId"));
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("MedicalFolderId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("adress")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("birthday")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("cin")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("city")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("country")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("fisrtName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("gender")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("lastName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("phone")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("postalCode")
-                        .HasColumnType("integer");
-
-                    b.HasKey("PatientId");
-
-                    b.HasIndex("MedicalFolderId");
-
-                    b.ToTable("Patient");
-                });
-
             modelBuilder.Entity("ArchiMed.Models.Radio", b =>
                 {
                     b.Property<int>("RadioId")
@@ -492,6 +291,116 @@ namespace ArchiMed.Migrations
                     b.ToTable("Scanner");
                 });
 
+            modelBuilder.Entity("ArchiMed.Models.User", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("address")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("birthday")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("cin")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("city")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("country")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("fisrtName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("gender")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("lastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("phone")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("postalCode")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("user_type")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Users");
+
+                    b.HasDiscriminator<string>("user_type").HasValue("admin");
+                });
+
+            modelBuilder.Entity("ArchiMed.Models.Agent", b =>
+                {
+                    b.HasBaseType("ArchiMed.Models.User");
+
+                    b.HasDiscriminator().HasValue("agent");
+                });
+
+            modelBuilder.Entity("ArchiMed.Models.Doctor", b =>
+                {
+                    b.HasBaseType("ArchiMed.Models.User");
+
+                    b.Property<int>("DepartmentFk")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("headofDepartment")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("specialty")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasDiscriminator().HasValue("doctor");
+                });
+
+            modelBuilder.Entity("ArchiMed.Models.Patient", b =>
+                {
+                    b.HasBaseType("ArchiMed.Models.User");
+
+                    b.Property<int>("MedicalFolderId")
+                        .HasColumnType("integer");
+
+                    b.HasIndex("MedicalFolderId");
+
+                    b.HasDiscriminator().HasValue("patient");
+                });
+
             modelBuilder.Entity("ArchiMed.Models.Appointment", b =>
                 {
                     b.HasOne("ArchiMed.Models.Agent", "Agent")
@@ -517,15 +426,6 @@ namespace ArchiMed.Migrations
                     b.Navigation("Doctor");
 
                     b.Navigation("Patient");
-                });
-
-            modelBuilder.Entity("ArchiMed.Models.Doctor", b =>
-                {
-                    b.HasOne("ArchiMed.Models.Department", "Department")
-                        .WithMany("Doctors")
-                        .HasForeignKey("DepartmentId");
-
-                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("ArchiMed.Models.MedicalOrder", b =>
@@ -556,17 +456,6 @@ namespace ArchiMed.Migrations
                     b.HasOne("ArchiMed.Models.MedicalOrder", null)
                         .WithMany("Medications")
                         .HasForeignKey("MedicalOrderId");
-                });
-
-            modelBuilder.Entity("ArchiMed.Models.Patient", b =>
-                {
-                    b.HasOne("ArchiMed.Models.MedicalFolder", "MedicalFolder")
-                        .WithMany()
-                        .HasForeignKey("MedicalFolderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MedicalFolder");
                 });
 
             modelBuilder.Entity("ArchiMed.Models.Radio", b =>
@@ -629,6 +518,26 @@ namespace ArchiMed.Migrations
                     b.Navigation("Doctor");
 
                     b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("ArchiMed.Models.Doctor", b =>
+                {
+                    b.HasOne("ArchiMed.Models.Department", "Department")
+                        .WithMany("Doctors")
+                        .HasForeignKey("DepartmentId");
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("ArchiMed.Models.Patient", b =>
+                {
+                    b.HasOne("ArchiMed.Models.MedicalFolder", "MedicalFolder")
+                        .WithMany()
+                        .HasForeignKey("MedicalFolderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MedicalFolder");
                 });
 
             modelBuilder.Entity("ArchiMed.Models.Department", b =>
