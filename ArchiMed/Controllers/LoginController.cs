@@ -25,11 +25,14 @@ public class LoginController : Controller
     {
         public string token { get; set; }
         public string role { get; set; }
+        
+        public int userId { get; set; }
 
-        public Response(string token, string role)
+        public Response(string token, string role, int userId)
         {
             this.token = token;
             this.role = role;
+            this.userId = userId;
         }
     }
     
@@ -67,7 +70,7 @@ public class LoginController : Controller
 
     var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-    return new Response(tokenString,loggedInUser.GetType().Name);
+    return new Response(tokenString,loggedInUser.GetType().Name, loggedInUser.id);
 }
 }
 

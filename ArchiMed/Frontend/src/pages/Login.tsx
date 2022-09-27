@@ -1,10 +1,31 @@
-
-import Footer from "components/Footer";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import Contact from "./Contact";
+import { Link, Navigate } from "react-router-dom";
+import axios from "axios";
+
+
 export default function Login() {
   const [showpass, setShowpass] = useState(false)
+  const [email, setEmail] = useState(String);
+  const [password, setpassword] = useState(String);
+
+  const login = async () => {
+    const data = await axios
+      .post("login", {
+        "email": email,
+        "password": password
+      })
+      .then(
+        (res) => {
+          localStorage.setItem("role", JSON.stringify(res.data.role));
+          localStorage.setItem("token", JSON.stringify(res.data.token));
+          localStorage.setItem("userId", JSON.stringify(res.data.userId));
+          window.location.href = "/profile";
+          console.log(res.data);
+        },
+        (err) => console.log(err)
+      );
+    console.log(data);
+  };
   return (
     <>
       <div className="flex justify-center items-center bg-indigo-50 h-screen w-full">
@@ -53,7 +74,7 @@ export default function Login() {
                   {" "}
                   Email{" "}
                 </label>
-                <input id="email" aria-labelledby="email" type="email" className="bg-gray-200 border rounded text-xs font-medium leading-none placeholder-gray-800 text-gray-800 py-3 w-full pl-3 mt-2" placeholder="e.g: john@gmail.com " />
+                <input id="email" onChange={(e)=>setEmail(e.target.value)} aria-labelledby="email" type="email" className="bg-gray-200 border rounded text-xs font-medium leading-none placeholder-gray-800 text-gray-800 py-3 w-full pl-3 mt-2" placeholder="e.g: john@gmail.com " />
               </div>
               <div className="mt-6 w-full">
                 <label htmlFor="myInput" className="text-sm font-medium leading-none text-gray-800">
@@ -61,7 +82,7 @@ export default function Login() {
                   Password{" "}
                 </label>
                 <div className="relative flex items-center justify-center">
-                  <input id="myInput" type={showpass ? "text" : "password"} className="bg-gray-200 border rounded text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2" />
+                  <input id="myInput" onChange={(e)=>setpassword(e.target.value)} type={showpass ? "text" : "password"} className="bg-gray-200 border rounded text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2" />
                   <div onClick={() => setShowpass(!showpass)} className="absolute right-0 mt-2 mr-3 cursor-pointer">
                     <div id="show">
                       <svg width={16} height={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -83,7 +104,7 @@ export default function Login() {
                 </div>
               </div>
               <div className="mt-8">
-                <button role="button" className="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 text-sm font-semibold leading-none text-white focus:outline-none bg-indigo-700 border rounded hover:bg-indigo-600 py-4 w-full">
+                <button onClick={() => login()} role="button" className="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 text-sm font-semibold leading-none text-white focus:outline-none bg-indigo-700 border rounded hover:bg-indigo-600 py-4 w-full">
                   Login
                 </button>
               </div>

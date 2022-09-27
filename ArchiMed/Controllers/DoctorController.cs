@@ -170,7 +170,22 @@ namespace ArchiMed.Controllers
 
             return NoContent();
         }
-
+        
+        [HttpGet("GetDoctorByDepartement/{id}")]
+        public async Task<ActionResult<IEnumerable<Doctor>>> GetDoctorByDepartement(int id)
+        {
+            if (_context.Doctors == null)
+            {
+                return NotFound();
+            }
+            var doctor = await _context.Doctors
+                .Where(d => d.DepartmentFk == id).ToListAsync();
+            if (doctor == null)
+            {
+                return NotFound();
+            }
+            return doctor;
+        }
         private bool DoctorExists(int id)
         {
             return (_context.Doctors?.Any(e => e.id == id)).GetValueOrDefault();

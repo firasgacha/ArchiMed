@@ -38,7 +38,9 @@ export default function ListOfAppointment() {
 
 
   const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => AppointmentListData, [AppointmentListData]);
+  const data = useMemo(() =>
+    AppointmentListData
+    , [AppointmentListData]);
 
   const { allColumns, selectedFlatRows, getToggleHideAllColumnsProps, getTableProps, getTableBodyProps, headerGroups, footerGroups, page, nextPage, previousPage, setPageSize, setColumnOrder, canNextPage, canPreviousPage, pageOptions, gotoPage, pageCount, prepareRow, state, setGlobalFilter } =
     useTable({
