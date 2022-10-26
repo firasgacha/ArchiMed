@@ -118,7 +118,36 @@ namespace ArchiMed.Controllers
 
             return NoContent();
         }
-
+        
+        [HttpGet("GetAppByDOC/{id}")]
+        public async Task<List<Appointment>> GetAppByDOC(int id)
+        {
+            if (_context.Appointment == null)
+            {
+                return null;
+            }
+            var app = await _context.Appointment
+                .Where(d => d.DoctorId == id).ToListAsync();
+            
+            return app;
+        }
+        
+        [HttpGet("GetAppByPatient/{id}")]
+        public async Task<List<Appointment>> GetAppByPatient(int id)
+        {
+            if (_context.Appointment == null)
+            {
+                return null;
+            }
+            var app = await _context.Appointment
+                .Where(d => d.PatientId == id).ToListAsync();
+            
+            return app;
+        }
+        private bool DoctorExists(int id)
+        {
+            return (_context.Doctors?.Any(e => e.id == id)).GetValueOrDefault();
+        }
         private bool AppointmentExists(int id)
         {
             return (_context.Appointment?.Any(e => e.AppointmentId == id)).GetValueOrDefault();

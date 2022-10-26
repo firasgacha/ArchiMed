@@ -186,6 +186,7 @@ namespace ArchiMed.Controllers
             }
             return doctor;
         }
+        
         private bool DoctorExists(int id)
         {
             return (_context.Doctors?.Any(e => e.id == id)).GetValueOrDefault();

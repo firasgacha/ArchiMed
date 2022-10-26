@@ -31,6 +31,7 @@ export default function Profile() {
     //response login 
     const [email, setEmail] = useState(String);
     const [role, setRole] = useState(String);
+    const [userRole, setUserRole] = useState(String);
 
     const fetchUser = async (r: string, i: number) => {
         await axios.get(`${r}/${i}`)
@@ -47,6 +48,7 @@ export default function Profile() {
                 setPhone(res.data.phone);
                 setPublicId(res.data.imageUrl);
                 setEmail(res.data.email);
+                setUserRole(res.data.role);
                 if (role == "Doctor") {
                     setDoctorId(res.data.id),
                     setSpecialty(res.data.specialty);

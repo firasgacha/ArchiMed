@@ -148,7 +148,15 @@ export default function ListOfAppointment() {
     await axios.get('Appointment')
       .then((res) => {
         setAppointmentListData(res.data);
-        console.log(res.data);
+      }).catch((err) => {
+        console.log(err);
+      })
+  }
+  const fetchDataByDoctor = async (id) => {
+    await axios.get(`Appointment/${id}`)
+      .then((res) => {
+        setAppointmentListData(res.data);
+        console.log("doc",res.data);
       }).catch((err) => {
         console.log(err);
       })
@@ -226,7 +234,13 @@ export default function ListOfAppointment() {
 
 
   useEffect(() => {
-    fetchData();
+    // if (localStorage.getItem('role') == "User") {
+    //   fetchData();
+    // } else {
+    //   fetchDataByDoctor(localStorage.getItem('userId'));
+    // }
+    fetchDataByDoctor(localStorage.getItem('UserId'));
+
     fetchPatientData();
     fetchDoctorData();
     fetchAgentData();

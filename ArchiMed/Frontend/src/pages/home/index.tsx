@@ -38,7 +38,7 @@ export default function Navbar() {
       style={{ overflow: show ? "clip" : "" }}
     >
       <div className="flex flex-no-wrap">
-        {role == "Agent" && (
+        {/* {role == "Agent" && (
           <div className=" fixed w-64 h-screen top-16 shadow bg-gray-100 hidden lg:block">
             <div className="h-16 w-full flex items-center px-8">
               <Link to={"/"}>
@@ -99,9 +99,9 @@ export default function Navbar() {
               </li>
             </ul>
           </div>
-        )}
+        )} */}
         {/* Sidebar starts */}
-        {role == "Doctor" && (
+        {/* {role == "Doctor" && (
           <div className=" fixed w-64 h-screen top-16 shadow bg-gray-100 hidden lg:block">
             <div className="h-16 w-full flex items-center px-8">
               <Link to={"/"}>
@@ -190,8 +190,8 @@ export default function Navbar() {
               </li>
             </ul>
           </div>
-        )}
-        {role == "Patient" && (
+        )} */}
+        {/* {role == "Patient" && (
           <div className=" fixed w-64 h-screen top-16 shadow bg-gray-100 hidden lg:block">
             <div className="h-16 w-full flex items-center px-8">
               <Link to={"/"}>
@@ -211,8 +211,8 @@ export default function Navbar() {
               </li>
             </ul>
           </div>
-        )}
-        {role == "Admin" && (
+        )} */}
+        {role == "Doctor" && (
           <div className=" fixed w-64 h-screen top-16 shadow bg-gray-100 hidden lg:block">
             <div className="h-16 w-full flex items-center px-8">
               <Link to={"/"}>
@@ -499,7 +499,7 @@ export default function Navbar() {
                         className="w-8 h-8 rounded-md"
                       />
                       <p className="md:text-xl text-gray-800 text-base leading-4 ml-2">
-                        Jane Doe
+                        {/* Jane Doe */}
                       </p>
                     </div>
                     <ul className="flex">
@@ -568,7 +568,7 @@ export default function Navbar() {
                         <div className="w-2 h-2 rounded-full bg-green-400 border border-white absolute inset-0 mb-0 mr-0 m-auto" />
                       </div>
                     </div>
-                    <p className="text-gray-800 text-sm mx-3">Jane Doe</p>
+                    {/* <p className="text-gray-800 text-sm mx-3">Jane Doe</p> */}
                     <div className="cursor-pointer text-gray-600">
                       <ChevronSvg />
                     </div>
