@@ -7,7 +7,7 @@ export default function Login() {
   const [showpass, setShowpass] = useState(false)
   const [email, setEmail] = useState(String);
   const [password, setpassword] = useState(String);
-
+  const [error, setError] = useState(String);
   const login = async () => {
     const data = await axios
       .post("login", {
@@ -22,7 +22,7 @@ export default function Login() {
           window.location.href = "/profile";
           console.log(res.data);
         },
-        (err) => console.log(err)
+        (err) => setError(err.response.data)
       );
     console.log(data);
   };
@@ -69,6 +69,7 @@ export default function Login() {
                 <p className="text-base font-medium leading-4 px-2.5 text-gray-500">OR</p>
                 <hr className="w-full bg-gray-400" />
               </div>
+              {error && <p className="text-red-500 text-xs italic text-center">{error}</p>}
               <div>
                 <label htmlFor="email" className="text-sm font-medium leading-none text-gray-800">
                   {" "}

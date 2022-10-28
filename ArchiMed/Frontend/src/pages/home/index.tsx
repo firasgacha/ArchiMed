@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, Outlet, useLocation, useParams } from "react-router-dom";
-
+// @ts-ignore
+import ImageBalise from "../home/ImageBalise";
 // SVG
 import SVGA from "assets/a.svg";
 import CompasSVG from "assets/compas.svg";
@@ -23,13 +24,19 @@ export default function Navbar() {
   const location = useLocation();
   const [pageName, setPageName] = useState("");
   const [role, setRole] = useState(String);
+  const [PublicId, setPublicId] = useState("Empty");
 
+  const signOut = () => {
+    localStorage.clear();
+    window.location.href = "/";
+  };
 
   useEffect(() => {
     const temp = location.pathname.slice(1).replace(/([A-Z])/g, " $1");
     setPageName(location.pathname.charAt(1).toUpperCase() + temp.slice(1));
     if (localStorage.getItem('role').substring(1, localStorage.getItem('role').length - 1)) { setRole(localStorage.getItem('role').substring(1, localStorage.getItem('role').length - 1)) }
-
+    setPublicId(localStorage.getItem('PublicId'));
+    console.log(localStorage.getItem('PublicId'));
   }, [location]);
 
   return (
@@ -38,7 +45,7 @@ export default function Navbar() {
       style={{ overflow: show ? "clip" : "" }}
     >
       <div className="flex flex-no-wrap">
-        {/* {role == "Agent" && (
+        {role == "Agent" && (
           <div className=" fixed w-64 h-screen top-16 shadow bg-gray-100 hidden lg:block">
             <div className="h-16 w-full flex items-center px-8">
               <Link to={"/"}>
@@ -99,9 +106,8 @@ export default function Navbar() {
               </li>
             </ul>
           </div>
-        )} */}
-        {/* Sidebar starts */}
-        {/* {role == "Doctor" && (
+        )}
+        {role == "Doctor" && (
           <div className=" fixed w-64 h-screen top-16 shadow bg-gray-100 hidden lg:block">
             <div className="h-16 w-full flex items-center px-8">
               <Link to={"/"}>
@@ -190,8 +196,8 @@ export default function Navbar() {
               </li>
             </ul>
           </div>
-        )} */}
-        {/* {role == "Patient" && (
+        )}
+        {role == "Patient" && (
           <div className=" fixed w-64 h-screen top-16 shadow bg-gray-100 hidden lg:block">
             <div className="h-16 w-full flex items-center px-8">
               <Link to={"/"}>
@@ -211,8 +217,8 @@ export default function Navbar() {
               </li>
             </ul>
           </div>
-        )} */}
-        {role == "Doctor" && (
+        )}
+        {role == "User" && (
           <div className=" fixed w-64 h-screen top-16 shadow bg-gray-100 hidden lg:block">
             <div className="h-16 w-full flex items-center px-8">
               <Link to={"/"}>
@@ -522,7 +528,7 @@ export default function Navbar() {
           {/* Navigation starts */}
           <nav className="h-16 flex items-center lg:items-stretch justify-end lg:justify-between bg-white shadow fixed w-full z-10">
             <div className="hidden lg:flex w-full pr-6">
-              <div className="w-1/2 h-full hidden lg:flex items-center pl-6 pr-24">
+              <div className="w-2/3 h-full hidden lg:flex items-center pl-6 pr-24">
                 <div className="relative w-full">
                   <div className="text-gray-500 absolute ml-4 inset-0 m-auto w-4 h-4">
                     <SearchSVG />
@@ -534,37 +540,37 @@ export default function Navbar() {
                   />
                 </div>
               </div>
-              <div className="w-1/2 hidden lg:flex">
-                <div className="w-full flex items-center pl-8 justify-end">
+              <div className="w-1/3 h-full hidden lg:flex items-center pl-6 pr-24">
+                <div className="relative w-full">
                   <div
                     className="flex items-center relative cursor-pointer"
                     onClick={() => setProfile(!profile)}
                   >
-                    <div className="rounded-full">
+                    <div className="rounded-full mx-auto">
                       {profile ? (
-                        <ul className="p-2 w-full border-r bg-white absolute rounded left-0 shadow mt-12 sm:mt-16 ">
-                          <li className="flex w-full justify-between text-gray-600 hover:text-indigo-700 cursor-pointer items-center">
+                        <div className="p-2 m-auto w-full border-r bg-white absolute rounded left-0 shadow mt-12 sm:mt-16 ">
+                          <div className="flex w-full justify-between text-gray-600 hover:text-indigo-700 cursor-pointer items-center">
                             <Link to={"/profile"} className="flex items-center">
-                              <UserSVG />
                               <span className="text-sm ml-2">My Profile</span>
                             </Link>
-                          </li>
-                          <li className="flex w-full justify-between text-gray-600 hover:text-indigo-700 cursor-pointer items-center mt-2">
+                          </div>
+                          <div className="flex w-full justify-between text-gray-600 hover:text-indigo-700 cursor-pointer items-center mt-2">
                             <div className="flex items-center">
                               <LogoutSvg />
-                              <span className="text-sm ml-2">Sign out</span>
+                              <span onClick={signOut} className="text-sm ml-2">Sign out</span>
                             </div>
-                          </li>
-                        </ul>
+                          </div>
+                        </div>
                       ) : (
                         ""
                       )}
                       <div className="relative">
-                        <img
-                          className="rounded-full h-10 w-10 object-cover"
-                          src="src/assets/upload.svg"
-                          alt="avatar"
-                        />
+                        {PublicId == "Empty" ?
+                          //user image 
+                          <img src="https://tuk-cdn.s3.amazonaws.com/assets/components/boxed_layout/bl_1.png" className="w-8 h-8 rounded-full" />
+                          :
+                          <div className="max-h-auto max-w-[40px] mb-2 rounded-full"><ImageBalise image={PublicId} /></div>
+                        }
                         <div className="w-2 h-2 rounded-full bg-green-400 border border-white absolute inset-0 mb-0 mr-0 m-auto" />
                       </div>
                     </div>

@@ -42,11 +42,14 @@ public class LoginController : Controller
     
     if (string.IsNullOrEmpty(user.email) ||
         string.IsNullOrEmpty(user.password)) return BadRequest("Email or Password Not provided");
-
+    
+    
     var loggedInUser =_context.Users.FirstOrDefault(o =>
-            o.email.Equals(user.email) &&
-            o.password.Equals(user.password)); 
-    if (loggedInUser is null) return NotFound("User Not Found");
+            o.email.Equals(user.email) && 
+            o.password.Equals(user.password)
+            ); 
+    if (loggedInUser is null) return NotFound("User Not Found or password incorrect");
+    
 
     var claims = new[]
     {

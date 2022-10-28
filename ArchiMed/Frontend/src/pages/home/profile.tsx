@@ -47,6 +47,7 @@ export default function Profile() {
                 setPostalCode(res.data.postalCode);
                 setPhone(res.data.phone);
                 setPublicId(res.data.imageUrl);
+                localStorage.setItem("PublicId", res.data.imageUrl);
                 setEmail(res.data.email);
                 setUserRole(res.data.role);
                 if (role == "Doctor") {
@@ -96,13 +97,11 @@ export default function Profile() {
                         </div>
                     </div>
                     <div className="px-4 md:px-10 pt-6 md:pt-12 md:pb-4 pb-7">
-                        <p className="text-lg text-center mb-10 text-gray-800  font-bold">{role} : 
-                            {role == "Agent" && (
-                                <>
-                                    {roleAgent}
-                                </>
-                            )}
-                        </p>
+                        {role === "User" ? (
+                            <p className="text-lg text-center mb-10 text-gray-800  font-bold">Admin</p>
+                        ) : (
+                                <p className="text-lg text-center mb-10 text-gray-800  font-bold">{role}</p>
+                        )}
                         <form>
                             <div className="flex items-center space-x-9 mt-2">
                                 <h2 className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{fisrtName}</h2>
