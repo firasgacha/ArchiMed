@@ -28,8 +28,8 @@ Notre plateforme propose plusieurs rôles d'utilisateurs, parmi lesquels :
 
 ## Stack technique
 
-[Vite]("https://vitejs.dev")
-[React]("https://react.dev")
-[Tailwind CSS]("https://tailwindcss.com")
-[ASP.NET]("")
-[PostgreSQL]("")
+➔ [Vite]("https://vitejs.dev")
+➔ [React]("https://react.dev")
+➔ [Tailwind CSS]("https://tailwindcss.com")
+➔ [ASP.NET]("https://dotnet.microsoft.com")
+➔ [PostgreSQL]("https://www.postgresql.org/")
